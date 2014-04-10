@@ -10,7 +10,7 @@ class MyGame < Gosu::Window
 		
 		Game.initialize self
 		
-		@man = GameObject.new 200, 200, 40, 115, :sprite1, Vector.new(-10, -5), 3, 2
+		@man = GameObject.new 200, 200, 37, 115, :sprite2, Vector.new(-8, -5), 3, 2
 		@man_indices = [0, 1, 0, 2, 0, 1, 0, 2, 3, 4, 3, 5, 3, 4, 3, 5]
 		@man_interval = 9
 		
