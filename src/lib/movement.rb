@@ -1,6 +1,45 @@
 require_relative 'global'
 
 module AGL
+	class Block
+		attr_reader :x, :y, :w, :h, :passable
+		
+		def initialize x, y, w, h, passable
+			@x = x; @y = y; @w = w; @h = h
+			@passable = passable
+		end
+		
+		def bounds
+			Rectangle.new @x, @y, @w, @h
+		end
+	end
+	
+	class Ramp
+		def initialize x, y, w, h, left
+			@x = x
+			@y = y
+			@w = w
+			@h = h
+			@left = left
+		end
+		
+		def intersects obj
+			obj.x + obj.w > @x && obj.x < @x + @w && obj.y > get_y(obj) && obj.y <= @y + @h - obj.h
+		end
+		
+		def is_below obj
+			obj.x + obj.w > @x && obj.x < @x + @w && obj.y.round(6) == get_y(obj).round(6)
+		end
+		
+		def get_y obj
+			if @left && obj.x + obj.w > @x + @w; return @y - obj.h
+			elsif @left; return @y + (1.0 * (@x + @w - obj.x - obj.w) * @h / @w) - obj.h
+			elsif obj.x < @x; return @y - obj.h
+			else; return @y + (1.0 * (obj.x - @x) * @h / @w) - obj.h
+			end
+		end
+	end
+	
 	module Movement
 		attr_reader :speed, :w, :h, :passable, :top, :bottom, :left, :right
 		attr_accessor :x, :y, :stored_forces

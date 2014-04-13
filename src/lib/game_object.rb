@@ -36,19 +36,6 @@ module AGL
 		end
 	end
 
-	class Block
-		attr_reader :x, :y, :w, :h, :passable
-		
-		def initialize x, y, w, h, passable
-			@x = x; @y = y; @w = w; @h = h
-			@passable = passable
-		end
-		
-		def bounds
-			Rectangle.new @x, @y, @w, @h
-		end
-	end
-
 	class GameObject < Sprite
 		include Movement
 		
