@@ -23,20 +23,49 @@ module AGL
 			@left = left
 		end
 		
+		def can_collide? obj
+			@can_collide = (obj.speed.y >= 0 and not intersects(obj))
+		end
+		
+		def check_intersection obj
+			if @can_collide and intersects obj
+#				if obj.speed.x == 0
+					obj.y = get_y(obj)
+					obj.speed.y = 0
+#					return
+#				end
+#			
+#				a = obj.speed.y / obj.speed.x
+#				x = get_x(obj)
+#				y = get_y(obj) + obj.h
+#				w = obj.x - x
+#				h = obj.y + obj.h - y
+#				dx = w * h / (w * a + h)
+#				
+#				obj.x = x + w - dx
+#				obj.y = y + h - (dx * a) - obj.h
+#				obj.speed.y = 0
+			end
+		end
+		
+		def contact? obj
+			obj.x.round(6) == get_x(obj).round(6) && obj.y.round(6) == get_y(obj).round(6)
+		end
+		
 		def intersects obj
 			obj.x + obj.w > @x && obj.x < @x + @w && obj.y > get_y(obj) && obj.y <= @y + @h - obj.h
 		end
 		
-		def is_below obj
-			obj.x + obj.w > @x && obj.x < @x + @w && obj.y.round(6) == get_y(obj).round(6)
+		def get_x obj
+			return @x + (1.0 * (@y + @h - obj.y - obj.h) * @w / @h) - obj.w if @left
+			@x + (1.0 * (obj.y + obj.h - @y) * @w / @h)
 		end
 		
 		def get_y obj
-			if @left && obj.x + obj.w > @x + @w; return @y - obj.h
-			elsif @left; return @y + (1.0 * (@x + @w - obj.x - obj.w) * @h / @w) - obj.h
-			elsif obj.x < @x; return @y - obj.h
-			else; return @y + (1.0 * (obj.x - @x) * @h / @w) - obj.h
-			end
+			return @y - obj.h if @left && obj.x + obj.w > @x + @w
+			return @y + (1.0 * (@x + @w - obj.x - obj.w) * @h / @w) - obj.h if @left
+			return @y - obj.h if obj.x < @x
+			@y + (1.0 * (obj.x - @x) * @h / @w) - obj.h
 		end
 	end
 	
@@ -53,7 +82,7 @@ module AGL
 			forces.x += @stored_forces.x; forces.y += @stored_forces.y
 			@stored_forces.x = @stored_forces.y = 0
 		
-			check_contact obst, ramps
+			# check_contact obst, ramps
 			forces.x = 0 if (forces.x < 0 and @left) or (forces.x > 0 and @right)
 			forces.y = 0 if (forces.y < 0 and @top) or (forces.y > 0 and @bottom)
 		
@@ -62,7 +91,11 @@ module AGL
 			@speed.y = 0 if @speed.y.abs < @min_speed.y
 			@speed.x = (@speed.x <=> 0) * @max_speed.x if @speed.x.abs > @max_speed.x
 			@speed.y = (@speed.y <=> 0) * @max_speed.y if @speed.y.abs > @max_speed.y
-		
+			
+			ramps.each do |r|
+				r.can_collide? self
+			end
+			
 			x = @speed.x < 0 ? @x + @speed.x : @x
 			y = @speed.y < 0 ? @y + @speed.y : @y
 			w = @w + (@speed.x < 0 ? -@speed.x : @speed.x)
@@ -136,12 +169,9 @@ module AGL
 			end
 			@x += @speed.x
 			@y += @speed.y
-		
+			
 			ramps.each do |r|
-				if r.intersects self
-					@y = r.get_y self
-					@speed.y = 0
-				end
+				r.check_intersection self
 			end
 			check_contact obst, ramps
 		end
@@ -156,7 +186,10 @@ module AGL
 			end		
 			if @bottom.nil?
 				ramps.each do |r|
-					@bottom = r if r.is_below self
+					if r.contact? self
+						@bottom = r
+						break
+					end
 				end
 			end
 		end
@@ -194,7 +227,7 @@ module AGL
 			distance = Math.sqrt(x_d**2 + y_d**2)
 			@speed.x = 1.0 * x_d * speed / distance
 			@speed.y = 1.0 * y_d * speed / distance
-		
+			
 			x_aim = @x + @speed.x; y_aim = @y + @speed.y
 			passengers = []
 			obstacles.each do |o|
