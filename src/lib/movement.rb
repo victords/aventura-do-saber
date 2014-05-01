@@ -29,21 +29,19 @@ module AGL
 		
 		def check_intersection obj
 			if @can_collide and intersects obj
-#				if obj.speed.x == 0
-					obj.y = get_y(obj)
-					obj.speed.y = 0
-#					return
-#				end
-#			
-#				a = obj.speed.y / obj.speed.x
+				obj.y = get_y obj
+				obj.speed.y = 0
+#				a = @w / @h
 #				x = get_x(obj)
-#				y = get_y(obj) + obj.h
+#				y = get_y(obj)
 #				w = obj.x - x
-#				h = obj.y + obj.h - y
+#				h = obj.y - y
 #				dx = w * h / (w * a + h)
+#				dy = dx * a
 #				
-#				obj.x = x + w - dx
-#				obj.y = y + h - (dx * a) - obj.h
+#				obj.x -= dx
+#				obj.y -= dy
+#				obj.speed.x *= (@w / (@w + @h))
 #				obj.speed.y = 0
 			end
 		end
