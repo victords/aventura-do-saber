@@ -9,6 +9,8 @@ class Character < GameObject
 			when :milena then 37
 			end
 		super 0, 0, w, 115, name, Vector.new(-8, -5), 3, 2
+		@max_speed.x = 10; @max_speed.y = 20
+		
 		@anim_indices_left_stop = [0]
 		@anim_indices_left = [0, 1, 0, 2]
 		@anim_indices_right_stop = [3]
@@ -35,11 +37,11 @@ class Character < GameObject
 	end
 	
 	def set_position entry
-		@x = entry[:pos].x
-		@y = entry[:pos].y
+		@x = entry.x
+		@y = entry.y
 		@speed.x = @speed.y = 0
 		
-		@anim_indices = (entry[:dir] == :l ? @anim_indices_left_stop : @anim_indices_right_stop)
+		@anim_indices = (entry.dir == :l ? @anim_indices_left_stop : @anim_indices_right_stop)
 		set_animation @anim_indices[0]
 	end
 end
