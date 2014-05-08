@@ -11,11 +11,24 @@ class Scene
 		@entry = entry
 		@bg = Res.img "scene#{number}".to_sym
 		
+		reset
+	end
+	
+	def update
+		@character.update self
+		
+		@items.each do |i|
+			i.update self
+			@items.delete i if i.dead
+		end
+	end
+	
+	def reset
 		@entries = []
 		@obsts = []
 		@ramps = []
 		@items = []
-		File.open("data/scene/#{number}.txt") do |f|
+		File.open("data/scene/#{@number}.txt") do |f|
 			f.each_line do |l|
 				a = l[2..-1].chomp.split ','
 				if l[0] == '>'
@@ -30,19 +43,6 @@ class Scene
 			end
 		end
 		
-		@character.set_position @entries[@entry]
-	end
-	
-	def update
-		@character.update self
-		
-		@items.each do |i|
-			i.update self
-			@items.delete i if i.dead
-		end
-	end
-	
-	def reset
 		@character.set_position @entries[@entry]
 	end
 	
