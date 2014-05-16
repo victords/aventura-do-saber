@@ -1,4 +1,5 @@
-require './item'
+require_relative 'item'
+require_relative 'npc'
 
 Entry = Struct.new :x, :y, :dir
 
@@ -21,6 +22,10 @@ class Scene
 			i.update self
 			@items.delete i if i.dead
 		end
+		
+		@npcs.each do |c|
+			c.update self
+		end
 	end
 	
 	def reset
@@ -28,6 +33,7 @@ class Scene
 		@obsts = []
 		@ramps = []
 		@items = []
+		@npcs = []
 		File.open("data/scene/#{@number}.txt") do |f|
 			f.each_line do |l|
 				a = l[2..-1].chomp.split ','
@@ -37,10 +43,15 @@ class Scene
 					@ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
 				elsif l[0] == '!'
 					@items << Item.new(a[0].to_i, a[1].to_i, a[2].to_sym)
+				elsif l[0] == '?'
+					@npcs << NPC.new(a[0].to_i, a[1].to_i, a[2].to_i)
 				else
 					@obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
 				end
 			end
+		end
+		@npcs.each do |c|
+			@obsts << c
 		end
 		
 		@character.set_position @entries[@entry]
@@ -51,6 +62,9 @@ class Scene
 		@character.draw
 		@items.each do |i|
 			i.draw
+		end
+		@npcs.each do |c|
+			c.draw
 		end
 	end
 end
