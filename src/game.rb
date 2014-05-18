@@ -1,6 +1,6 @@
 require 'gosu'
-require './scene'
-require './character'
+require_relative 'scene'
+require_relative 'character'
 require_relative 'lib/forms'
 include AGL
 
