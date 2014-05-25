@@ -1,4 +1,4 @@
 Aventura do Saber
 =================
 
-Um framework para games e um jogo educativo feitos em Ruby, com base na biblioteca Gosu.
+Um jogo educativo feito em Ruby, com base na biblioteca MiniGL.
