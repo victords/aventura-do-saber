@@ -1,7 +1,7 @@
 require 'gosu'
+require 'minigl'
 require_relative 'scene'
 require_relative 'character'
-require_relative 'lib/forms'
 include AGL
 
 class MyGame < Gosu::Window
