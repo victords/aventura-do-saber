@@ -1,5 +1,4 @@
-require 'gosu'
-require 'minigl'
+require_relative 'menu'
 require_relative 'scene'
 require_relative 'character'
 include AGL
@@ -10,13 +9,16 @@ class MyGame < Gosu::Window
 		self.caption = "Aventura do Saber"
 		
 		Game.initialize self
-		player = Character.new :marcus
-		@scene = Scene.new 1, player, 1
+		G.initialize
 		
-		@font = Gosu::Font.new self, "data/font/Ubuntu-L.ttf", 20
-		@button = Button.new(600, 100, @font, "Restart", :btn1) {
-			@scene.reset
-		}
+		@menu = Menu.new
+#		player = Character.new :marcus
+#		@scene = Scene.new 1, player, 1
+#		
+#		@font = Gosu::Font.new self, "data/font/Ubuntu-L.ttf", 20
+#		@button = Button.new(600, 100, @font, "Restart", :btn1) {
+#			@scene.reset
+#		}
 	end
 	
 	def needs_cursor?
@@ -27,13 +29,15 @@ class MyGame < Gosu::Window
 		KB.update
 		Mouse.update
 		
-		@scene.update
-		@button.update
+		@menu.update
+#		@scene.update
+#		@button.update
 	end
 	
 	def draw
-		@scene.draw
-		@button.draw
+		@menu.draw
+#		@scene.draw
+#		@button.draw
 	end
 end
 
