@@ -43,22 +43,36 @@ end
 class Menu
 	def initialize
 		@bg = Res.img :bg_menu, true
+#		@char1 = Res.img :other_marcus
+#		@char2 = Res.img :other_milena
+#		@selection = Sprite.new 133, 86, :other_selection, 2, 1
 		@comps = 0
 		@comp1 = MenuComponent.new -660, 0, :ui_menuComponent1
 		@comp1.move_to(0, 0) { @comps += 1 }
 		@comp2 = MenuComponent.new 800, 531, :ui_menuComponent2
 		@comp2.move_to(409, 531) { @comps += 1 }
 		
-		@btn = Button.new(500, 555, G.font, "Test", :ui_btn1) {
-			puts "clicou"
+		@btn1 = Button.new(440, 555, G.font, "OK", :ui_btn1) {
+			puts "OK"
 		}
+		@btn2 = Button.new(600, 555, G.font, "Voltar", :ui_btn1) {
+			puts "Voltar"
+		}
+		@text_field = TextField.new 100, 260, G.big_font, :ui_textField, :ui_textCursor, "", 20, 13
 	end
 	
 	def update
 		@comp1.update
 		@comp2.update
 		if @comps == 2
-			@btn.update
+			@btn1.update
+			@btn2.update
+			@text_field.update
+#			@selection.animate [0, 1], 10
+#			if KB.key_pressed?(Gosu::KbLeft) or KB.key_pressed?(Gosu::KbRight)
+#				if @selection.x == 133; @selection.x = 435
+#				else; @selection.x = 133; end
+#			end
 		end
 	end
 	
@@ -67,7 +81,13 @@ class Menu
 		@comp1.draw
 		@comp2.draw
 		if @comps == 2
-			@btn.draw
+			G.big_font.draw "Qual é o seu nome?", 15, 5, 0, 1, 1, 0xff000000
+			@btn1.draw
+			@btn2.draw
+			@text_field.draw
+#			@selection.draw
+#			@char1.draw 153, 106, 0
+#			@char2.draw 474, 111, 0
 		end
 	end
 end
