@@ -10,15 +10,6 @@ class MyGame < Gosu::Window
 		
 		Game.initialize self
 		G.initialize
-		
-		@menu = Menu.new
-#		player = Character.new :marcus
-#		@scene = Scene.new 1, player, 1
-#		
-#		@font = Gosu::Font.new self, "data/font/Ubuntu-L.ttf", 20
-#		@button = Button.new(600, 100, @font, "Restart", :btn1) {
-#			@scene.reset
-#		}
 	end
 	
 	def needs_cursor?
@@ -29,15 +20,19 @@ class MyGame < Gosu::Window
 		KB.update
 		Mouse.update
 		
-		@menu.update
-#		@scene.update
-#		@button.update
+		if G.state == :menu
+			G.menu.update
+		elsif
+			G.scene.update
+		end
 	end
 	
 	def draw
-		@menu.draw
-#		@scene.draw
-#		@button.draw
+		if G.state == :menu
+			G.menu.draw
+		elsif
+			G.scene.draw
+		end
 	end
 end
 

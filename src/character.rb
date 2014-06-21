@@ -8,7 +8,7 @@ class Character < GameObject
 			when :marcus then 44
 			when :milena then 37
 			end
-		super 0, 0, w, 115, name, Vector.new(-8, -5), 3, 2
+		super 0, 0, w, 115, "sprite_#{name}", Vector.new(-8, -5), 3, 2
 		@max_speed.x = 10; @max_speed.y = 20
 		
 		@anim_indices_left = [0, 1, 0, 2]

@@ -10,7 +10,7 @@ class Scene
 		@number = number
 		@character = character
 		@entry = entry
-		@bg = Res.img "scene#{number}".to_sym
+		@bg = Res.img "bg_scene#{number}".to_sym
 		
 		reset
 	end

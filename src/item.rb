@@ -7,7 +7,7 @@ class Item < GameObject
 	def initialize x, y, type
 		@type = type
 		
-		super x, y, 30, 30, type, Vector.new(0, 0)
+		super x, y, 30, 30, "sprite_#{type}", Vector.new(0, 0)
 	end
 	
 	def update scene

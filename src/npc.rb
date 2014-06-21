@@ -7,7 +7,7 @@ class NPC < GameObject
 		when 1 then w = 30; h = 140; img_gap = Vector.new(-18, 0); rows = 1; cols = 1
 		end
 		
-		super x, y, w, h, "npc#{id}", img_gap, rows, cols
+		super x, y, w, h, "sprite_npc#{id}", img_gap, rows, cols
 	end
 	
 	def update scene
