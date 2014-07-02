@@ -143,7 +143,7 @@ class Menu
 			], [
 				Button.new(440, 555, G.font, "OK", :ui_btn1) { go_to_screen 2 },
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 },
-				TextField.new(100, 260, G.big_font, :ui_textField, :ui_textCursor, "", 20, 13),
+				TextField.new(100, 260, G.big_font, :ui_textField, :ui_textCursor, 20, 13, 20, true),
 				MenuText.new("Qual é o seu nome?", 10, 10)
 			]),
 			MenuScreen.new([
