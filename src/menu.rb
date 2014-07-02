@@ -60,20 +60,21 @@ class MenuText
 		@text = text
 		@x = x
 		@y = y
+		@writer = TextHelper.new G.big_font
 	end
 	
 	def update; end
 	
-	def draw
-		G.big_font.draw @text, @x - 2, @y - 2, 0, 1, 1, 0xff000000
-		G.big_font.draw @text, @x, @y - 2, 0, 1, 1, 0xff000000
-		G.big_font.draw @text, @x + 2, @y - 2, 0, 1, 1, 0xff000000
-		G.big_font.draw @text, @x + 2, @y, 0, 1, 1, 0xff000000
-		G.big_font.draw @text, @x + 2, @y + 2, 0, 1, 1, 0xff000000
-		G.big_font.draw @text, @x, @y + 2, 0, 1, 1, 0xff000000
-		G.big_font.draw @text, @x - 2, @y + 2, 0, 1, 1, 0xff000000
-		G.big_font.draw @text, @x - 2, @y, 0, 1, 1, 0xff000000
-		G.big_font.draw @text, @x, @y, 0, 1, 1, 0xffffffff
+	def draw alpha
+		@writer.write_line @text, @x - 2, @y - 2, :left, 0, alpha
+		@writer.write_line @text, @x, @y - 2, :left, 0, alpha
+		@writer.write_line @text, @x + 2, @y - 2, :left, 0, alpha
+		@writer.write_line @text, @x + 2, @y, :left, 0, alpha
+		@writer.write_line @text, @x + 2, @y + 2, :left, 0, alpha
+		@writer.write_line @text, @x, @y + 2, :left, 0, alpha
+		@writer.write_line @text, @x - 2, @y + 2, :left, 0, alpha
+		@writer.write_line @text, @x - 2, @y, :left, 0, alpha
+		@writer.write_line @text, @x, @y, :left, 0xffffff, alpha
 	end
 end
 
@@ -84,17 +85,24 @@ class MenuScreen
 		@panels = panels
 		@components = components
 		@ready = false
+		@fading = false
+		@alpha = 0
 	end
 	
 	def update
 		if @ready
 			@components.each { |c| c.update }
+			if @fading
+				@alpha += 17
+				@fading = false if @alpha == 255
+			end
 		else
 			@ready = true
 			@panels.each do |p|
 				p.update
 				@ready = false unless p.ready
 			end
+			@fading = true if @ready
 		end
 	end
 	
@@ -106,11 +114,13 @@ class MenuScreen
 	def reset
 		@panels.each { |p| p.reset }
 		@ready = false
+		@fading = false
+		@alpha = 0
 	end
 	
 	def draw
 		@panels.each { |p| p.draw }
-		@components.each { |c| c.draw } if @ready
+		@components.each { |c| c.draw @alpha } if @ready
 	end
 end
 
