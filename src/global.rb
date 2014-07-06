@@ -1,4 +1,3 @@
-require 'gosu'
 require 'minigl'
 include AGL
 
@@ -12,9 +11,14 @@ class G
 		@@menu = Menu.new
 	end
 	
-	def self.start_game
+	def self.start_game char_index
 		@@state = :game
-		@@player = Character.new :marcus
+		character =
+			case char_index
+			when 0 then :marcus
+			when 1 then :milena
+			end
+		@@player = Character.new character
 		@@scene = Scene.new 1, @@player, 1
 	end
 	
