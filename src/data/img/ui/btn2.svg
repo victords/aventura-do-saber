@@ -10,8 +10,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="308"
-   height="44"
+   width="400"
+   height="120"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
@@ -147,7 +147,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -155,24 +155,24 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-1008.3622)">
+     transform="translate(0,-932.3622)">
     <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;opacity:0.5"
+       style="opacity:0.50000000000000000;fill:#000000;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.2"
        id="rect3756"
-       width="152"
-       height="42"
+       width="398"
+       height="38"
        x="0.99999994"
-       y="1009.3622"
+       y="1013.3622"
        ry="8.6301374"
        rx="8.0192518" />
     <rect
        rx="8.0192518"
        ry="8.6301374"
-       y="1009.3622"
-       x="155"
-       height="42"
-       width="152"
-       id="rect3774"
+       y="973.36218"
+       x="0.99999994"
+       height="38"
+       width="398"
+       id="rect3001"
        style="opacity:0.5;fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
   </g>
 </svg>

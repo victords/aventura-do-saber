@@ -157,9 +157,9 @@ class Menu
 			Button.new(19, 253, G.font, "Pontuações", :ui_btn1) { puts "P" },
 			Button.new(19, 313, G.font, "Opções", :ui_btn1) { puts "O" },
 			Button.new(19, 373, G.font, "Sair", :ui_btn1) { G.win.close },
-			Button.new(440, 555, G.font, "OK", :ui_btn1) { go_to_screen 2 },
+			Button.new(440, 555, G.font, "OK", :ui_btn1) { @name = @name_input.text; go_to_screen 2 },
 			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 },
-			Button.new(440, 555, G.font, "OK", :ui_btn1) { G.start_game @char },
+			Button.new(440, 555, G.font, "OK", :ui_btn1) { G.start_game @char, @name },
 			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 1 },
 			Button.new(122, 97, nil, nil, nil, 0, 0, 0, 0, 212, 420) {
 				@char = :marcus
@@ -174,10 +174,23 @@ class Menu
 				@selection.set_pos 456, 87
 			}
 		]
+		
 		@char = :marcus
 		@char_name = MenuText.new "Marcus", 10, 536, :left, G.med_font
 		@char_description = MenuText.new "Um simpático garoto de 10 anos.", 10, 572, :left, G.font
 		@selection = MenuSprite.new 112, 87, :ui_selection, 2, 1, [0,1], 10
+		
+		@name_input = TextField.new 100, 160, G.big_font, :ui_textField, :ui_textCursor, 20, 13, 20, true
+		name_screen_components = [
+			@buttons[4], @buttons[5], @name_input,
+			MenuText.new("Qual é o seu nome?", 10, 5)
+		]
+		games = Dir["data/save/*"]
+		games.each_with_index do |g, i|
+			name = g.split('/')[-1]
+			name_screen_components << Button.new(200, 250 + i * 40, G.med_font, name, :ui_btn2) { @name = name; go_to_screen 2 }
+		end
+		
 		@screens = [
 			MenuScreen.new([
 				MenuPanel.new(-200, 163, 0, 163, :ui_menuComponent3)
@@ -188,11 +201,7 @@ class Menu
 			MenuScreen.new([
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
 				MenuPanel.new(800, 531, 409, 531, :ui_menuComponent2)
-			], [
-				@buttons[4], @buttons[5],
-				TextField.new(100, 260, G.big_font, :ui_textField, :ui_textCursor, 20, 13, 20, true),
-				MenuText.new("Qual é o seu nome?", 10, 5)
-			]),
+			], name_screen_components),
 			MenuScreen.new([
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
 				MenuPanel.new(800, 531, 409, 531, :ui_menuComponent2)

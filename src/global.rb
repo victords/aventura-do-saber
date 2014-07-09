@@ -12,10 +12,11 @@ class G
 		@@menu = Menu.new
 	end
 	
-	def self.start_game character
+	def self.start_game character, name
 		@@state = :game
 		@@player = Character.new character
 		@@scene = Scene.new 1, @@player, 1
+		puts "Jogador: #{name}"
 	end
 	
 	def self.win; @@win; end
