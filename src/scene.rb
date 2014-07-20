@@ -34,20 +34,14 @@ class Scene
 		@ramps = []
 		@items = []
 		@npcs = []
-		File.open("data/scene/#{@number}.txt") do |f|
-			f.each_line do |l|
-				a = l[2..-1].chomp.split ','
-				if l[0] == '>'
-					@entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)
-				elsif l[0] == '/' or l[0] == '\\'
-					@ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
-				elsif l[0] == '!'
-					@items << Item.new(a[0].to_i, a[1].to_i, a[2].to_sym)
-				elsif l[0] == '?'
-					@npcs << NPC.new(a[0].to_i, a[1].to_i, a[2].to_i)
-				else
-					@obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
-				end
+		File.open("data/scene/#{@number}.txt").each do |l|
+			a = l[2..-1].chomp.split ','
+			case l[0]
+			when '>'     then @entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)
+			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
+			when '!'     then @items << Item.new(a[0].to_i, a[1].to_i, a[2].to_sym)
+			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2].to_i)
+			else              @obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
 			end
 		end
 		@npcs.each do |c|

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="320"
+   height="180"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="port.svg"
+   inkscape:export-filename="/home/victor/Projects/TCC/aventura-do-saber/src/data/img/sprite/port.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="160"
+     inkscape:cy="90"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1364"
+     inkscape:window-height="718"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-872.36218)">
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       d="m 96.377146,923.37852 21.232404,-45.3169 25.03521,38.02817 c 0,0 21.54929,-3.48592 21.86619,-5.38733 0.31691,-1.9014 3.16902,-25.66901 3.16902,-25.66901 l 58.62676,3.80282 -30.73944,46.5845 -56.72535,0.31691 c 0,0 40.24648,35.17605 43.09859,32.95774 2.85211,-2.21831 55.14085,-35.49296 55.14085,-35.49296 0,0 -36.76057,-20.28169 -34.22535,-20.28169 2.53521,0 43.73239,-12.99295 48.48591,-17.42957 4.75352,-4.43662 18.69718,13.30986 32.64085,19.64788 13.94366,6.33803 36.44366,8.55634 30.73943,13.30986 -5.70422,4.75352 -60.84507,31.05634 -61.16197,35.80986 -0.3169,4.75352 -6.02113,38.3451 -9.50704,26.61972 -3.48592,-11.72535 0.3169,-60.52817 0.3169,-60.52817 0,0 -9.82394,24.08451 -26.61972,34.54226 -16.79577,10.45774 -32.00704,22.5 -52.92253,21.23239 -20.9155,-1.26761 -44.6831,-12.99296 -45.63381,-21.23239 -0.9507,-8.23944 12.35916,-31.69015 11.40845,-39.92958 -0.9507,-8.23944 18.69719,-29.15493 -5.07042,-8.87324 -23.7676,20.28169 -24.08451,19.96479 -24.08451,19.96479 l -6.654934,-12.99296 z"
+       id="path2985"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

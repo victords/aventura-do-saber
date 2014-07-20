@@ -12,7 +12,7 @@ class G
 		@@menu = Menu.new
 	end
 	
-	def self.start_game character, name
+	def self.start_game type, name, character
 		@@state = :game
 		@@player = Character.new character
 		@@scene = Scene.new 1, @@player, 1
