@@ -242,11 +242,6 @@ class Menu
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
 				MenuPanel.new(800, 531, 409, 531, :ui_menuComponent2)
 			], [
-				MenuText.new("O que você quer praticar?", 10, 5),
-				MenuText.new("Matemática", 60, 248, :left, G.med_font),
-				MenuText.new("Língua Portuguesa", 440, 248, :left, G.med_font),
-				MenuText.new("Lógica", 60, 468, :left, G.med_font),
-				MenuText.new("Tudo isso!", 440, 468, :left, G.med_font),
 				Button.new(440, 555, G.font, "OK", :ui_btn1) { G.start_game @game_type, @name, @char },
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 3 },
 				Button.new(50, 110, nil, nil, nil, 0, 0, 0, 0, 320, 180) { @game_type = :math; @game_selection.set_pos 38, 98 },
@@ -257,6 +252,11 @@ class Menu
 				MenuSprite.new(430, 110, :sprite_port),
 				MenuSprite.new(50, 330, :sprite_logic),
 				MenuSprite.new(430, 330, :sprite_all),
+				MenuText.new("O que você quer praticar?", 10, 5),
+				MenuText.new("Matemática", 60, 248, :left, G.med_font),
+				MenuText.new("Língua Portuguesa", 440, 248, :left, G.med_font),
+				MenuText.new("Lógica", 60, 468, :left, G.med_font),
+				MenuText.new("Tudo isso!", 440, 468, :left, G.med_font),
 				@game_selection
 			])
 		]
