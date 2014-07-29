@@ -4,19 +4,20 @@ require_relative 'npc'
 Entry = Struct.new :x, :y, :dir
 
 class Scene
-	attr_reader :character, :obsts, :ramps
+	attr_reader :obsts, :ramps
 	
-	def initialize number, character, entry
+	def initialize number, entry
 		@number = number
-		@character = character
 		@entry = entry
 		@bg = Res.img "bg_scene#{number}".to_sym
+		@map = Map.new 1, 1, @bg.width, @bg.height
 		
 		reset
 	end
 	
 	def update
-		@character.update self
+		G.player.update
+		@map.set_camera G.player.char.x - 380, G.player.char.y - 240
 		
 		@items.each do |i|
 			i.update self
@@ -48,17 +49,17 @@ class Scene
 			@obsts << c
 		end
 		
-		@character.set_position @entries[@entry]
+		G.player.char.set_position @entries[@entry]
 	end
 	
 	def draw
-		@bg.draw 0, 0, 0
-		@character.draw
+		@bg.draw -@map.cam.x, -@map.cam.y, 0
 		@items.each do |i|
-			i.draw
+			i.draw @map
 		end
 		@npcs.each do |c|
-			c.draw
+			c.draw @map
 		end
+		G.player.draw @map
 	end
 end
