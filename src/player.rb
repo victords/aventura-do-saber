@@ -1,7 +1,7 @@
 class Player
 	attr_reader :name, :char
 	
-	def initialize name, char, items = []
+	def initialize name, char, items = {}
 		@name = name
 		@char = Character.new char
 		@items = items
@@ -12,9 +12,10 @@ class Player
 	end
 	
 	def add_item item
-		@items << item
+		@items[item.type] = [] if @items[item.type].nil?
+		@items[item.type] << item
 		@item_alpha = 0
-		@item_index = @items.length - 1
+		@item_index = item.type
 	end
 	
 	def update
@@ -34,15 +35,19 @@ class Player
 		G.med_font.draw @name.capitalize, 5, 25, 0, 1, 1, 0xff000000
 		
 		if @items.length > 0
-			@panel2.draw 740, @items.length * 42 - 260, 0
-			G.font.draw "Itens", 758, 5, 0, 1, 1, 0xff000000
-			@items.each_with_index do |item, i|
-				if i == @item_index
+			base = 805 - @items.length * 57
+			@panel2.draw base - 20, 0, 0
+			G.font.draw "Itens", base, 5, 0, 1, 1, 0xff000000
+			i = 0
+			@items.each do |k, v|
+				if k == @item_index
 					color = 0xffffff | (@item_alpha << 24)
-					item.icon.draw 758, 25 + i * 42, 0, 1, 1, color
+					v[0].icon.draw base + i * 57, 23, 0, 1, 1, color
 				else
-					item.icon.draw 758, 25 + i * 42, 0
+					v[0].icon.draw base + i * 57, 23, 0
 				end
+				G.med_font.draw v.length, base + i * 57 + 33, 27, 0, 1, 1, 0xff000000 if v.length > 1
+				i += 1
 			end
 		end
 	end

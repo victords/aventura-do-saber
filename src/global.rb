@@ -15,7 +15,7 @@ class G
 	
 	def self.start_game type, name, char
 		@@state = :game
-		@@player = Player.new name, char, []
+		@@player = Player.new name, char, {}
 		@@scene = Scene.new 1, 1
 	end
 	
