@@ -19,4 +19,8 @@ class Item < GameObject
 			@dead = true
 		end
 	end
+	
+	def use
+		puts "Usando #{@type}"
+	end
 end

@@ -1,3 +1,14 @@
+require 'minigl'
+
+class ItemButton < AGL::Button
+	def initialize x, y, item_type
+		@item_type = item_type
+		super(x, y, nil, nil, :ui_itemBtn) {
+			G.player.use_item @item_type
+		}
+	end
+end
+
 class Player
 	attr_reader :name, :char
 	
@@ -9,13 +20,27 @@ class Player
 		
 		@panel1 = Res.img :ui_panel1
 		@panel2 = Res.img :ui_panel2
+		
+		@buttons = {}
 	end
 	
 	def add_item item
-		@items[item.type] = [] if @items[item.type].nil?
+		if @items[item.type].nil?
+			@items[item.type] = []
+			@buttons[item.type] = ItemButton.new(0, 20, item.type)
+			i = 0
+			@buttons.each do |k, v|
+				v.set_position 802 - (@items.length-i) * 57, 20
+				i += 1
+			end
+		end
 		@items[item.type] << item
 		@item_alpha = 0
 		@item_index = item.type
+	end
+	
+	def use_item item
+		@items[item][0].use
 	end
 	
 	def update
@@ -25,6 +50,7 @@ class Player
 		elsif @item_index
 			@item_index = nil
 		end
+		@buttons.each { |k, v| v.update }
 	end
 	
 	def draw map
@@ -37,6 +63,7 @@ class Player
 		if @items.length > 0
 			base = 805 - @items.length * 57
 			@panel2.draw base - 20, 0, 0
+			@buttons.each { |k, v| v.draw }
 			G.font.draw "Itens", base, 5, 0, 1, 1, 0xff000000
 			i = 0
 			@items.each do |k, v|
