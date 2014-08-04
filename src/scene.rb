@@ -24,9 +24,11 @@ class Scene
 			@items.delete i if i.dead
 		end
 		
+		@obsts << G.player.char
 		@npcs.each do |c|
 			c.update self
 		end
+		@obsts.delete G.player.char
 	end
 	
 	def reset

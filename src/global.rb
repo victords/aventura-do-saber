@@ -9,6 +9,11 @@ class G
 		@@med_font = Res.font :UbuntuLight, 32
 		@@big_font = Res.font :UbuntuLight, 54
 		@@state = :menu
+		@@texts = {}
+		File.open("data/text/all.txt").each do |l|
+			parts = l.split "\t"
+			@@texts[parts[0]] = parts[-1].chomp
+		end
 		
 		@@menu = Menu.new
 	end
@@ -24,6 +29,8 @@ class G
 	def self.med_font; @@med_font; end
 	def self.big_font; @@big_font; end
 	def self.state; @@state; end
+	def self.texts; @@texts; end
+	
 	def self.menu; @@menu; end
 	def self.player; @@player; end
 	def self.scene; @@scene; end
