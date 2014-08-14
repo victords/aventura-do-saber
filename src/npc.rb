@@ -2,13 +2,15 @@ require 'minigl'
 include AGL
 
 class NPC < GameObject
-	def initialize x, y, id, state = 1
-		case id
-		when 1 then w = 45; h = 140; img_gap = Vector.new(-3, 0)
-		end
+	attr_reader :block
+	
+	def initialize id, x, y, w, h, img_gap_x, img_gap_y, last_state, state = 1
+		super x, y, w, h, "sprite_npc#{id}", Vector.new(img_gap_x, img_gap_y), 3, 1
+		@id = id
+		@state = state
+		@last_state = last_state
 		
-		super x, y, w, h, "sprite_npc#{id}", img_gap, 3, 1
-		
+		@block = Block.new @x + 5, @y + 5, @w, @h, false
 		@message = G.texts["npc#{id}_#{state}"]
 		@writer = TextHelper.new G.font, 8
 		@ellipsis = Res.img :ui_ellipsis
@@ -18,9 +20,9 @@ class NPC < GameObject
 		@alpha = 0
 	end
 	
-	def update scene
-		move Vector.new(0, 0), scene.obsts, scene.ramps
-		@can_talk = (@left == G.player.char or @right == G.player.char)
+	def update
+		move Vector.new(0, 0), G.scene.obsts, G.scene.ramps
+		@can_talk = bounds.intersects G.player.char.bounds
 		if @talking and not @can_talk
 			@talking = false
 			@leaving = true
@@ -38,11 +40,19 @@ class NPC < GameObject
 				G.player.talking = true
 				@alpha = 0
 			end
+		elsif @can_talk and KB.key_pressed? Gosu::KbS
+			set_state 2
 		end
 		animate @talking_seq, 8 if @talking
 		@alpha += 17 if @alpha < 255 and (@can_talk or @talking)
 		@alpha -= 17 if @alpha > 0 and not @can_talk and not @talking
 		@leaving = false if @alpha == 0
+	end
+	
+	def set_state state
+		@state = state
+		@message = G.texts["npc#{@id}_#{state}"]
+		G.scene.remove_obst @block if state == @last_state
 	end
 	
 	def draw map

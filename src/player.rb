@@ -64,7 +64,9 @@ class Player
 		
 		p_color = (@panel_alpha << 24) | 0xffffff
 		p_t_color = (@panel_alpha << 24) | 0
-		@panel1.draw 0, 0, 0, 1, 1, p_color
+		base = -270 + G.med_font.text_width(@name.capitalize)
+		base = -210 if base < -210
+		@panel1.draw base, 0, 0, 1, 1, p_color
 		G.font.draw "Jogador", 5, 5, 0, 1, 1, p_t_color
 		G.med_font.draw @name.capitalize, 5, 25, 0, 1, 1, p_t_color
 		

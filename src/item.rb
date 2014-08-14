@@ -10,9 +10,9 @@ class Item < GameObject
 		@icon = Res.img "icon_#{type}"
 	end
 	
-	def update scene
+	def update
 		forces = Vector.new(0, 0)
-		move forces, scene.obsts, scene.ramps
+		move forces, G.scene.obsts, G.scene.ramps
 		
 		if bounds.intersects G.player.char.bounds
 			G.player.add_item self

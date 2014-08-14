@@ -20,15 +20,18 @@ class Scene
 		@map.set_camera G.player.char.x - 380, G.player.char.y - 240
 		
 		@items.each do |i|
-			i.update self
+			i.update
 			@items.delete i if i.dead
 		end
 		
-		@obsts << G.player.char
-		@npcs.each do |c|
-			c.update self
+		@effects.each do |e|
+			e.update
+			@effects.delete e if e.dead
 		end
-		@obsts.delete G.player.char
+		
+		@npcs.each do |c|
+			c.update
+		end
 	end
 	
 	def reset
@@ -37,21 +40,27 @@ class Scene
 		@ramps = []
 		@items = []
 		@npcs = []
+		@effects = []
 		File.open("data/scene/#{@number}.txt").each do |l|
 			a = l[2..-1].chomp.split ','
 			case l[0]
 			when '>'     then @entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)
 			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
 			when '!'     then @items << Item.new(a[0].to_i, a[1].to_i, a[2].to_sym)
-			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2].to_i)
+			when '?'     then @npcs << NPC.new(a[0], a[1].to_i, a[2].to_i, a[3].to_i, a[4].to_i, a[5].to_i, a[6].to_i, a[7].to_i)
+			when 'x'     then @effects << Effect.new(a[0].to_i, a[1].to_i, "fx_#{a[2]}", a[3].to_i, a[4].to_i, 15, [0,1,0,1,2,1,2,3,4,3,4,5])
 			else              @obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
 			end
 		end
 		@npcs.each do |c|
-			@obsts << c
+			@obsts << c.block
 		end
 		
 		G.player.char.set_position @entries[@entry]
+	end
+	
+	def remove_obst obst
+		@obsts.delete obst
 	end
 	
 	def draw
@@ -63,5 +72,8 @@ class Scene
 			c.draw @map
 		end
 		G.player.draw @map
+		@effects.each do |e|
+			e.draw
+		end
 	end
 end
