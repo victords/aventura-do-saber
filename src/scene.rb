@@ -17,7 +17,7 @@ class Scene
 	
 	def update
 		G.player.update
-		@map.set_camera G.player.char.x - 380, G.player.char.y - 240
+		@map.set_camera G.player.x - 380, G.player.y - 240
 		
 		@items.each do |i|
 			i.update
@@ -56,7 +56,7 @@ class Scene
 			@obsts << c.block
 		end
 		
-		G.player.char.set_position @entries[@entry]
+		G.player.set_position @entries[@entry]
 	end
 	
 	def remove_obst obst

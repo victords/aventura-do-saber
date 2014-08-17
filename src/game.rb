@@ -1,6 +1,5 @@
 require_relative 'menu'
 require_relative 'scene'
-require_relative 'character'
 include AGL
 
 class MyGame < Gosu::Window

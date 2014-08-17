@@ -11,12 +11,12 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="400"
-   height="120"
+   height="160"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="btnSelection.svg"
-   inkscape:export-filename="/home/victor/Projects/TCC/aventura-do-saber/src/data/img/ui/btnSelection.png"
+   sodipodi:docname="btn2.svg"
+   inkscape:export-filename="/home/victor/Projects/TCC/aventura-do-saber/src/data/img/ui/btn2.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -147,7 +147,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -155,20 +155,20 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-932.3622)">
+     transform="translate(0,-892.3622)">
     <rect
-       style="opacity:0.50000000000000000;fill:#000000;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.2"
+       style="opacity:0.5;fill:#000000;fill-opacity:0.2;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect3756"
        width="398"
        height="38"
        x="0.99999994"
-       y="1013.3622"
+       y="973.36218"
        ry="8.6301374"
        rx="8.0192518" />
     <rect
        rx="8.0192518"
        ry="8.6301374"
-       y="973.36218"
+       y="933.36218"
        x="0.99999994"
        height="38"
        width="398"

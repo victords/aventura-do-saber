@@ -160,8 +160,20 @@ class Menu
 		@bg = Res.img :bg_menu, true
 		
 		@names = []
-		@name_input = TextField.new 100, 160, G.big_font, :ui_textField, :ui_textCursor, 20, 13, 12, true, "",
-		                            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+		@name_input = TextField.new(100, 160, G.big_font, :ui_textField, :ui_textCursor, nil, 20, 13, 12, true, "",
+		                            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ") { |text|
+		                              @name_button.visible = (text.length > 0)
+		                            }
+		@name_button = Button.new(440, 555, G.font, "OK", :ui_btn1) {
+			@name = @name_input.text.downcase
+			if @names.index @name
+				@same_name.set_text "Um jogo com nome '#{@name.capitalize}' já existe. Deseja continuar ou substituir?"
+				go_to_screen 2
+			else
+				go_to_screen 3
+			end
+		}
+		@name_button.visible = false
 		@same_name = MenuText.new "", 240, 185, :justified, G.med_font, 320
 		
 		@char = :marcus
@@ -173,18 +185,9 @@ class Menu
 		@game_selection = MenuSprite.new 38, 98, :ui_selection2, 1, 2, [0, 1], 10
 		
 		name_screen_components = [
-			Button.new(440, 555, G.font, "OK", :ui_btn1) {
-				@name = @name_input.text.downcase
-				if @names.index @name
-					@same_name.set_text "Um jogo com nome '#{@name.capitalize}' já existe. Deseja continuar ou substituir?"
-					go_to_screen 2
-				else
-					go_to_screen 3
-				end
-			},
 			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 },
 			MenuText.new("Qual é o seu nome?", 10, 5),
-			@name_input
+			@name_input, @name_button
 		]
 		games = Dir["data/save/*"]
 		games.each_with_index do |g, i|
@@ -221,13 +224,13 @@ class Menu
 			], [
 				Button.new(440, 555, G.font, "OK", :ui_btn1) { go_to_screen 4 },
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { @name_input.focus; go_to_screen 1 },
-				Button.new(122, 97, nil, nil, nil, 0, 0, 0, 0, 212, 420) {
+				Button.new(122, 97, nil, nil, nil, 0, 0, 0, 0, 0, 212, 420) {
 					@char = :marcus
 					@char_name.set_text "Marcus"
 					@char_description.set_text "Um simpático garoto de 10 anos."
 					@char_selection.set_pos 112, 87
 				},
-				Button.new(466, 97, nil, nil, nil, 0, 0, 0, 0, 212, 420) {
+				Button.new(466, 97, nil, nil, nil, 0, 0, 0, 0, 0, 212, 420) {
 					@char = :milena
 					@char_name.set_text "Milena"
 					@char_description.set_text "Uma adorável garota de 10 anos."
@@ -244,10 +247,10 @@ class Menu
 			], [
 				Button.new(440, 555, G.font, "OK", :ui_btn1) { G.start_game @game_type, @name, @char },
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 3 },
-				Button.new(50, 110, nil, nil, nil, 0, 0, 0, 0, 320, 180) { @game_type = :math; @game_selection.set_pos 38, 98 },
-				Button.new(430, 110, nil, nil, nil, 0, 0, 0, 0, 320, 180) { @game_type = :port; @game_selection.set_pos 418, 98 },
-				Button.new(50, 330, nil, nil, nil, 0, 0, 0, 0, 320, 180) { @game_type = :logic; @game_selection.set_pos 38, 318 },
-				Button.new(430, 330, nil, nil, nil, 0, 0, 0, 0, 320, 180) { @game_type = :all; @game_selection.set_pos 418, 318 },
+				Button.new(50, 110, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :math; @game_selection.set_pos 38, 98 },
+				Button.new(430, 110, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :port; @game_selection.set_pos 418, 98 },
+				Button.new(50, 330, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :logic; @game_selection.set_pos 38, 318 },
+				Button.new(430, 330, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :all; @game_selection.set_pos 418, 318 },
 				MenuSprite.new(50, 110, :sprite_math),
 				MenuSprite.new(430, 110, :sprite_port),
 				MenuSprite.new(50, 330, :sprite_logic),

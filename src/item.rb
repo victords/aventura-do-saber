@@ -14,7 +14,7 @@ class Item < GameObject
 		forces = Vector.new(0, 0)
 		move forces, G.scene.obsts, G.scene.ramps
 		
-		if bounds.intersects G.player.char.bounds
+		if bounds.intersects G.player.bounds
 			G.player.add_item self
 			@dead = true
 		end

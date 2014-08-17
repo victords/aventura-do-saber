@@ -22,7 +22,7 @@ class NPC < GameObject
 	
 	def update
 		move Vector.new(0, 0), G.scene.obsts, G.scene.ramps
-		@can_talk = bounds.intersects G.player.char.bounds
+		@can_talk = bounds.intersects G.player.bounds
 		if @talking and not @can_talk
 			@talking = false
 			@leaving = true
