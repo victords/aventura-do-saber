@@ -1,18 +1,8 @@
 require 'minigl'
 include AGL
 
-class ItemButton < Button
-	def initialize x, y, item_type
-		@item_type = item_type
-		super(x, y, nil, nil, :ui_itemBtn) {
-			G.player.use_item @item_type
-		}
-	end
-end
-
 class Player < GameObject
 	attr_reader :name
-	attr_writer :talking
 	
 	def initialize name, char, items = {}
 		super 0, 0, (char == :marcus ? 44 : 37), 115, "sprite_#{char}", Vector.new(-8, -5), 3, 2
@@ -25,7 +15,6 @@ class Player < GameObject
 		@item_alpha = 255
 		@buttons = {}
 		
-		@talking = false
 		@panel_alpha = 255
 		@panel1 = Res.img :ui_panel1
 		@panel2 = Res.img :ui_panel2
@@ -68,10 +57,17 @@ class Player < GameObject
 		elsif @item_index
 			@item_index = nil
 		end
-		@buttons.each { |k, v| v.update } unless @talking
 		
-		@panel_alpha += 17 if @panel_alpha < 255 and not @talking
-		@panel_alpha -= 17 if @panel_alpha > 0 and @talking
+		if @npc
+			@buttons.each { |k, v| v.update } if @npc.require_item?
+			if @panel_alpha > 0
+				@panel_alpha -= 17
+				@buttons.each_with_index { |b, i| puts "a"; b[1].set_position 200 + i * 50, 540 } if @panel_alpha == 0 and @npc.require_item?
+			end
+		else
+			@buttons.each { |k, v| v.update }
+			@panel_alpha += 17 if @panel_alpha < 255
+		end
 	end
 	
 	def set_direction dir
@@ -98,7 +94,7 @@ class Player < GameObject
 	def add_item item
 		if @items[item.type].nil?
 			@items[item.type] = []
-			@buttons[item.type] = ItemButton.new(0, 20, item.type)
+			@buttons[item.type] = Button.new(0, 20, nil, nil, :ui_itemBtn, 0, 0, 0, 0, 0, 0, 0, item.type){ |i| G.player.use_item i }
 			arrange_buttons
 		end
 		@items[item.type] << item
@@ -108,6 +104,7 @@ class Player < GameObject
 	
 	def use_item item
 		@items[item].delete_at(0).use
+		@npc.send item if @npc
 		if @items[item].length == 0
 			@items.delete item
 			@buttons.delete item
@@ -115,12 +112,13 @@ class Player < GameObject
 		end
 	end
 	
-	def arrange_buttons
-		i = 0
-		@buttons.each do |k, v|
-			v.set_position 802 - (@items.length-i) * 57, 20
-			i += 1
-		end
+	def talk_to npc
+		@npc = npc
+	end
+	
+	def stop_talking
+		arrange_buttons if @npc.require_item?
+		@npc = nil
 	end
 	
 	def draw map
@@ -137,7 +135,8 @@ class Player < GameObject
 		if @items.length > 0
 			base = 805 - @items.length * 57
 			@panel2.draw base - 20, 0, 0, 1, 1, p_color
-			@buttons.each { |k, v| v.draw @panel_alpha }
+			button_alpha = ((@npc and @npc.require_item?) ? 0xff : @panel_alpha)
+			@buttons.each { |k, v| v.draw button_alpha }
 			G.font.draw "Itens", base, 5, 0, 1, 1, p_t_color
 			i = 0
 			@items.each do |k, v|
@@ -150,6 +149,16 @@ class Player < GameObject
 				G.med_font.draw v.length, base + i * 57 + 33, 27, 0, 1, 1, p_t_color if v.length > 1
 				i += 1
 			end
+		end
+	end
+	
+	private
+	
+	def arrange_buttons
+		i = 0
+		@buttons.each do |k, v|
+			v.set_position 802 - (@items.length-i) * 57, 20
+			i += 1
 		end
 	end
 end

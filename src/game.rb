@@ -24,6 +24,8 @@ class MyGame < Gosu::Window
 		elsif
 			G.scene.update
 		end
+		
+		close if KB.key_pressed? Gosu::KbEscape
 	end
 	
 	def draw
