@@ -99,11 +99,7 @@ class Player < GameObject
 		if @items[item.type].nil?
 			@items[item.type] = []
 			@buttons[item.type] = ItemButton.new(0, 20, item.type)
-			i = 0
-			@buttons.each do |k, v|
-				v.set_position 802 - (@items.length-i) * 57, 20
-				i += 1
-			end
+			arrange_buttons
 		end
 		@items[item.type] << item
 		@item_alpha = 0
@@ -111,7 +107,20 @@ class Player < GameObject
 	end
 	
 	def use_item item
-		@items[item][0].use
+		@items[item].delete_at(0).use
+		if @items[item].length == 0
+			@items.delete item
+			@buttons.delete item
+			arrange_buttons
+		end
+	end
+	
+	def arrange_buttons
+		i = 0
+		@buttons.each do |k, v|
+			v.set_position 802 - (@items.length-i) * 57, 20
+			i += 1
+		end
 	end
 	
 	def draw map

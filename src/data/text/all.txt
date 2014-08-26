@@ -1,5 +1,0 @@
-npc1_1		Olá amigo! Este é seu dia de sorte! Você acaba de faturar 1 MILHÃO DE REAIS!!! Porém, não se engane: 27,5% vão para o governo...
-player1_1_1	Opção 1
-player1_1_2 Opção 2
-player1_1_3 Opção 3
-npc1_2		Esta é minha segunda fala. Ela não pode ser mais longa do que o que cabe no balão.
