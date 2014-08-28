@@ -1,6 +1,20 @@
 require 'minigl'
 include AGL
 
+class ItemButton < Button
+	def initialize item_set
+		super(0, 20, nil, nil, :ui_itemBtn, 0, 0, 0, 0, 0, 0, 0, item_set[0].type){ |i| G.player.use_item i }
+		@item_set = item_set
+	end
+	
+	def draw alpha
+		super alpha
+		c1 = (alpha << 24) | 0xffffff; c2 = alpha << 24
+		@item_set[0].icon.draw @x + 3, @y + 3, 0, 1, 1, c1
+		G.med_font.draw @item_set.length, @x + 33, @y + 7, 0, 1, 1, c2 if @item_set.length > 1
+	end
+end
+
 class Player < GameObject
 	attr_reader :name
 	
@@ -10,10 +24,12 @@ class Player < GameObject
 		@max_speed.x = 10; @max_speed.y = 20
 		@anim_indices_left = [0, 1, 0, 2]
 		@anim_indices_right = [3, 4, 3, 5]
+		@active = true
 		
 		@items = items
 		@item_alpha = 255
 		@buttons = {}
+		@button_alpha = 255
 		
 		@panel_alpha = 255
 		@panel1 = Res.img :ui_panel1
@@ -23,30 +39,32 @@ class Player < GameObject
 	def update
 		################## Movement ##################
 		forces = Vector.new 0, 0
-		if KB.key_down? Gosu::KbLeft
-			set_direction :left if @facing_right
-			forces.x -= @bottom ? 0.3 : 0.05
-		elsif @speed.x < 0
-			forces.x -= 0.1 * @speed.x
-		end
-		if KB.key_down? Gosu::KbRight
-			set_direction :right if not @facing_right
-			forces.x += @bottom ? 0.3 : 0.05
-		elsif @speed.x > 0
-			forces.x -= 0.1 * @speed.x
-		end
-		if @bottom
-			if @speed.x != 0
-				animate @anim_indices, 30 / @speed.x.abs
-			elsif @facing_right
-				set_animation 3
-			else
-				set_animation 0
+		if @active
+			if KB.key_down? Gosu::KbLeft
+				set_direction :left if @facing_right
+				forces.x -= @bottom ? 0.3 : 0.05
+			elsif @speed.x < 0
+				forces.x -= 0.1 * @speed.x
 			end
-			if KB.key_pressed? Gosu::KbUp
-				forces.y -= 13.7 + 0.4 * @speed.x.abs
-#				if @facing_right; set_animation 3
-#				else; set_animation 8; end
+			if KB.key_down? Gosu::KbRight
+				set_direction :right if not @facing_right
+				forces.x += @bottom ? 0.3 : 0.05
+			elsif @speed.x > 0
+				forces.x -= 0.1 * @speed.x
+			end
+			if @bottom
+				if @speed.x != 0
+					animate @anim_indices, 30 / @speed.x.abs
+				elsif @facing_right
+					set_animation 3
+				else
+					set_animation 0
+				end
+				if KB.key_pressed? Gosu::KbUp
+					forces.y -= 13.7 + 0.4 * @speed.x.abs
+	#				if @facing_right; set_animation 3
+	#				else; set_animation 8; end
+				end
 			end
 		end
 		move forces, G.scene.obsts, G.scene.ramps
@@ -62,11 +80,17 @@ class Player < GameObject
 			@buttons.each { |k, v| v.update } if @npc.require_item?
 			if @panel_alpha > 0
 				@panel_alpha -= 17
-				@buttons.each_with_index { |b, i| puts "a"; b[1].set_position 200 + i * 50, 540 } if @panel_alpha == 0 and @npc.require_item?
+				@button_alpha -= 17
+				if @panel_alpha == 0 and @npc.require_item?
+					@buttons.each_with_index { |b, i| b[1].set_position 200 + i * 57, 540 }
+				end
+			elsif @npc.require_item? and @button_alpha < 255
+				@button_alpha += 17
 			end
 		else
 			@buttons.each { |k, v| v.update }
 			@panel_alpha += 17 if @panel_alpha < 255
+			@button_alpha += 17 if @button_alpha < 255
 		end
 	end
 	
@@ -94,21 +118,26 @@ class Player < GameObject
 	def add_item item
 		if @items[item.type].nil?
 			@items[item.type] = []
-			@buttons[item.type] = Button.new(0, 20, nil, nil, :ui_itemBtn, 0, 0, 0, 0, 0, 0, 0, item.type){ |i| G.player.use_item i }
+			@items[item.type] << item
+			@buttons[item.type] = ItemButton.new(@items[item.type])
 			arrange_buttons
+		else
+			@items[item.type] << item
 		end
-		@items[item.type] << item
 		@item_alpha = 0
 		@item_index = item.type
 	end
 	
-	def use_item item
-		@items[item].delete_at(0).use
-		@npc.send item if @npc
-		if @items[item].length == 0
-			@items.delete item
-			@buttons.delete item
-			arrange_buttons
+	def use_item item, from_npc = false
+		if @npc and not from_npc
+			@npc.send item
+		else
+			@items[item].delete_at(0).use
+			if @items[item].length == 0
+				@items.delete item
+				@buttons.delete item
+				arrange_buttons
+			end
 		end
 	end
 	
@@ -116,9 +145,19 @@ class Player < GameObject
 		@npc = npc
 	end
 	
+	def choose
+		@buttons.each_with_index { |b, i| b[1].set_position 200 + i * 57, 540 }
+		@active = false
+	end
+	
 	def stop_talking
-		arrange_buttons if @npc.require_item?
+		arrange_buttons
 		@npc = nil
+		activate
+	end
+	
+	def activate
+		@active = true
 	end
 	
 	def draw map
@@ -135,30 +174,16 @@ class Player < GameObject
 		if @items.length > 0
 			base = 805 - @items.length * 57
 			@panel2.draw base - 20, 0, 0, 1, 1, p_color
-			button_alpha = ((@npc and @npc.require_item?) ? 0xff : @panel_alpha)
-			@buttons.each { |k, v| v.draw button_alpha }
+			@buttons.each { |k, v| v.draw @button_alpha }
 			G.font.draw "Itens", base, 5, 0, 1, 1, p_t_color
-			i = 0
-			@items.each do |k, v|
-				if k == @item_index
-					color = 0xffffff | (@item_alpha << 24)
-					v[0].icon.draw base + i * 57, 23, 0, 1, 1, color
-				else
-					v[0].icon.draw base + i * 57, 23, 0, 1, 1, p_color
-				end
-				G.med_font.draw v.length, base + i * 57 + 33, 27, 0, 1, 1, p_t_color if v.length > 1
-				i += 1
-			end
 		end
 	end
 	
 	private
 	
 	def arrange_buttons
-		i = 0
-		@buttons.each do |k, v|
-			v.set_position 802 - (@items.length-i) * 57, 20
-			i += 1
+		@buttons.each_with_index do |b, i|
+			b[1].set_position 802 - (@items.length-i) * 57, 20
 		end
 	end
 end

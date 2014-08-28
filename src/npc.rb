@@ -44,13 +44,14 @@ class NPC < GameObject
 		end
 		if @can_talk and KB.key_pressed? Gosu::KbA
 			if @talking
-				if @opts[@state].empty?
+				if @opts[@state].nil? or @opts[@state].empty?
 					@talking = false
 					set_animation 0
 					G.player.stop_talking
 					@alpha = 0
 				else
 					@show_opts = true
+					G.player.choose
 				end
 			else
 				@talking = true
@@ -68,6 +69,7 @@ class NPC < GameObject
 	end
 	
 	def require_item?
+		return false unless @switches[@state]
 		@switches[@state][0] == '!'
 	end
 	
@@ -80,15 +82,16 @@ class NPC < GameObject
 			item = s[1..-1].to_sym
 			if item == what
 				next_state
-				G.player.use_item what
+				G.player.use_item what, true
 			end
 		end
 	end
 	
 	def next_state
 		@state += 1
-		G.scene.remove_obst @block if @state == @msgs.length - 1
 		@show_opts = false
+		G.player.activate
+		G.scene.remove_obst @block if @state == @msgs.length - 1
 	end
 	
 	def draw map
