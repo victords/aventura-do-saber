@@ -1,4 +1,4 @@
-55,140,2,0
+70,140,2,0,l
 Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem longa, para ocupar quase todo o espaço disponível.
 -OK, entendi.
 -Cala a boca!

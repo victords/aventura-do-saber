@@ -3,7 +3,7 @@ include AGL
 
 class ItemButton < Button
 	def initialize item_set
-		super(0, 20, nil, nil, :ui_itemBtn, 0, 0, 0, 0, 0, 0, 0, item_set[0].type){ |i| G.player.use_item i }
+		super(0, 20, nil, nil, :ui_btn4, 0, 0, 0, 0, 0, 0, 0, item_set[0].type){ |i| G.player.use_item i }
 		@item_set = item_set
 	end
 	
@@ -27,7 +27,6 @@ class Player < GameObject
 		@active = true
 		
 		@items = items
-		@item_alpha = 255
 		@buttons = {}
 		@button_alpha = 255
 		
@@ -62,47 +61,34 @@ class Player < GameObject
 				end
 				if KB.key_pressed? Gosu::KbUp
 					forces.y -= 13.7 + 0.4 * @speed.x.abs
-	#				if @facing_right; set_animation 3
-	#				else; set_animation 8; end
+#					if @facing_right; set_animation 3
+#					else; set_animation 8; end
 				end
 			end
 		end
 		move forces, G.scene.obsts, G.scene.ramps
 		##############################################
 		
-		if @item_alpha < 255
-			@item_alpha += 5
-		elsif @item_index
-			@item_index = nil
-		end
-		
 		if @npc
 			@buttons.each { |k, v| v.update } if @npc.require_item?
 			if @panel_alpha > 0
 				@panel_alpha -= 17
 				@button_alpha -= 17
-				if @panel_alpha == 0 and @npc.require_item?
-					@buttons.each_with_index { |b, i| b[1].set_position 200 + i * 57, 540 }
-				end
+				arrange_buttons true if @panel_alpha == 0 and @npc.require_item?
 			elsif @npc.require_item? and @button_alpha < 255
 				@button_alpha += 17
+			elsif not @npc.require_item? and @button_alpha > 0
+				@button_alpha -= 17
 			end
 		else
 			@buttons.each { |k, v| v.update }
 			@panel_alpha += 17 if @panel_alpha < 255
-			@button_alpha += 17 if @button_alpha < 255
+			if @button_alpha < 255
+				@button_alpha += 17
+			elsif @item_index
+				@item_index = nil
+			end
 		end
-	end
-	
-	def set_direction dir
-		if dir == :left
-			@facing_right = false
-			@anim_indices = @anim_indices_left
-		else
-			@facing_right = true
-			@anim_indices = @anim_indices_right
-		end
-		set_animation @anim_indices[0]
 	end
 	
 	def set_position entry
@@ -124,7 +110,7 @@ class Player < GameObject
 		else
 			@items[item.type] << item
 		end
-		@item_alpha = 0
+		@button_alpha = 0
 		@item_index = item.type
 	end
 	
@@ -136,7 +122,7 @@ class Player < GameObject
 			if @items[item].length == 0
 				@items.delete item
 				@buttons.delete item
-				arrange_buttons
+				arrange_buttons if @npc.nil?
 			end
 		end
 	end
@@ -146,7 +132,7 @@ class Player < GameObject
 	end
 	
 	def choose
-		@buttons.each_with_index { |b, i| b[1].set_position 200 + i * 57, 540 }
+		arrange_buttons true
 		@active = false
 	end
 	
@@ -181,9 +167,21 @@ class Player < GameObject
 	
 	private
 	
-	def arrange_buttons
+	def arrange_buttons bottom = false
 		@buttons.each_with_index do |b, i|
-			b[1].set_position 802 - (@items.length-i) * 57, 20
+			if bottom; b[1].set_position 225 + i * 70, 555
+			else; b[1].set_position 802 - (@items.length-i) * 57, 20; end
 		end
+	end
+	
+	def set_direction dir
+		if dir == :left
+			@facing_right = false
+			@anim_indices = @anim_indices_left
+		else
+			@facing_right = true
+			@anim_indices = @anim_indices_right
+		end
+		set_animation @anim_indices[0]
 	end
 end

@@ -7,7 +7,8 @@ class NPC < GameObject
 	def initialize x, y, id, state
 		f = File.open("data/text/npc#{id}.txt")
 		info = f.readline.chomp.split ','
-		super x, y, info[0].to_i, info[1].to_i, "sprite_npc#{id}", Vector.new(info[2].to_i, info[3].to_i), 3, 1
+		super x, y, info[0].to_i, info[1].to_i, "sprite_npc#{id}", Vector.new(info[2].to_i, info[3].to_i), 3, 2
+		@facing_right = (info[4] == 'r')
 		@state = state
 		@msgs = []
 		@opts = []
@@ -19,7 +20,7 @@ class NPC < GameObject
 			break if i == states.length - 1
 			@opts << []
 			lines[1..-2].each_with_index do |l, j|
-				@opts[i] << Button.new(200, 600 + (j - lines.length + 2) * 40, G.med_font, l, nil, 0, 0, false, 5, 5, 400, 40, j+1){ |o| send o }
+				@opts[i] << Button.new(216, 600 + (j - lines.length + 2) * 40, G.med_font, l, :ui_btn3, 0, 0, false, 5, 5, 0, 0, j+1){ |o| send o }
 			end
 			@switches << lines[-1]
 		end
@@ -31,22 +32,30 @@ class NPC < GameObject
 		@balloon_arrow = Res.img :ui_balloonArrow
 		@panel = Res.img :ui_panel3
 		@talking_seq = [1, 2, 1, 0, 2, 1, 2, 0]
+		@talking_seq_right = [4, 5, 4, 3, 5, 4, 5, 3]
 		@alpha = 0
 	end
 	
 	def update
 		@can_talk = bounds.intersects G.player.bounds
+		if @can_talk and G.player.x > @x
+			set_animation 3 unless @facing_right
+			@facing_right = true
+		else
+			set_animation 0 if @facing_right
+			@facing_right = false
+		end
 		if @talking and not @can_talk
 			@talking = false
 			@leaving = true
-			set_animation 0
+			set_animation (@facing_right ? 3 : 0)
 			G.player.stop_talking
 		end
 		if @can_talk and KB.key_pressed? Gosu::KbA
 			if @talking
 				if @opts[@state].nil? or @opts[@state].empty?
 					@talking = false
-					set_animation 0
+					set_animation (@facing_right ? 3 : 0)
 					G.player.stop_talking
 					@alpha = 0
 				else
@@ -62,7 +71,7 @@ class NPC < GameObject
 		if @show_opts
 			@opts[@state].each { |o| o.update }
 		end
-		animate @talking_seq, 8 if @talking
+		animate (@facing_right ? @talking_seq_right : @talking_seq), 8 if @talking
 		@alpha += 17 if @alpha < 255 and (@can_talk or @talking)
 		@alpha -= 17 if @alpha > 0 and not @can_talk and not @talking
 		@leaving = false if @alpha == 0
@@ -106,8 +115,10 @@ class NPC < GameObject
 			@ellipsis.draw @x + @w / 2 - 25, @y - 45, 0, 1, 1, color
 		end
 		if @show_opts
-			@panel.draw 200, 588 - (@opts[@state].length) * 40, 0
+			@panel.draw 200, 583 - (@opts[@state].length) * 40, 0
 			@opts[@state].each { |b| b.draw }
+		elsif @talking and require_item?
+			@panel.draw 200, 534, 0
 		end
 	end
 end
