@@ -189,11 +189,14 @@ class Menu
 			MenuText.new("Qual é o seu nome?", 10, 5),
 			@name_input, @name_button
 		]
-		games = Dir["data/save/*"]
-		games.each_with_index do |g, i|
+		
+		Dir["data/save/*"].sort[0..9].each_with_index do |g, i|
 			name = g.split('/')[-1]
 			@names << name
-			name_screen_components << Button.new(200, 250 + i * 40, G.med_font, name.capitalize, :ui_btn2) { @name = name; go_to_screen 3 }
+			name_screen_components <<
+				Button.new(100 + (i % 2) * 300, 250 + (i / 2) * 40, G.med_font, name.capitalize, :ui_btn2){
+					@name = name; go_to_screen 3
+				}
 		end
 		
 		@screens = [

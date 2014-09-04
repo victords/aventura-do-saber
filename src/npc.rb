@@ -86,12 +86,15 @@ class NPC < GameObject
 		s = @switches[@state]
 		if s[0] == '+'
 			option = s[1..-1].to_i
-			next_state if option == what
+			if option == what; next_state
+			else; G.scene.add_effect 0, 200, 100; end
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
 				next_state
 				G.player.use_item what, true
+			else
+				G.scene.add_effect 0, 200, 100
 			end
 		end
 	end

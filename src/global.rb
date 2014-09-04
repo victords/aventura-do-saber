@@ -8,6 +8,7 @@ class G
 		@@font = Res.font :UbuntuLight, 20
 		@@med_font = Res.font :UbuntuLight, 32
 		@@big_font = Res.font :UbuntuLight, 54
+		@@effects = File.open("data/text/fx.txt").readlines
 		@@state = :menu
 		
 		@@menu = Menu.new
@@ -23,6 +24,7 @@ class G
 	def self.font; @@font; end
 	def self.med_font; @@med_font; end
 	def self.big_font; @@big_font; end
+	def self.effects; @@effects; end
 	def self.state; @@state; end
 	
 	def self.menu; @@menu; end

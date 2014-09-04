@@ -48,7 +48,6 @@ class Scene
 			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
 			when '!'     then @items << Item.new(a[0].to_i, a[1].to_i, a[2].to_sym)
 			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2], 0)
-			when 'x'     then @effects << Effect.new(a[0].to_i, a[1].to_i, "fx_#{a[2]}", a[3].to_i, a[4].to_i, 15, [0,1,0,1,2,1,2,3,4,3,4,5])
 			else              @obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
 			end
 		end
@@ -61,6 +60,10 @@ class Scene
 	
 	def remove_obst obst
 		@obsts.delete obst
+	end
+	
+	def add_effect id, x, y
+		eval "@effects << Effect.new(#{x}, #{y}, :fx_#{id}, #{G.effects[id].chomp})"
 	end
 	
 	def draw
