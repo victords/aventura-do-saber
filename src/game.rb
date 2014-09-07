@@ -39,3 +39,4 @@ end
 
 game = MyGame.new
 game.show
+p G.switches
