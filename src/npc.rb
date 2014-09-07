@@ -4,19 +4,24 @@ include AGL
 class NPC < GameObject
 	attr_reader :block
 	
-	def initialize x, y, id, state
+	def initialize x, y, id
 		f = File.open("data/text/npc#{id}.txt")
 		info = f.readline.chomp.split ','
 		super x, y, info[0].to_i, info[1].to_i, "sprite_npc#{id}", Vector.new(info[2].to_i, info[3].to_i), 3, 2
 		@facing_right = (info[4] == 'r')
-		@state = state
+		@state = 0
 		@msgs = []
 		@opts = []
 		@switches = []
+		
 		states = f.read.split "\n\n"
 		states.each_with_index do |s, i|
 			lines = s.split "\n"
-			@msgs << lines[0]
+			if lines[0][0] == '$'
+				sw = lines[0].split[0][1..-1].to_i
+				@state = i if G.switches.index sw
+			end
+			@msgs << (lines[0][0] == '$' ? lines[0][2..-1] : lines[0])
 			break if i == states.length - 1
 			@opts << []
 			lines[1..-2].each_with_index do |l, j|
@@ -25,7 +30,7 @@ class NPC < GameObject
 			@switches << lines[-1]
 		end
 		
-		@block = Block.new @x + 5, @y + 5, @w - 10, @h - 5, false
+		@block = Block.new @x + 5, @y + 5, @w - 10, @h - 5, false if @state < states.length - 1
 		@writer = TextHelper.new G.font, 8
 		@ellipsis = Res.img :ui_ellipsis
 		@balloon = Res.img :ui_balloon
