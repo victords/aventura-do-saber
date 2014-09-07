@@ -83,7 +83,7 @@ class NPC < GameObject
 	end
 	
 	def send what
-		s = @switches[@state]
+		s = @switches[@state].split[0]
 		if s[0] == '+'
 			option = s[1..-1].to_i
 			if option == what; next_state
@@ -100,6 +100,12 @@ class NPC < GameObject
 	end
 	
 	def next_state
+		s = @switches[@state].split
+		if s.length > 1
+			sw = s[1][1..-1].to_i
+			G.switches << sw
+		end
+		
 		@state += 1
 		@show_opts = false
 		G.player.activate
@@ -110,12 +116,12 @@ class NPC < GameObject
 		super map
 		if @talking or @leaving
 			color = (@alpha << 24) | 0xffffff
-			@balloon.draw @x - 404, @y - 133, 0, 1, 1, color
-			@balloon_arrow.draw @x - 34, @y - 35, 0, 1, 1, color
-			@writer.write_breaking @msgs[@state], @x - 374, @y - 123, 380, :justified, 0, @alpha
+			@balloon.draw @x - map.cam.x - 404, @y - map.cam.y - 133, 0, 1, 1, color
+			@balloon_arrow.draw @x - map.cam.x - 34, @y - map.cam.y - 35, 0, 1, 1, color
+			@writer.write_breaking @msgs[@state], @x - map.cam.x - 374, @y - map.cam.y - 123, 380, :justified, 0, @alpha
 		elsif @alpha > 0
 			color = (@alpha << 24) | 0xffffff
-			@ellipsis.draw @x + @w / 2 - 25, @y - 45, 0, 1, 1, color
+			@ellipsis.draw @x - map.cam.x + @w / 2 - 25, @y - map.cam.y - 45, 0, 1, 1, color
 		end
 		if @show_opts
 			@panel.draw 200, 583 - (@opts[@state].length) * 40, 0

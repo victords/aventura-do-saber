@@ -175,6 +175,7 @@ class Menu
 		}
 		@name_button.visible = false
 		@same_name = MenuText.new "", 240, 185, :justified, G.med_font, 320
+		@continue = false
 		
 		@char = :marcus
 		@char_name = MenuText.new "Marcus", 10, 536, :left, G.med_font
@@ -195,7 +196,7 @@ class Menu
 			@names << name
 			name_screen_components <<
 				Button.new(100 + (i % 2) * 300, 250 + (i / 2) * 40, G.med_font, name.capitalize, :ui_btn2){
-					@name = name; go_to_screen 3
+					@name = name; @continue = true; go_to_screen 3
 				}
 		end
 		
@@ -216,8 +217,8 @@ class Menu
 			MenuScreen.new([
 				MenuPanel.new(210, -280, 210, 165, :ui_menuComponent4)
 			], [
-				Button.new(245, 330, G.font, "Continuar", :ui_btn1) { go_to_screen 3 },
-				Button.new(405, 330, G.font, "Substituir", :ui_btn1) { @name += "!"; go_to_screen 3 },
+				Button.new(245, 330, G.font, "Continuar", :ui_btn1) { @continue = true; go_to_screen 3 },
+				Button.new(405, 330, G.font, "Substituir", :ui_btn1) { go_to_screen 3 },
 				Button.new(325, 376, G.font, "Voltar", :ui_btn1) { @name_input.focus; go_to_screen 1 },
 				@same_name
 			]),
@@ -248,7 +249,7 @@ class Menu
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
 				MenuPanel.new(800, 531, 409, 531, :ui_menuComponent2)
 			], [
-				Button.new(440, 555, G.font, "OK", :ui_btn1) { G.start_game @game_type, @name, @char },
+				Button.new(440, 555, G.font, "OK", :ui_btn1) { G.start_game @game_type, @name, @char, @continue },
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 3 },
 				Button.new(50, 110, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :math; @game_selection.set_pos 38, 98 },
 				Button.new(430, 110, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :port; @game_selection.set_pos 418, 98 },

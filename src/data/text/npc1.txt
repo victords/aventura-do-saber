@@ -3,9 +3,9 @@ Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem l
 -OK, entendi.
 -Cala a boca!
 -Ãããhnn...
-+1
++1 $1
 
 Esta aqui é a segunda fala... Traga para mim uma maçã, por favor.
-!apple
+!apple $2
 
 Valeu, mulek!
