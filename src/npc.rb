@@ -46,7 +46,7 @@ class NPC < GameObject
 		if @can_talk and G.player.x > @x
 			set_animation 3 unless @facing_right
 			@facing_right = true
-		else
+		elsif @can_talk
 			set_animation 0 if @facing_right
 			@facing_right = false
 		end

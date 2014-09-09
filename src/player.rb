@@ -21,7 +21,7 @@ class Player < GameObject
 	def initialize name, char, items = {}
 		super 0, 0, (char == :marcus ? 44 : 37), 115, "sprite_#{char}", Vector.new(-8, -5), 3, 2
 		@name = name
-		@max_speed.x = 10; @max_speed.y = 20
+		@max_speed.x = 5.5; @max_speed.y = 20
 		@anim_indices_left = [0, 1, 0, 2]
 		@anim_indices_right = [3, 4, 3, 5]
 		@active = true
@@ -41,13 +41,13 @@ class Player < GameObject
 		if @active
 			if KB.key_down? Gosu::KbLeft
 				set_direction :left if @facing_right
-				forces.x -= @bottom ? 0.3 : 0.05
+				forces.x -= @bottom ? 0.25 : 0.03
 			elsif @speed.x < 0
 				forces.x -= 0.1 * @speed.x
 			end
 			if KB.key_down? Gosu::KbRight
 				set_direction :right if not @facing_right
-				forces.x += @bottom ? 0.3 : 0.05
+				forces.x += @bottom ? 0.25 : 0.03
 			elsif @speed.x > 0
 				forces.x -= 0.1 * @speed.x
 			end

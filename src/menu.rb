@@ -206,7 +206,7 @@ class Menu
 			], [
 				Button.new(19, 193, G.font, "Jogar", :ui_btn1) { go_to_screen 1 },
 				Button.new(19, 253, G.font, "Pontuações", :ui_btn1) { puts "P" },
-				Button.new(19, 313, G.font, "Opções", :ui_btn1) { puts "O" },
+				Button.new(19, 313, G.font, "Opções", :ui_btn1) { go_to_screen 5 },
 				Button.new(19, 373, G.font, "Sair", :ui_btn1) { G.win.close },
 				MenuText.new("Aventura do Saber", 400, 10, :center)
 			]),
@@ -265,6 +265,14 @@ class Menu
 				MenuText.new("Lógica", 60, 468, :left, G.med_font),
 				MenuText.new("Tudo isso!", 440, 468, :left, G.med_font),
 				@game_selection
+			]),
+			MenuScreen.new([
+				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
+				MenuPanel.new(10, 600, 10, 120, :ui_menuComponent5)
+			], [
+				MenuText.new("Opções", 10, 5),
+				Button.new(440, 555, G.font, "OK", :ui_btn1) { puts "salvar opções..." },
+				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 }
 			])
 		]
 		@cur_screen = 0
