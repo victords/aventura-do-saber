@@ -156,7 +156,7 @@ class MenuScreen
 end
 
 class Menu
-	def initialize
+	def initialize first
 		@bg = Res.img :bg_menu, true
 		
 		@names = []
@@ -207,7 +207,7 @@ class Menu
 				Button.new(19, 193, G.font, "Jogar", :ui_btn1) { go_to_screen 1 },
 				Button.new(19, 253, G.font, "Pontuações", :ui_btn1) { puts "P" },
 				Button.new(19, 313, G.font, "Opções", :ui_btn1) { go_to_screen 5 },
-				Button.new(19, 373, G.font, "Sair", :ui_btn1) { G.win.close },
+				Button.new(19, 373, G.font, "Sair", :ui_btn1) { G.quit_game },
 				MenuText.new("Aventura do Saber", 400, 10, :center)
 			]),
 			MenuScreen.new([
@@ -271,11 +271,12 @@ class Menu
 				MenuPanel.new(10, 600, 10, 120, :ui_menuComponent5)
 			], [
 				MenuText.new("Opções", 10, 5),
+				ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, 0, 0, false, 60, 10, 0, 0) { |c| G.set_full_screen c },
 				Button.new(440, 555, G.font, "OK", :ui_btn1) { puts "salvar opções..." },
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 }
 			])
 		]
-		@cur_screen = 0
+		@cur_screen = first ? 0 : 5
 	end
 	
 	def update

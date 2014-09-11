@@ -3,12 +3,12 @@ require_relative 'scene'
 include AGL
 
 class MyGame < Gosu::Window
-	def initialize
-		super 800, 600, false
+	def initialize full_screen, first = true
+		super 800, 600, full_screen
 		self.caption = "Aventura do Saber"
 		
 		Game.initialize self
-		G.initialize
+		G.initialize first
 	end
 	
 	def needs_cursor?
@@ -37,6 +37,11 @@ class MyGame < Gosu::Window
 	end
 end
 
-game = MyGame.new
+fs = false
+game = MyGame.new fs
 game.show
-p G.switches
+until G.quit
+	game = MyGame.new G.full_screen, false
+	game.show
+end
+

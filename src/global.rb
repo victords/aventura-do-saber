@@ -3,11 +3,8 @@ require_relative 'player'
 include AGL
 
 class G
-	def self.initialize
-		@@win = Game.window
-		@@font = Res.font :UbuntuLight, 20
-		@@med_font = Res.font :UbuntuLight, 32
-		@@big_font = Res.font :UbuntuLight, 54
+	def self.initialize first
+		reset_window
 		@@effects = File.open("data/text/fx.txt").readlines
 		@@switches = []
 		@@state = :menu
@@ -20,7 +17,7 @@ class G
 			define_singleton_method(v.to_s[2..-1]) { class_variable_get v }
 		end
 		
-		@@menu = Menu.new
+		@@menu = Menu.new first
 	end
 	
 	def self.start_game type, name, char, continue
@@ -42,4 +39,25 @@ class G
 		@@player = Player.new name, char, {}
 		@@scene = Scene.new type, G.scenes[type], 1
 	end
+	
+	def self.quit_game
+		@@quit = true
+		@@win.close
+	end
+	
+	def self.set_full_screen fs
+		@@full_screen = fs
+		@@quit = false
+		@@win.close
+	end
+	
+	def self.reset_window
+		@@win = Game.window
+		@@font = Res.font :UbuntuLight, 20
+		@@med_font = Res.font :UbuntuLight, 32
+		@@big_font = Res.font :UbuntuLight, 54
+	end
+	
+	def self.quit; @@quit; end
+	def self.full_screen; @@full_screen; end
 end
