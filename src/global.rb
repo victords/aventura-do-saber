@@ -3,8 +3,12 @@ require_relative 'player'
 include AGL
 
 class G
-	def self.initialize first
-		reset_window
+	def self.initialize full_screen, first
+		@@win = Game.window
+		@@full_screen = full_screen
+		@@font = Res.font :UbuntuLight, 20
+		@@med_font = Res.font :UbuntuLight, 32
+		@@big_font = Res.font :UbuntuLight, 54
 		@@effects = File.open("data/text/fx.txt").readlines
 		@@switches = []
 		@@state = :menu
@@ -51,13 +55,5 @@ class G
 		@@win.close
 	end
 	
-	def self.reset_window
-		@@win = Game.window
-		@@font = Res.font :UbuntuLight, 20
-		@@med_font = Res.font :UbuntuLight, 32
-		@@big_font = Res.font :UbuntuLight, 54
-	end
-	
 	def self.quit; @@quit; end
-	def self.full_screen; @@full_screen; end
 end

@@ -8,7 +8,7 @@ class MyGame < Gosu::Window
 		self.caption = "Aventura do Saber"
 		
 		Game.initialize self
-		G.initialize first
+		G.initialize full_screen, first
 	end
 	
 	def needs_cursor?

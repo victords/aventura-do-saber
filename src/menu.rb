@@ -271,7 +271,7 @@ class Menu
 				MenuPanel.new(10, 600, 10, 120, :ui_menuComponent5)
 			], [
 				MenuText.new("Opções", 10, 5),
-				ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, 0, 0, false, 60, 10, 0, 0) { |c| G.set_full_screen c },
+				ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, G.full_screen, 0, 0, false, 60, 10) { |c| G.set_full_screen c },
 				Button.new(440, 555, G.font, "OK", :ui_btn1) { puts "salvar opções..." },
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 }
 			])
