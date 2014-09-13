@@ -3,12 +3,12 @@ require_relative 'scene'
 include AGL
 
 class MyGame < Gosu::Window
-	def initialize full_screen, first = true
+	def initialize full_screen, hints, sounds, music
 		super 800, 600, full_screen
 		self.caption = "Aventura do Saber"
 		
 		Game.initialize self
-		G.initialize full_screen, first
+		G.initialize hints, sounds, music
 	end
 	
 	def needs_cursor?
@@ -37,11 +37,14 @@ class MyGame < Gosu::Window
 	end
 end
 
-fs = false
-game = MyGame.new fs
+f = File.open("data/save/_config")
+config = f.read.chomp.split(',')
+full_screen = (config[0] == '1')
+hints = (config[1] == '1')
+sounds = (config[2] == '1')
+music = (config[3] == '1')
+f.close
+
+game = MyGame.new full_screen, hints, sounds, music
 game.show
-until G.quit
-	game = MyGame.new G.full_screen, false
-	game.show
-end
 

@@ -56,23 +56,23 @@ class MenuPanel
 end
 
 class MenuText
-	def initialize text, x, y, mode = :left, font = G.big_font, width = nil
+	attr_writer :text, :visible
+	
+	def initialize text, x, y, mode = :left, font = G.big_font, visible = true, width = nil
 		@text = text
 		@x = x
 		@y = y
 		@mode = mode
 		@writer = TextHelper.new font
 		@offset = (font == G.big_font ? 2 : 1)
+		@visible = visible
 		@width = width
 	end
 	
 	def update; end
 	
-	def set_text text
-		@text = text
-	end
-	
 	def draw alpha
+		return unless @visible
 		if @mode == :justified
 			@writer.write_breaking @text, @x, @y, @width, @mode, 0, alpha
 		else
@@ -90,10 +90,13 @@ class MenuText
 end
 
 class MenuSprite < Sprite
-	def initialize x, y, img, sprite_cols = nil, sprite_rows = nil, indices = nil, interval = nil
+	attr_writer :visible
+	
+	def initialize x, y, img, visible = true, sprite_cols = nil, sprite_rows = nil, indices = nil, interval = nil
 		super x, y, img, sprite_cols, sprite_rows
 		@indices = indices
 		@interval = interval
+		@visible = visible
 	end
 	
 	def update
@@ -105,6 +108,7 @@ class MenuSprite < Sprite
 	end
 	
 	def draw alpha
+		return unless @visible
 		super nil, 1, 1, alpha
 	end
 end
@@ -156,7 +160,7 @@ class MenuScreen
 end
 
 class Menu
-	def initialize first
+	def initialize
 		@bg = Res.img :bg_menu, true
 		
 		@names = []
@@ -167,23 +171,23 @@ class Menu
 		@name_button = Button.new(440, 555, G.font, "OK", :ui_btn1) {
 			@name = @name_input.text.downcase
 			if @names.index @name
-				@same_name.set_text "Um jogo com nome '#{@name.capitalize}' já existe. Deseja continuar ou substituir?"
+				@same_name.text = "Um jogo com nome '#{@name.capitalize}' já existe. Deseja continuar ou substituir?"
 				go_to_screen 2
 			else
 				go_to_screen 3
 			end
 		}
 		@name_button.visible = false
-		@same_name = MenuText.new "", 240, 185, :justified, G.med_font, 320
+		@same_name = MenuText.new "", 240, 185, :justified, G.med_font, true, 320
 		@continue = false
 		
 		@char = :marcus
 		@char_name = MenuText.new "Marcus", 10, 536, :left, G.med_font
 		@char_description = MenuText.new "Um simpático garoto de 10 anos.", 10, 572, :left, G.font
-		@char_selection = MenuSprite.new 112, 87, :ui_selection, 2, 1, [0, 1], 10
+		@char_selection = MenuSprite.new 112, 87, :ui_selection, true, 2, 1, [0, 1], 10
 		
 		@game_type = :math
-		@game_selection = MenuSprite.new 38, 98, :ui_selection2, 1, 2, [0, 1], 10
+		@game_selection = MenuSprite.new 38, 98, :ui_selection2, true, 1, 2, [0, 1], 10
 		
 		name_screen_components = [
 			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 },
@@ -191,7 +195,7 @@ class Menu
 			@name_input, @name_button
 		]
 		
-		Dir["data/save/*"].sort[0..9].each_with_index do |g, i|
+		Dir["data/save/*"].sort[1..10].each_with_index do |g, i|
 			name = g.split('/')[-1]
 			@names << name
 			name_screen_components <<
@@ -199,6 +203,22 @@ class Menu
 					@name = name; @continue = true; go_to_screen 3
 				}
 		end
+		
+		@info_icon = MenuSprite.new 40, 400, :icon_info, false
+		@info_text = MenuText.new "Reinicie o jogo para mudar o modo tela cheia.", 82, 400, :left, G.med_font, false
+		@chks = [
+			ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, G.win.fullscreen?, 0, 0, false, 60, 10) { |c|
+				G.set_option 0, c
+				if c == G.win.fullscreen?
+					@info_icon.visible = @info_text.visible = false
+				else
+					@info_icon.visible = @info_text.visible = true
+				end
+			},
+			ToggleButton.new(40, 200, G.med_font, "Mostrar dicas", :ui_check, G.hints, 0, 0, false, 60, 10) { |c| G.set_option 1, c },
+			ToggleButton.new(40, 260, G.med_font, "Tocar sons", :ui_check, G.sounds, 0, 0, false, 60, 10) { |c| G.set_option 2, c },
+			ToggleButton.new(40, 320, G.med_font, "Tocar músicas", :ui_check, G.music, 0, 0, false, 60, 10) { |c| G.set_option 3, c },
+		]
 		
 		@screens = [
 			MenuScreen.new([
@@ -230,14 +250,14 @@ class Menu
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { @name_input.focus; go_to_screen 1 },
 				Button.new(122, 97, nil, nil, nil, 0, 0, 0, 0, 0, 212, 420) {
 					@char = :marcus
-					@char_name.set_text "Marcus"
-					@char_description.set_text "Um simpático garoto de 10 anos."
+					@char_name.text = "Marcus"
+					@char_description.text = "Um simpático garoto de 10 anos."
 					@char_selection.set_pos 112, 87
 				},
 				Button.new(466, 97, nil, nil, nil, 0, 0, 0, 0, 0, 212, 420) {
 					@char = :milena
-					@char_name.set_text "Milena"
-					@char_description.set_text "Uma adorável garota de 10 anos."
+					@char_name.text = "Milena"
+					@char_description.text = "Uma adorável garota de 10 anos."
 					@char_selection.set_pos 456, 87
 				},
 				MenuText.new("Escolha seu personagem!", 10, 5),
@@ -270,13 +290,18 @@ class Menu
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
 				MenuPanel.new(10, 600, 10, 120, :ui_menuComponent5)
 			], [
-				MenuText.new("Opções", 10, 5),
-				ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, G.full_screen, 0, 0, false, 60, 10) { |c| G.set_full_screen c },
-				Button.new(440, 555, G.font, "OK", :ui_btn1) { puts "salvar opções..." },
-				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 }
+				MenuText.new("Opções", 10, 5), @info_icon, @info_text, @chks[0], @chks[1], @chks[2], @chks[3],
+				Button.new(440, 555, G.font, "Salvar", :ui_btn1) { G.save_options; go_to_screen 0 },
+				Button.new(600, 555, G.font, "Cancelar", :ui_btn1) {
+					@chks[0].checked = G.win.fullscreen?
+					@chks[1].checked = G.hints
+					@chks[2].checked = G.sounds
+					@chks[3].checked = G.music
+					go_to_screen 0
+				}
 			])
 		]
-		@cur_screen = first ? 0 : 5
+		@cur_screen = 0
 	end
 	
 	def update
