@@ -38,7 +38,6 @@ class G
 	
 	def self.start_game type, name, char, continue
 		if continue
-			puts "Continuando: #{name}"
 			f = File.open("data/save/#{name}")
 			s = f.readline.split(',').map { |s| s.to_i }
 			@@scenes[:math] = s[0]
@@ -48,8 +47,6 @@ class G
 			s = f.readline.split(',').map { |s| s.to_i }
 			s.each { |sw| @@switches << sw }
 			f.close
-		else
-			puts "Novo jogo: #{name}"
 		end
 		
 		@@state = :game

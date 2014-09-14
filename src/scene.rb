@@ -1,5 +1,6 @@
 require_relative 'item'
 require_relative 'npc'
+require_relative 'object'
 
 Entry = Struct.new :x, :y, :dir
 
@@ -24,14 +25,15 @@ class Scene
 			i.update
 			@items.delete i if i.dead
 		end
-		
 		@effects.each do |e|
 			e.update
 			@effects.delete e if e.dead
 		end
-		
 		@npcs.each do |c|
 			c.update
+		end
+		@objects.each do |o|
+			o.update
 		end
 	end
 	
@@ -41,6 +43,7 @@ class Scene
 		@ramps = []
 		@items = []
 		@npcs = []
+		@objects = []
 		@effects = []
 		File.open("data/text/#{@game_type}#{@number}.txt").each do |l|
 			a = l[2..-1].chomp.split ','
@@ -49,6 +52,7 @@ class Scene
 			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
 			when '!'     then @items << Item.new(a[0].to_i, a[1].to_i, a[2].to_sym)
 			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2])
+			when '*'     then @objects << SceneObject.new(a[0].to_i, a[1].to_i, a[2])
 			else              @obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
 			end
 		end
@@ -74,6 +78,9 @@ class Scene
 		end
 		@npcs.each do |c|
 			c.draw @map
+		end
+		@objects.each do |o|
+			o.draw @map
 		end
 		G.player.draw @map
 		@effects.each do |e|

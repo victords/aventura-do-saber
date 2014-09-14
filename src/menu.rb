@@ -169,6 +169,7 @@ class Menu
 		                              @name_button.visible = (text.length > 0)
 		                            }
 		@name_button = Button.new(440, 555, G.font, "OK", :ui_btn1) {
+			@continue = false
 			@name = @name_input.text.downcase
 			if @names.index @name
 				@same_name.text = "Um jogo com nome '#{@name.capitalize}' já existe. Deseja continuar ou substituir?"

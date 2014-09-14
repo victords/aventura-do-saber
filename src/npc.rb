@@ -15,6 +15,7 @@ class NPC < GameObject
 		@switches = []
 		
 		states = f.read.split "\n\n"
+		f.close
 		states.each_with_index do |s, i|
 			lines = s.split "\n"
 			if lines[0][0] == '$'
@@ -58,17 +59,23 @@ class NPC < GameObject
 		end
 		if @can_talk and KB.key_pressed? Gosu::KbA
 			if @talking
-				if @opts[@state].nil? or @opts[@state].empty?
-					@talking = false
-					set_animation (@facing_right ? 3 : 0)
-					G.player.stop_talking
-					@alpha = 0
-				else
-					@show_opts = true
-					G.player.choose
+				@cur_page += 1
+				if @cur_page == @pages.length
+					@cur_page -= 1
+					if @opts[@state].nil? or @opts[@state].empty?
+						@talking = false
+						set_animation (@facing_right ? 3 : 0)
+						G.player.stop_talking
+						@alpha = 0
+					else
+						@show_opts = true
+						G.player.choose
+					end
 				end
 			else
 				@talking = true
+				@pages = @msgs[@state].split '/'
+				@cur_page = 0
 				G.player.talk_to self
 				@alpha = 0
 			end
@@ -112,6 +119,8 @@ class NPC < GameObject
 		end
 		
 		@state += 1
+		@pages = @msgs[@state].split '/'
+		@cur_page = 0
 		@show_opts = false
 		G.player.activate
 		G.scene.remove_obst @block if @state == @msgs.length - 1
@@ -123,7 +132,7 @@ class NPC < GameObject
 			color = (@alpha << 24) | 0xffffff
 			@balloon.draw @x - map.cam.x - 404, @y - map.cam.y - 133, 0, 1, 1, color
 			@balloon_arrow.draw @x - map.cam.x - 34, @y - map.cam.y - 35, 0, 1, 1, color
-			@writer.write_breaking @msgs[@state], @x - map.cam.x - 374, @y - map.cam.y - 123, 380, :justified, 0, @alpha
+			@writer.write_breaking @pages[@cur_page], @x - map.cam.x - 374, @y - map.cam.y - 123, 380, :justified, 0, @alpha
 		elsif @alpha > 0
 			color = (@alpha << 24) | 0xffffff
 			@ellipsis.draw @x - map.cam.x + @w / 2 - 25, @y - map.cam.y - 45, 0, 1, 1, color

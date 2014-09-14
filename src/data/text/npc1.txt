@@ -1,11 +1,14 @@
 70,140,2,0,l
-Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem longa, para ocupar quase todo o espaço disponível.
+Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem longa, para ocupar quase todo o espaço disponível./A fala pode ter mais de uma página.
 -OK, entendi.
 -Cala a boca!
 -Ãããhnn...
 +1 $1
 
-$1 Esta aqui é a segunda fala... Traga para mim uma maçã, por favor.
+$1 Traga-me duas maçãs, por favor.
 !apple $2
 
-$2 Valeu, mulek!
+$2 Obrigado! Traga-me mais uma maçã, por favor.
+!apple $3
+
+$3 Valeu, mulek!/Você é um cara bacana.
