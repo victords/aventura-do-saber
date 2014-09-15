@@ -52,10 +52,9 @@ class NPC < GameObject
 			@facing_right = false
 		end
 		if @talking and not @can_talk
-			@talking = false
 			@leaving = true
 			set_animation (@facing_right ? 3 : 0)
-			G.player.stop_talking
+			G.player.stop_interacting
 		end
 		if @can_talk and KB.key_pressed? Gosu::KbA
 			if @talking
@@ -63,9 +62,8 @@ class NPC < GameObject
 				if @cur_page == @pages.length
 					@cur_page -= 1
 					if @opts[@state].nil? or @opts[@state].empty?
-						@talking = false
 						set_animation (@facing_right ? 3 : 0)
-						G.player.stop_talking
+						G.player.stop_interacting
 						@alpha = 0
 					else
 						@show_opts = true
@@ -76,7 +74,7 @@ class NPC < GameObject
 				@talking = true
 				@pages = @msgs[@state].split '/'
 				@cur_page = 0
-				G.player.talk_to self
+				G.player.interact_with self
 				@alpha = 0
 			end
 		end
@@ -124,6 +122,10 @@ class NPC < GameObject
 		@show_opts = false
 		G.player.activate
 		G.scene.remove_obst @block if @state == @msgs.length - 1
+	end
+	
+	def stop_interacting
+		@talking = false
 	end
 	
 	def draw map

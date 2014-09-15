@@ -69,25 +69,24 @@ class Player < GameObject
 		move forces, G.scene.obsts, G.scene.ramps
 		##############################################
 		
-		if @npc
-			@buttons.each { |k, v| v.update } if @npc.require_item?
+		if @obj
+			if @obj.require_item? and @items.empty?
+				stop_interacting
+				return
+			end
+			@buttons.each { |k, v| v.update } if @obj.require_item?
 			if @panel_alpha > 0
 				@panel_alpha -= 17
 				@button_alpha -= 17
-				arrange_buttons true if @panel_alpha == 0 and @npc.require_item?
-			elsif @npc.require_item? and @button_alpha < 255
+				arrange_buttons true if @panel_alpha == 0 and @obj.require_item?
+			elsif @obj.require_item? and @button_alpha < 255
 				@button_alpha += 17
-			elsif not @npc.require_item? and @button_alpha > 0
+			elsif not @obj.require_item? and @button_alpha > 0
 				@button_alpha -= 17
 			end
 		else
-			@buttons.each { |k, v| v.update }
 			@panel_alpha += 17 if @panel_alpha < 255
-			if @button_alpha < 255
-				@button_alpha += 17
-			elsif @item_index
-				@item_index = nil
-			end
+			@button_alpha += 17 if @button_alpha < 255
 		end
 	end
 	
@@ -111,24 +110,22 @@ class Player < GameObject
 			@items[item.type] << item
 		end
 		@button_alpha = 0
-		@item_index = item.type
 	end
 	
-	def use_item item, from_npc = false
-		if @npc and not from_npc
-			@npc.send item
-		else
+	def use_item item, from_obj = false
+		if from_obj
 			@items[item].delete_at(0).use
 			if @items[item].length == 0
 				@items.delete item
 				@buttons.delete item
-				arrange_buttons if @npc.nil?
 			end
+		else
+			@obj.send item
 		end
 	end
 	
-	def talk_to npc
-		@npc = npc
+	def interact_with obj
+		@obj = obj
 	end
 	
 	def choose
@@ -136,9 +133,10 @@ class Player < GameObject
 		@active = false
 	end
 	
-	def stop_talking
+	def stop_interacting
 		arrange_buttons
-		@npc = nil
+		@obj.stop_interacting
+		@obj = nil
 		activate
 	end
 	
