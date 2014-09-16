@@ -1,19 +1,6 @@
 require 'minigl'
+require_relative 'ui'
 include AGL
-
-class ItemButton < Button
-	def initialize item_set
-		super(0, 20, nil, nil, :ui_btn4, 0, 0, 0, 0, 0, 0, 0, item_set[0].type){ |i| G.player.use_item i }
-		@item_set = item_set
-	end
-	
-	def draw alpha
-		super alpha
-		c1 = (alpha << 24) | 0xffffff; c2 = alpha << 24
-		@item_set[0].icon.draw @x + 3, @y + 3, 0, 1, 1, c1
-		G.med_font.draw @item_set.length, @x + 33, @y + 7, 0, 1, 1, c2 if @item_set.length > 1
-	end
-end
 
 class Player < GameObject
 	attr_reader :name
@@ -21,18 +8,11 @@ class Player < GameObject
 	def initialize name, char, items = {}
 		super 0, 0, (char == :marcus ? 44 : 37), 115, "sprite_#{char}", Vector.new(-8, -5), 3, 2
 		@name = name
+		@items = items
 		@max_speed.x = 5.5; @max_speed.y = 20
 		@anim_indices_left = [0, 1, 0, 2]
 		@anim_indices_right = [3, 4, 3, 5]
 		@active = true
-		
-		@items = items
-		@buttons = {}
-		@button_alpha = 255
-		
-		@panel_alpha = 255
-		@panel1 = Res.img :ui_panel1
-		@panel2 = Res.img :ui_panel2
 	end
 	
 	def update
@@ -69,24 +49,8 @@ class Player < GameObject
 		move forces, G.scene.obsts, G.scene.ramps
 		##############################################
 		
-		if @obj
-			if @obj.require_item? and @items.empty?
-				stop_interacting
-				return
-			end
-			@buttons.each { |k, v| v.update } if @obj.require_item?
-			if @panel_alpha > 0
-				@panel_alpha -= 17
-				@button_alpha -= 17
-				arrange_buttons true if @panel_alpha == 0 and @obj.require_item?
-			elsif @obj.require_item? and @button_alpha < 255
-				@button_alpha += 17
-			elsif not @obj.require_item? and @button_alpha > 0
-				@button_alpha -= 17
-			end
-		else
-			@panel_alpha += 17 if @panel_alpha < 255
-			@button_alpha += 17 if @button_alpha < 255
+		if @obj and @obj.require_item? and @items.empty?
+			stop_interacting
 		end
 	end
 	
@@ -104,12 +68,10 @@ class Player < GameObject
 		if @items[item.type].nil?
 			@items[item.type] = []
 			@items[item.type] << item
-			@buttons[item.type] = ItemButton.new(@items[item.type])
-			arrange_buttons
 		else
 			@items[item.type] << item
 		end
-		@button_alpha = 0
+		UI.add_item @items[item.type]
 	end
 	
 	def use_item item, from_obj = false
@@ -117,7 +79,7 @@ class Player < GameObject
 			@items[item].delete_at(0).use
 			if @items[item].length == 0
 				@items.delete item
-				@buttons.delete item
+				UI.remove_item item
 			end
 		else
 			@obj.send item
@@ -128,49 +90,12 @@ class Player < GameObject
 		@obj = obj
 	end
 	
-	def choose
-		arrange_buttons true
-		@active = false
-	end
-	
 	def stop_interacting
-		arrange_buttons
 		@obj.stop_interacting
 		@obj = nil
-		activate
-	end
-	
-	def activate
-		@active = true
-	end
-	
-	def draw map
-		super map
-		
-		p_color = (@panel_alpha << 24) | 0xffffff
-		p_t_color = (@panel_alpha << 24) | 0
-		base = -270 + G.med_font.text_width(@name.capitalize)
-		base = -210 if base < -210
-		@panel1.draw base, 0, 0, 1, 1, p_color
-		G.font.draw "Jogador", 5, 5, 0, 1, 1, p_t_color
-		G.med_font.draw @name.capitalize, 5, 25, 0, 1, 1, p_t_color
-		
-		if @items.length > 0
-			base = 805 - @items.length * 57
-			@panel2.draw base - 20, 0, 0, 1, 1, p_color
-			@buttons.each { |k, v| v.draw @button_alpha }
-			G.font.draw "Itens", base, 5, 0, 1, 1, p_t_color
-		end
 	end
 	
 	private
-	
-	def arrange_buttons bottom = false
-		@buttons.each_with_index do |b, i|
-			if bottom; b[1].set_position 225 + i * 70, 555
-			else; b[1].set_position 802 - (@items.length-i) * 57, 20; end
-		end
-	end
 	
 	def set_direction dir
 		if dir == :left

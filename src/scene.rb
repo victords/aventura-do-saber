@@ -35,6 +35,8 @@ class Scene
 		@objects.each do |o|
 			o.update
 		end
+		
+		UI.update
 	end
 	
 	def reset
@@ -86,5 +88,7 @@ class Scene
 		@effects.each do |e|
 			e.draw
 		end
+		
+		UI.draw
 	end
 end

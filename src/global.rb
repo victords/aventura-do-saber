@@ -51,6 +51,7 @@ class G
 		
 		@@state = :game
 		@@player = Player.new name, char, {}
+		UI.initialize
 		@@scene = Scene.new type, G.scenes[type], 1
 	end
 	
