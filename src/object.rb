@@ -6,15 +6,14 @@ class SceneObject < GameObject
 		f = File.open("data/text/obj#{id}.txt")
 		info = f.readline.chomp.split ','
 		super x, y, info[0].to_i, info[1].to_i, "sprite_obj#{id}", nil, info[2].to_i, info[3].to_i
+		@exclam = XSprite.new 0, 0, :ui_exclam
 		@active = true
 		@state = 0
 		@opts = []
 		@switches = []
-		@alpha = 0
 		
 		states = f.read.split "\n\n"
 		f.close
-		
 		sw = states[-1][1..-1].to_i
 		if G.switches.index sw
 			@active = false
@@ -22,7 +21,6 @@ class SceneObject < GameObject
 		end
 		states[0..-2].each_with_index do |s, i|
 			lines = s.split "\n"
-			@opts << []
 			if lines.length > 1
 				ind = 0
 				if lines[0][0] == '$'
@@ -30,23 +28,24 @@ class SceneObject < GameObject
 					@state = i if G.switches.index sw
 					ind += 1
 				end
-				opts = lines[ind..-2]
-				opts.each_with_index do |l, j|
-					@opts[i] << Button.new(216, 600 + (j - opts.length) * 40, G.med_font, l, :ui_btn3, 0, 0, false, 5, 5, 0, 0, j+1){ |o| send o }
-				end
+				@opts << lines[ind..-2]
+			else
+				@opts << []
 			end
 			@switches << lines[-1]
 		end
-		
-		@exclam = Res.img :ui_exclam
-		@panel = Res.img :ui_panel3
 	end
 	
 	def update
 		return unless @active
-		@can_interact = bounds.intersects G.player.bounds
+		if bounds.intersects G.player.bounds
+			@exclam.fade_in unless @can_interact
+			@can_interact = true
+		else
+			@exclam.fade_out if @can_interact
+			@can_interact = false
+		end
 		if @interacting and not @can_interact
-			@leaving = true
 			G.player.stop_interacting
 		end
 		if @can_interact and KB.key_pressed? Gosu::KbA
@@ -54,24 +53,19 @@ class SceneObject < GameObject
 				G.player.stop_interacting
 			else
 				@interacting = true
+				@exclam.fade_out
 				G.player.interact_with self
-				unless @opts[@state].empty?
-					@show_opts = true
-					G.player.choose
+				if require_item?
+					UI.choose_item
+				else
+					UI.choose_opt
 				end
 			end
-			@alpha = 0
 		end
-		if @show_opts
-			@opts[@state].each { |o| o.update }
-		end
-		@alpha += 17 if @alpha < 255 and (@can_interact or @interacting)
-		@alpha -= 17 if @alpha > 0 and not @can_interact and not @interacting
-		@leaving = false if @alpha == 0
+		@exclam.update_alpha
 	end
 	
 	def require_item?
-		return false unless @switches[@state]
 		@switches[@state][0] == '!'
 	end
 	
@@ -99,34 +93,19 @@ class SceneObject < GameObject
 			G.switches << sw
 		end
 		@state += 1
-		if @state == @opts.length
-			@active = false
-		elsif @opts[@state].empty?
-			G.player.activate
-			@show_opts = false
-		end
+		@active = false if @state == @opts.length
 	end
 	
 	def stop_interacting
 		@interacting = false
+		@exclam.fade_in
 	end
 	
 	def draw map
 		super map
-		if @interacting or @leaving
-#			color = (@alpha << 24) | 0xffffff
-#			@balloon.draw @x - map.cam.x - 404, @y - map.cam.y - 133, 0, 1, 1, color
-#			@balloon_arrow.draw @x - map.cam.x - 34, @y - map.cam.y - 35, 0, 1, 1, color
-#			@writer.write_breaking @pages[@cur_page], @x - map.cam.x - 374, @y - map.cam.y - 123, 380, :justified, 0, @alpha
-		elsif @alpha > 0
-			color = (@alpha << 24) | 0xffffff
-			@exclam.draw @x + @w / 2 - map.cam.x - 6, @y - map.cam.y - 60, 0, 1, 1, color
-		end
-		if @show_opts
-			@panel.draw 200, 583 - (@opts[@state].length) * 40, 0
-			@opts[@state].each { |b| b.draw }
-		elsif @interacting and require_item?
-			@panel.draw 200, 534, 0
+		if @active
+			@exclam.x = @x + @w / 2 - map.cam.x - 6; @exclam.y = @y - map.cam.y - 60
+			@exclam.draw
 		end
 	end
 end

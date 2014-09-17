@@ -38,7 +38,13 @@ class NPC < GameObject
 	end
 	
 	def update
-		@can_talk = bounds.intersects G.player.bounds
+		if bounds.intersects G.player.bounds
+			@ellipsis.fade_in unless @can_talk
+			@can_talk = true
+		else
+			@ellipsis.fade_out if @can_talk
+			@can_talk = false
+		end
 		if @can_talk and G.player.x > @x
 			set_animation 3 unless @facing_right
 			@facing_right = true
@@ -49,8 +55,6 @@ class NPC < GameObject
 		if @talking and not @can_talk
 			set_animation (@facing_right ? 3 : 0)
 			G.player.stop_interacting
-			@balloon.fade_out
-			@balloon_arrow.fade_out
 		end
 		if @can_talk and KB.key_pressed? Gosu::KbA
 			if @talking
@@ -71,9 +75,11 @@ class NPC < GameObject
 				@pages = @msgs[@state].split '/'
 				@cur_page = 0
 				G.player.interact_with self
+				@ellipsis.fade_out; @balloon.fade_in; @balloon_arrow.fade_in
 			end
 		end
 		animate (@facing_right ? @talking_seq_right : @talking_seq), 8 if @talking
+		@ellipsis.update_alpha; @balloon.update_alpha; @balloon_arrow.update_alpha
 	end
 	
 	def require_item?
@@ -113,6 +119,7 @@ class NPC < GameObject
 	
 	def stop_interacting
 		@talking = false
+		@ellipsis.fade_in; @balloon.fade_out; @balloon_arrow.fade_out
 	end
 	
 	def draw map

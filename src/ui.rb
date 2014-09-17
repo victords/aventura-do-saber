@@ -58,7 +58,7 @@ class XSprite < Sprite
 	
 	def initialize x, y, img, sprite_cols = nil, sprite_rows = nil
 		super x, y, img, sprite_cols, sprite_rows
-		@alpha = 255
+		@alpha = 0
 	end
 	
 	def draw
@@ -72,8 +72,8 @@ class UI
 		base = -210 if base < -210
 		@panel1 = XSprite.new base, 0, :ui_panel1
 		@panel2 = XSprite.new 0, 0, :ui_panel2
-		@panel3 = XSprite.new 0, 0, :ui_panel3
-		@panel3.alpha = 0
+		@panel3 = XSprite.new 200, 0, :ui_panel3
+		@panel1.alpha = 255
 		@item_buttons = {}
 		@opt_buttons = []
 	end
@@ -97,32 +97,52 @@ class UI
 			@item_buttons[item_set[0].type] = ItemButton.new(item_set)
 			arrange_item_buttons
 		end
+		@panel2.fade_in if @item_buttons.length == 1
 	end
 	
 	def self.remove_item item
 		@item_buttons.delete item
 		arrange_item_buttons true
+		@panel2.fade_out if @item_buttons.empty?
 	end
 	
 	def self.choose_item
-		@item_buttons.each do |b|
-			b.alpha = 0
-			b.fade_in
-		end
+		@item_buttons.each { |k, v| v.alpha = 0; v.fade_in }
 		arrange_item_buttons true
+		@panel3.y = 538
 		@panel3.fade_in
 		@choosing_opt = false
+		@choosing_item = true
 	end
 	
 	def self.choose_opt opts
 		@opt_buttons.clear
 		opts.each_with_index do |o, i|
-			@opt_buttons << XButton.new(216, 600 + (i - opts.length) * 40, G.med_font, o, :ui_btn3, 0, 0, false, 5, 5, 0, 0, i+1){ |p| send p }
+			@opt_buttons << XButton.new(216, 600 + (i - opts.length) * 40, G.med_font, o,
+			                            :ui_btn3, 0, 0, false, 5, 5, 0, 0, i+1){ |p| G.player.send_to_obj p }
 		end
+		@panel3.y = 584 - opts.length * 40
 		@panel3.fade_in
 		@opt_buttons.each { |b| b.fade_in }
-		arrange_item_buttons
+		if @choosing_item
+			arrange_item_buttons
+			@choosing_item = false
+		end
 		@choosing_opt = true
+	end
+	
+	def self.start_player_interaction
+		@panel1.fade_out
+		@panel2.fade_out
+		@item_buttons.each { |k, v| v.fade_out }
+	end
+	
+	def self.stop_player_interaction
+		@item_buttons.each { |b| b.alpha = 0; b.fade_in }
+		arrange_item_buttons
+		@panel3.fade_out
+		@opt_buttons.each { |b| b.fade_out }
+		@choosing_item = @choosing_opt = false
 	end
 	
 	def self.draw
@@ -132,14 +152,14 @@ class UI
 		G.font.draw "Jogador", 5, 5, 0, 1, 1, p_t_color
 		G.med_font.draw G.player.name.capitalize, 5, 25, 0, 1, 1, p_t_color
 		
+		@panel3.draw
+		@opt_buttons.each { |b| b.draw } if @choosing_opt
+		
 		if @item_buttons.length > 0
 			@panel2.draw
 			@item_buttons.each { |k, v| v.draw }
 			G.font.draw "Itens", @items_text_base, 5, 0, 1, 1, p_t_color
 		end
-		
-		@panel3.draw
-		@opt_buttons.each { |b| b.draw } if @choosing_opt
 	end
 	
 	private
@@ -152,6 +172,6 @@ class UI
 			b[1].fade_in
 		end
 		@items_text_base = 805 - @item_buttons.length * 57
-		@choosing_item = bottom
+		@panel2.x = @items_text_base - 30
 	end
 end

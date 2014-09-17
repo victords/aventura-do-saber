@@ -88,11 +88,17 @@ class Player < GameObject
 	
 	def interact_with obj
 		@obj = obj
+		UI.start_player_interaction
+	end
+	
+	def send_to_obj what
+		@obj.send what
 	end
 	
 	def stop_interacting
 		@obj.stop_interacting
 		@obj = nil
+		UI.stop_player_interaction
 	end
 	
 	private
