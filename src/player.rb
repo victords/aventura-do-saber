@@ -16,7 +16,6 @@ class Player < GameObject
 	end
 	
 	def update
-		################## Movement ##################
 		forces = Vector.new 0, 0
 		if @active
 			if KB.key_down? Gosu::KbLeft
@@ -47,11 +46,6 @@ class Player < GameObject
 			end
 		end
 		move forces, G.scene.obsts, G.scene.ramps
-		##############################################
-		
-		if @obj and @obj.require_item? and @items.empty?
-			stop_interacting
-		end
 	end
 	
 	def set_position entry

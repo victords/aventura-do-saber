@@ -125,7 +125,7 @@ class UI
 		@panel3.fade_in
 		@opt_buttons.each { |b| b.fade_in }
 		if @choosing_item
-			arrange_item_buttons
+			@item_buttons.each { |k, v| v.fade_out }
 			@choosing_item = false
 		end
 		@choosing_opt = true
@@ -138,8 +138,9 @@ class UI
 	end
 	
 	def self.stop_player_interaction
-		@item_buttons.each { |b| b.alpha = 0; b.fade_in }
 		arrange_item_buttons
+		@panel1.fade_in
+		@panel2.fade_in
 		@panel3.fade_out
 		@opt_buttons.each { |b| b.fade_out }
 		@choosing_item = @choosing_opt = false
@@ -149,7 +150,7 @@ class UI
 		@panel1.draw
 		p_color = (@panel1.alpha << 24) | 0xffffff
 		p_t_color = @panel1.alpha << 24
-		G.font.draw "Jogador", 5, 5, 0, 1, 1, p_t_color
+		G.font.draw "Jogador", 5, 2, 0, 1, 1, p_t_color
 		G.med_font.draw G.player.name.capitalize, 5, 25, 0, 1, 1, p_t_color
 		
 		@panel3.draw
@@ -158,7 +159,7 @@ class UI
 		if @item_buttons.length > 0
 			@panel2.draw
 			@item_buttons.each { |k, v| v.draw }
-			G.font.draw "Itens", @items_text_base, 5, 0, 1, 1, p_t_color
+			G.font.draw "Itens", @items_text_base, 2, 0, 1, 1, p_t_color
 		end
 	end
 	
@@ -172,6 +173,6 @@ class UI
 			b[1].fade_in
 		end
 		@items_text_base = 805 - @item_buttons.length * 57
-		@panel2.x = @items_text_base - 30
+		@panel2.x = @items_text_base - 20
 	end
 end

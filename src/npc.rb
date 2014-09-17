@@ -61,14 +61,7 @@ class NPC < GameObject
 				@cur_page += 1
 				if @cur_page == @pages.length
 					@cur_page -= 1
-					if require_item?
-						UI.choose_item
-					elsif @opts[@state].nil? or @opts[@state].empty?
-						set_animation (@facing_right ? 3 : 0)
-						G.player.stop_interacting
-					else
-						UI.choose_opt @opts[@state]
-					end
+					interact
 				end
 			else
 				@talking = true
@@ -80,6 +73,17 @@ class NPC < GameObject
 		end
 		animate (@facing_right ? @talking_seq_right : @talking_seq), 8 if @talking
 		@ellipsis.update_alpha; @balloon.update_alpha; @balloon_arrow.update_alpha
+	end
+	
+	def interact
+		if require_item?
+			UI.choose_item
+		elsif @opts[@state].nil? or @opts[@state].empty?
+			set_animation (@facing_right ? 3 : 0)
+			G.player.stop_interacting
+		else
+			UI.choose_opt @opts[@state]
+		end
 	end
 	
 	def require_item?
@@ -96,8 +100,8 @@ class NPC < GameObject
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
-				next_state
 				G.player.use_item what, true
+				next_state
 			else
 				G.scene.add_effect 0, 200, 100
 			end
@@ -112,27 +116,31 @@ class NPC < GameObject
 		end
 		
 		@state += 1
+		G.scene.remove_obst @block if @state == @msgs.length - 1
+		
 		@pages = @msgs[@state].split '/'
 		@cur_page = 0
-		G.scene.remove_obst @block if @state == @msgs.length - 1
+		interact
 	end
 	
 	def stop_interacting
-		@talking = false
-		@ellipsis.fade_in; @balloon.fade_out; @balloon_arrow.fade_out
+		@can_talk = @talking = false
+		@balloon.fade_out; @balloon_arrow.fade_out
 	end
 	
 	def draw map
 		super map
-		@ellipsis.x = @x - map.cam.x + @w / 2 - 25; @ellipsis.y = @y - map.cam.y - 45
-		@balloon.x = @x - map.cam.x - 404; @balloon.y = @y - map.cam.y - 133
-		@balloon_arrow.x = @x - map.cam.x - 34; @balloon_arrow.y = @y - map.cam.y - 35
 		
+		@ellipsis.x = @x - map.cam.x + @w / 2 - 25; @ellipsis.y = @y - map.cam.y - 45
 		@ellipsis.draw
-		if @talking
-			@balloon.draw
-			@balloon_arrow.draw
-			@writer.write_breaking @pages[@cur_page], @x - map.cam.x - 374, @y - map.cam.y - 123, 380, :justified, 0, @balloon.alpha
-		end
+		
+		@balloon.x = @x - map.cam.x - 404; @balloon.y = @y - map.cam.y - 133
+		@balloon.draw
+		
+		@balloon_arrow.x = @x - map.cam.x - 34; @balloon_arrow.y = @y - map.cam.y - 35
+		@balloon_arrow.draw
+		
+		@writer.write_breaking @pages[@cur_page],
+			@x - map.cam.x - 374, @y - map.cam.y - 123, 380, :justified, 0, @balloon.alpha if @pages
 	end
 end

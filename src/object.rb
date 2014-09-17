@@ -37,6 +37,7 @@ class SceneObject < GameObject
 	end
 	
 	def update
+		@exclam.update_alpha
 		return unless @active
 		if bounds.intersects G.player.bounds
 			@exclam.fade_in unless @can_interact
@@ -55,14 +56,17 @@ class SceneObject < GameObject
 				@interacting = true
 				@exclam.fade_out
 				G.player.interact_with self
-				if require_item?
-					UI.choose_item
-				else
-					UI.choose_opt
-				end
+				interact
 			end
 		end
-		@exclam.update_alpha
+	end
+	
+	def interact
+		if require_item?
+			UI.choose_item
+		else
+			UI.choose_opt @opts[@state]
+		end
 	end
 	
 	def require_item?
@@ -78,8 +82,8 @@ class SceneObject < GameObject
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
-				next_state
 				G.player.use_item what, true
+				next_state
 			else
 				G.scene.add_effect 0, 200, 100
 			end
@@ -93,12 +97,17 @@ class SceneObject < GameObject
 			G.switches << sw
 		end
 		@state += 1
-		@active = false if @state == @opts.length
+		if @state == @opts.length
+			@active = false
+			@exclam.fade_out
+			G.player.stop_interacting
+		else
+			interact
+		end
 	end
 	
 	def stop_interacting
-		@interacting = false
-		@exclam.fade_in
+		@can_interact = @interacting = false
 	end
 	
 	def draw map
