@@ -5,17 +5,22 @@ include AGL
 class Player < GameObject
 	attr_reader :name
 	
-	def initialize name, char, items = {}
+	def initialize name, char
 		super 0, 0, (char == :marcus ? 44 : 37), 115, "sprite_#{char}", Vector.new(-8, -5), 3, 2
 		@name = name
-		@items = items
 		@max_speed.x = 5.5; @max_speed.y = 20
 		@anim_indices_left = [0, 1, 0, 2]
 		@anim_indices_right = [3, 4, 3, 5]
 		@active = true
+		@items = {}
 	end
 	
 	def update
+		if @prepared_item
+			add_item @prepared_item, false
+			@prepared_item = nil
+		end
+		
 		forces = Vector.new 0, 0
 		if @active
 			if KB.key_down? Gosu::KbLeft
@@ -58,14 +63,18 @@ class Player < GameObject
 		set_animation @anim_indices[0]
 	end
 	
-	def add_item item
+	def add_item item, show = true
 		if @items[item.type].nil?
 			@items[item.type] = []
 			@items[item.type] << item
 		else
 			@items[item.type] << item
 		end
-		UI.add_item @items[item.type]
+		UI.add_item @items[item.type], show
+	end
+	
+	def prepare_item item
+		@prepared_item = Item.new 0, 0, item
 	end
 	
 	def use_item item, from_obj = false

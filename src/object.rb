@@ -95,6 +95,16 @@ class SceneObject < GameObject
 		if s.length > 1
 			sw = s[1][1..-1].to_i
 			G.switches << sw
+			if s.length > 2
+				if s[2][0] == '$'
+					sw = s[2][1..-1].to_i
+					G.switches << sw
+					G.player.prepare_item G.items[sw].split(',')[2].to_sym
+				else
+					item = s[2][1..-1].to_sym
+					G.player.prepare_item item
+				end
+			end
 		end
 		@state += 1
 		if @state == @opts.length

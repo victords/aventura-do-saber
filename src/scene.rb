@@ -52,7 +52,7 @@ class Scene
 			case l[0]
 			when '>'     then @entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)
 			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
-			when '!'     then @items << Item.new(a[0].to_i, a[1].to_i, a[2].to_sym)
+			when '!'     then check_item a
 			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2])
 			when '*'     then @objects << SceneObject.new(a[0].to_i, a[1].to_i, a[2])
 			else              @obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
@@ -63,6 +63,18 @@ class Scene
 		end
 		
 		G.player.set_position @entries[@entry]
+	end
+	
+	def check_item info
+		if info[0][0] == '$'
+			sw = info[0][1..-1].to_i
+			unless G.switches.index sw
+				info = G.items[sw].split ','
+				@items << Item.new(info[0].to_i, info[1].to_i, info[2].to_sym)
+			end
+		else
+			@items << Item.new(info[0].to_i, info[1].to_i, info[2].to_sym)
+		end
 	end
 	
 	def remove_obst obst

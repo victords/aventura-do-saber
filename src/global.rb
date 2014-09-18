@@ -15,6 +15,11 @@ class G
 		f = File.open("data/text/fx.txt")
 		@@effects = f.readlines
 		f.close
+		@@items = {}
+		File.open("data/text/items.txt").each do |l|
+			l = l.chomp.split
+			@@items[l[0].to_i] = l[1]
+		end
 		@@switches = []
 		@@state = :menu
 		
@@ -37,6 +42,8 @@ class G
 	end
 	
 	def self.start_game type, name, char, continue
+		@@player = Player.new name, char
+		UI.initialize
 		if continue
 			f = File.open("data/save/#{name}")
 			s = f.readline.split(',').map { |s| s.to_i }
@@ -46,13 +53,16 @@ class G
 			@@scenes[:all] = s[3]
 			s = f.readline.split(',').map { |s| s.to_i }
 			s.each { |sw| @@switches << sw }
+			s = f.readline.chomp.split(',').map { |s| s.to_i }
+			s.each do |sw|
+				@@player.add_item Item.new(0, 0, @@items[sw].split(',')[2].to_sym)
+				@@switches << sw
+			end
 			f.close
 		end
+		@@scene = Scene.new type, @@scenes[type], 1
 		
 		@@state = :game
-		@@player = Player.new name, char, {}
-		UI.initialize
-		@@scene = Scene.new type, G.scenes[type], 1
 	end
 	
 	def self.set_option o, v
