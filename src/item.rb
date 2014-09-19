@@ -4,10 +4,11 @@ include AGL
 class Item < GameObject
 	attr_reader :type, :dead, :icon
 	
-	def initialize x, y, type
+	def initialize x, y, type, switch = nil
 		super x, y, 30, 30, "sprite_#{type}", Vector.new(0, 0)
 		@type = type
 		@icon = Res.img "icon_#{type}"
+		@switch = switch
 	end
 	
 	def update
@@ -16,11 +17,12 @@ class Item < GameObject
 		
 		if bounds.intersects G.player.bounds
 			G.player.add_item self
+			G.switches << @switch if @switch
 			@dead = true
 		end
 	end
 	
-	def use
-		puts "Usando #{@type}"
-	end
+#	def use
+#		puts "Usando #{@type}"
+#	end
 end

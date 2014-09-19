@@ -4,6 +4,18 @@ require_relative 'object'
 
 Entry = Struct.new :x, :y, :dir
 
+class Exit
+	def initialize x, y, dir, destiny, dest_entry
+		@bounds = Rectangle.new dir == :l ? x - 30 : x + 30, y - 150, 1, 150
+		@destiny = destiny
+		@dest_entry = dest_entry
+	end
+	
+	def update
+		G.set_scene @destiny, @dest_entry if @bounds.intersects G.player.bounds
+	end
+end
+
 class Scene
 	attr_reader :obsts, :ramps
 	
@@ -29,18 +41,16 @@ class Scene
 			e.update
 			@effects.delete e if e.dead
 		end
-		@npcs.each do |c|
-			c.update
-		end
-		@objects.each do |o|
-			o.update
-		end
+		@npcs.each { |c| c.update }
+		@objects.each { |o| o.update }
+		@exits.each { |e| e.update }
 		
 		UI.update
 	end
 	
 	def reset
 		@entries = []
+		@exits = []
 		@obsts = []
 		@ramps = []
 		@items = []
@@ -51,6 +61,7 @@ class Scene
 			a = l[2..-1].chomp.split ','
 			case l[0]
 			when '>'     then @entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)
+			when '<'     then @exits << Exit.new(a[0].to_i, a[1].to_i, a[2].to_sym, a[3].to_i, a[4].to_i)
 			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
 			when '!'     then check_item a
 			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2])
@@ -63,6 +74,7 @@ class Scene
 		end
 		
 		G.player.set_position @entries[@entry]
+		@map.set_camera G.player.x - 380, G.player.y - 240
 	end
 	
 	def check_item info
@@ -70,7 +82,7 @@ class Scene
 			sw = info[0][1..-1].to_i
 			unless G.switches.index sw
 				info = G.items[sw].split ','
-				@items << Item.new(info[0].to_i, info[1].to_i, info[2].to_sym)
+				@items << Item.new(info[0].to_i, info[1].to_i, info[2].to_sym, sw)
 			end
 		else
 			@items << Item.new(info[0].to_i, info[1].to_i, info[2].to_sym)

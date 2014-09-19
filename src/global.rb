@@ -41,7 +41,21 @@ class G
 		@@menu = Menu.new
 	end
 	
+	def self.set_option o, v
+		@@temp_options[o] = (v ? 1 : 0)
+	end
+	
+	def self.save_options
+		@@hints = (@@temp_options[1] == 1)
+		@@sounds = (@@temp_options[2] == 1)
+		@@music = (@@temp_options[3] == 1)
+		f = File.open("data/save/_config", "w")
+		f.write @@temp_options.join(',')
+		f.close
+	end
+	
 	def self.start_game type, name, char, continue
+		@@game_type = type
 		@@player = Player.new name, char
 		UI.initialize
 		if continue
@@ -65,17 +79,32 @@ class G
 		@@state = :game
 	end
 	
-	def self.set_option o, v
-		@@temp_options[o] = (v ? 1 : 0)
+	def self.set_scene scene, entry
+		@@state = :transition
+		@@next_scene = scene
+		@@next_entry = entry
+		@@transition_alpha = 0
 	end
 	
-	def self.save_options
-		@@hints = (@@temp_options[1] == 1)
-		@@sounds = (@@temp_options[2] == 1)
-		@@music = (@@temp_options[3] == 1)
-		f = File.open("data/save/_config", "w")
-		f.write @@temp_options.join(',')
-		f.close
+	def self.update_transition
+		if @@next_scene
+			@@transition_alpha += 17
+			if @@transition_alpha == 255
+				@@scene = Scene.new @@game_type, @@next_scene, @@next_entry
+				@@next_scene = @@next_entry = nil
+			end
+		else
+			@@transition_alpha -= 17
+			@@state = :game if @@transition_alpha == 0
+		end
+	end
+	
+	def self.draw_transition
+		color = (@@transition_alpha << 24)
+		@@win.draw_quad 0, 0, color,
+		                800, 0, color,
+		                800, 600, color,
+		                0, 600, color, 0
 	end
 	
 	def self.quit_game

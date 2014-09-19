@@ -64,7 +64,6 @@ class Player < GameObject
 	end
 	
 	def add_item item, show = true
-		puts "#{item.type}, #{show}"
 		if @items[item.type].nil?
 			@items[item.type] = []
 			@items[item.type] << item
@@ -80,7 +79,7 @@ class Player < GameObject
 	
 	def use_item item, from_obj = false
 		if from_obj
-			@items[item].delete_at(0).use
+			@items[item].delete_at 0
 			if @items[item].length == 0
 				@items.delete item
 				UI.remove_item item

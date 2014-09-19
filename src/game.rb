@@ -21,8 +21,10 @@ class MyGame < Gosu::Window
 		
 		if G.state == :menu
 			G.menu.update
-		elsif
+		elsif G.state == :game
 			G.scene.update
+		else
+			G.update_transition
 		end
 		
 		close if KB.key_pressed? Gosu::KbEscape
@@ -31,8 +33,9 @@ class MyGame < Gosu::Window
 	def draw
 		if G.state == :menu
 			G.menu.draw
-		elsif
+		else
 			G.scene.draw
+			G.draw_transition if G.state == :transition
 		end
 	end
 end
