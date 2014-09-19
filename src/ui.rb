@@ -66,6 +66,47 @@ class XSprite < Sprite
 	end
 end
 
+class TextEffect
+	include Fading
+	
+	attr_reader :dead
+	
+	def initialize text, level
+		@x = 400 - G.med_font.text_width(text) / 2
+		@y = 300 - G.med_font.height / 2
+		@text = text
+		@color =
+			case level
+			when :info then 0xffffff
+			when :error then 0xff0000
+			end
+		@steps = 0
+		@alpha = 0
+		fade_in
+	end
+	
+	def update
+		@y -= 0.3
+		if @steps == 180; fade_out
+		else; @steps += 1; end
+		update_alpha
+		@dead = true if @alpha == 0
+	end
+	
+	def draw
+		aa = @alpha << 24
+		G.med_font.draw @text, @x - 1, @y - 1, 0, 1, 1, aa
+		G.med_font.draw @text, @x, @y - 1, 0, 1, 1, aa
+		G.med_font.draw @text, @x + 1, @y - 1, 0, 1, 1, aa
+		G.med_font.draw @text, @x + 1, @y, 0, 1, 1, aa
+		G.med_font.draw @text, @x + 1, @y + 1, 0, 1, 1, aa
+		G.med_font.draw @text, @x, @y + 1, 0, 1, 1, aa
+		G.med_font.draw @text, @x - 1, @y + 1, 0, 1, 1, aa
+		G.med_font.draw @text, @x - 1, @y, 0, 1, 1, aa
+		G.med_font.draw @text, @x, @y, 0, 1, 1, aa | @color
+	end
+end
+
 class UI
 	def self.initialize
 		base = -270 + G.med_font.text_width(G.player.name.capitalize)

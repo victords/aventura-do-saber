@@ -85,6 +85,10 @@ class Scene
 		eval "@effects << Effect.new(#{x}, #{y}, :fx_#{id}, #{G.effects[id].chomp})"
 	end
 	
+	def show_message msg, level = :info
+		@effects << TextEffect.new(msg, level)
+	end
+	
 	def draw
 		@bg.draw -@map.cam.x, -@map.cam.y, 0
 		@items.each do |i|

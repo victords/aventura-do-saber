@@ -17,7 +17,7 @@ class Player < GameObject
 	
 	def update
 		if @prepared_item
-			add_item @prepared_item, false
+			add_item @prepared_item, @obj.nil?
 			@prepared_item = nil
 		end
 		
@@ -64,6 +64,7 @@ class Player < GameObject
 	end
 	
 	def add_item item, show = true
+		puts "#{item.type}, #{show}"
 		if @items[item.type].nil?
 			@items[item.type] = []
 			@items[item.type] << item

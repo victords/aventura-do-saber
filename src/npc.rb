@@ -96,14 +96,14 @@ class NPC < GameObject
 		if s[0] == '+'
 			option = s[1..-1].to_i
 			if option == what; next_state
-			else; G.scene.add_effect 0, 200, 100; end
+			else; G.scene.show_message "Resposta errada... :(", :error; end
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
 				G.player.use_item what, true
 				next_state
 			else
-				G.scene.add_effect 0, 200, 100
+				G.scene.show_message "Não é esse item... :(", :error
 			end
 		end
 	end
@@ -116,6 +116,7 @@ class NPC < GameObject
 		end
 		
 		@state += 1
+		G.scene.show_message "Correto! :)"
 		G.scene.remove_obst @block if @state == @msgs.length - 1
 		
 		@pages = @msgs[@state].split '/'

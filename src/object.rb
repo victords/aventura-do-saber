@@ -11,6 +11,7 @@ class SceneObject < GameObject
 		@state = 0
 		@opts = []
 		@switches = []
+		@msgs = []
 		
 		states = f.read.split "\n\n"
 		f.close
@@ -32,7 +33,9 @@ class SceneObject < GameObject
 			else
 				@opts << []
 			end
-			@switches << lines[-1]
+			l = lines[-1].split '/'
+			@switches << l[0]
+			@msgs << l[1]
 		end
 	end
 	
@@ -78,14 +81,14 @@ class SceneObject < GameObject
 		if s[0] == '+'
 			option = s[1..-1].to_i
 			if option == what; next_state
-			else; G.scene.add_effect 0, 200, 100; end
+			else; G.scene.show_message "Nenhum efeito... =/", :error; end
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
 				G.player.use_item what, true
 				next_state
 			else
-				G.scene.add_effect 0, 200, 100
+				G.scene.show_message "Nenhum efeito... =/", :error
 			end
 		end
 	end
@@ -106,6 +109,7 @@ class SceneObject < GameObject
 				end
 			end
 		end
+		G.scene.show_message @msgs[@state]
 		@state += 1
 		if @state == @opts.length
 			@active = false
