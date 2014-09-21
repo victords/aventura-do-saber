@@ -19,19 +19,19 @@ class MyGame < Gosu::Window
 		KB.update
 		Mouse.update
 		
-		if G.state == :menu
+		if G.state == :menu or G.state == :paused
 			G.menu.update
 		elsif G.state == :game
-			G.scene.update
+			if KB.key_pressed? Gosu::KbEscape; G.open_menu
+			else; G.scene.update; end
 		else
 			G.update_transition
 		end
-		
-		close if KB.key_pressed? Gosu::KbEscape
 	end
 	
 	def draw
-		if G.state == :menu
+		if G.state == :menu or G.state == :paused
+			G.scene.draw if G.state == :paused
 			G.menu.draw
 		else
 			G.scene.draw

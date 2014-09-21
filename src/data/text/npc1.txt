@@ -6,9 +6,9 @@ Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem l
 +1 $1
 
 $1 Traga-me duas maçãs, por favor.
-!apple $2
+!apple $2 !item3
 
 $2 Obrigado! Traga-me mais uma maçã, por favor.
-!apple $3
+!apple $3 $15
 
 $3 Valeu, mulek!/Você é um cara bacana.

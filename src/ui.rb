@@ -145,10 +145,10 @@ class UI
 		}
 	end
 	
-	def self.add_item item_set, show
+	def self.add_item item_set, show, bottom = false
 		if @item_buttons[item_set[0].type].nil?
 			@item_buttons[item_set[0].type] = ItemButton.new(item_set)
-			arrange_item_buttons if show
+			arrange_item_buttons bottom if show
 		end
 		@panel2.fade_in if @item_buttons.length == 1
 	end

@@ -17,7 +17,7 @@ class Item < GameObject
 		
 		if bounds.intersects G.player.bounds
 			G.player.add_item self
-			G.switches << @switch if @switch
+			G.add_item_switch @switch if @switch
 			@dead = true
 		end
 	end

@@ -5,6 +5,7 @@ include AGL
 class G
 	def self.initialize hints, sounds, music
 		@@win = Game.window
+		@@full_screen = @@win.fullscreen?
 		@@hints = hints
 		@@sounds = sounds
 		@@music = music
@@ -21,24 +22,25 @@ class G
 			@@items[l[0].to_i] = l[1]
 		end
 		@@switches = []
+		@@item_switches = []
 		@@state = :menu
 		
 		@@menu = nil
 		@@player = nil
 		@@scene = nil
-		@@scenes = {}
+		@@scenes = {math: 1, port: 1, logic: 1, all: 1}
 		
 		class_variables.each do |v|
 			define_singleton_method(v.to_s[2..-1]) { class_variable_get v }
 		end
 		
 		@@temp_options = [
-			(@@win.fullscreen? ? 1 : 0),
+			(@@full_screen ? 1 : 0),
 			(hints ? 1 : 0),
 			(sounds ? 1 : 0),
 			(music ? 1 : 0)
 		]
-		@@menu = Menu.new
+		@@menu = MainMenu.new
 	end
 	
 	def self.set_option o, v
@@ -46,6 +48,7 @@ class G
 	end
 	
 	def self.save_options
+		@@full_screen = (@@temp_options[0] == 1)
 		@@hints = (@@temp_options[1] == 1)
 		@@sounds = (@@temp_options[2] == 1)
 		@@music = (@@temp_options[3] == 1)
@@ -70,13 +73,20 @@ class G
 			s = f.readline.chomp.split(',').map { |s| s.to_i }
 			s.each do |sw|
 				@@player.add_item Item.new(0, 0, @@items[sw].split(',')[2].to_sym)
-				@@switches << sw
+				add_item_switch sw
 			end
 			f.close
 		end
+		@@menu = nil
+		Res.clear
 		@@scene = Scene.new type, @@scenes[type], 1
 		
 		@@state = :game
+	end
+	
+	def self.add_item_switch sw
+		@@switches << sw
+		@@item_switches << sw
 	end
 	
 	def self.set_scene scene, entry
@@ -90,7 +100,9 @@ class G
 		if @@next_scene
 			@@transition_alpha += 17
 			if @@transition_alpha == 255
+				Res.clear
 				@@scene = Scene.new @@game_type, @@next_scene, @@next_entry
+				@@scenes[@@game_type] = @@next_scene
 				@@next_scene = @@next_entry = nil
 			end
 		else
@@ -105,6 +117,32 @@ class G
 		                800, 0, color,
 		                800, 600, color,
 		                0, 600, color, 0
+	end
+	
+	def self.open_menu
+		@@menu = SceneMenu.new @@game_type
+		@@state = :paused
+	end
+	
+	def self.resume_game
+		@@menu = nil
+		@@state = :game
+	end
+	
+	def self.back_to_menu
+		@@scene = nil
+		Res.clear
+		save_game
+		@@menu = MainMenu.new
+		@@state = :menu
+	end
+		
+	def self.save_game
+		f = File.open("data/save/#{@@player.name}", "w")
+		f.write @@scenes.values.join(',') + "\n"
+		f.write @@switches.join(',') + "\n"
+		f.write @@item_switches.join(',')
+		f.close
 	end
 	
 	def self.quit_game

@@ -17,7 +17,7 @@ class Player < GameObject
 	
 	def update
 		if @prepared_item
-			add_item @prepared_item, @obj.nil?
+			add_item @prepared_item, (@obj.nil? or @obj.require_item?), @obj
 			@prepared_item = nil
 		end
 		
@@ -63,14 +63,14 @@ class Player < GameObject
 		set_animation @anim_indices[0]
 	end
 	
-	def add_item item, show = true
+	def add_item item, show = true, bottom = false
 		if @items[item.type].nil?
 			@items[item.type] = []
 			@items[item.type] << item
 		else
 			@items[item.type] << item
 		end
-		UI.add_item @items[item.type], show
+		UI.add_item @items[item.type], show, bottom
 	end
 	
 	def prepare_item item

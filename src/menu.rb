@@ -160,8 +160,30 @@ class MenuScreen
 end
 
 class Menu
+	def update
+		@screens[@cur_screen].update
+		if @changing and @screens[@cur_screen].ready
+			@changing = false
+			@cur_screen = @next_screen
+		end
+	end
+	
+	def go_to_screen index
+		@screens[@cur_screen].go_back
+		@screens[index].reset
+		@next_screen = index
+		@changing = true
+	end
+	
+	def draw
+		@bg.draw 0, 0, 0
+		@screens[@cur_screen].draw
+	end
+end
+
+class MainMenu < Menu
 	def initialize
-		@bg = Res.img :bg_menu, true
+		@bg = Res.img :bg_menu
 		
 		@names = []
 		@name_input = TextField.new(100, 160, G.big_font, :ui_textField, :ui_textCursor, nil, 20, 13, 12, true, "",
@@ -205,21 +227,19 @@ class Menu
 				}
 		end
 		
-		@info_icon = MenuSprite.new 40, 400, :icon_info, false
-		@info_text = MenuText.new "Reinicie o jogo para mudar o modo tela cheia.", 82, 400, :left, G.med_font, false
-		@chks = [
-			ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, G.win.fullscreen?, 0, 0, false, 60, 10) { |c|
-				G.set_option 0, c
-				if c == G.win.fullscreen?
-					@info_icon.visible = @info_text.visible = false
-				else
-					@info_icon.visible = @info_text.visible = true
-				end
-			},
-			ToggleButton.new(40, 200, G.med_font, "Mostrar dicas", :ui_check, G.hints, 0, 0, false, 60, 10) { |c| G.set_option 1, c },
-			ToggleButton.new(40, 260, G.med_font, "Tocar sons", :ui_check, G.sounds, 0, 0, false, 60, 10) { |c| G.set_option 2, c },
-			ToggleButton.new(40, 320, G.med_font, "Tocar músicas", :ui_check, G.music, 0, 0, false, 60, 10) { |c| G.set_option 3, c },
-		]
+		@info_icon = MenuSprite.new(40, 400, :icon_info, G.full_screen != G.win.fullscreen?)
+		@info_text = MenuText.new("Reinicie o jogo para mudar o modo tela cheia.", 82, 400, :left, G.med_font, G.full_screen != G.win.fullscreen?)
+		@chk1 = ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, G.full_screen, 0, 0, false, 60, 10) { |c|
+			G.set_option 0, c
+			if c == G.win.fullscreen?
+				@info_icon.visible = @info_text.visible = false
+			else
+				@info_icon.visible = @info_text.visible = true
+			end
+		}
+		@chk2 = ToggleButton.new(40, 200, G.med_font, "Mostrar dicas", :ui_check, G.hints, 0, 0, false, 60, 10) { |c| G.set_option 1, c }
+		@chk3 = ToggleButton.new(40, 260, G.med_font, "Tocar sons", :ui_check, G.sounds, 0, 0, false, 60, 10) { |c| G.set_option 2, c }
+		@chk4 = ToggleButton.new(40, 320, G.med_font, "Tocar músicas", :ui_check, G.music, 0, 0, false, 60, 10) { |c| G.set_option 3, c }
 		
 		@screens = [
 			MenuScreen.new([
@@ -291,37 +311,69 @@ class Menu
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
 				MenuPanel.new(10, 600, 10, 120, :ui_menuComponent5)
 			], [
-				MenuText.new("Opções", 10, 5), @info_icon, @info_text, @chks[0], @chks[1], @chks[2], @chks[3],
+				MenuText.new("Opções", 10, 5), @info_icon, @info_text, @chk1, @chk2, @chk3, @chk4,
 				Button.new(440, 555, G.font, "Salvar", :ui_btn1) { G.save_options; go_to_screen 0 },
 				Button.new(600, 555, G.font, "Cancelar", :ui_btn1) {
-					@chks[0].checked = G.win.fullscreen?
-					@chks[1].checked = G.hints
-					@chks[2].checked = G.sounds
-					@chks[3].checked = G.music
+					@chk1.checked = G.full_screen
+					@chk2.checked = G.hints
+					@chk3.checked = G.sounds
+					@chk4.checked = G.music
 					go_to_screen 0
 				}
 			])
 		]
 		@cur_screen = 0
 	end
-	
-	def update
-		@screens[@cur_screen].update
-		if @changing and @screens[@cur_screen].ready
-			@changing = false
-			@cur_screen = @next_screen
-		end
-	end
-	
-	def go_to_screen index
-		@screens[@cur_screen].go_back
-		@screens[index].reset
-		@next_screen = index
-		@changing = true
-	end
-	
-	def draw
-		@bg.draw 0, 0, 0
-		@screens[@cur_screen].draw
+end
+
+class SceneMenu < Menu
+	def initialize game_type
+		@bg = Res.img "bg_#{game_type}Menu"
+		
+		@info_icon = MenuSprite.new(40, 400, :icon_info, G.full_screen != G.win.fullscreen?)
+		@info_text = MenuText.new("Reinicie o jogo para mudar o modo tela cheia.", 82, 400, :left, G.med_font, G.full_screen != G.win.fullscreen?)
+		@chk1 = ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, G.full_screen, 0, 0, false, 60, 10) { |c|
+			G.set_option 0, c
+			if c == G.win.fullscreen?
+				@info_icon.visible = @info_text.visible = false
+			else
+				@info_icon.visible = @info_text.visible = true
+			end
+		}
+		@chk2 = ToggleButton.new(40, 200, G.med_font, "Mostrar dicas", :ui_check, G.hints, 0, 0, false, 60, 10) { |c| G.set_option 1, c }
+		@chk3 = ToggleButton.new(40, 260, G.med_font, "Tocar sons", :ui_check, G.sounds, 0, 0, false, 60, 10) { |c| G.set_option 2, c }
+		@chk4 = ToggleButton.new(40, 320, G.med_font, "Tocar músicas", :ui_check, G.music, 0, 0, false, 60, 10) { |c| G.set_option 3, c }
+		
+		@screens = [
+			MenuScreen.new([
+				MenuPanel.new(210, 600, 210, 165, :ui_menuComponent4)
+			], [
+				Button.new(325, 230, G.font, "Continuar", :ui_btn1) { G.resume_game },
+				Button.new(325, 280, G.font, "Opções", :ui_btn1) { go_to_screen 1 },
+				Button.new(325, 330, G.font, "Sair", :ui_btn1) { go_to_screen 2 }
+			]),
+			MenuScreen.new([
+				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
+				MenuPanel.new(10, 600, 10, 120, :ui_menuComponent5)
+			], [
+				MenuText.new("Opções", 10, 5), @info_icon, @info_text, @chk1, @chk2, @chk3, @chk4,
+				Button.new(440, 555, G.font, "Salvar", :ui_btn1) { G.save_options; go_to_screen 0 },
+				Button.new(600, 555, G.font, "Cancelar", :ui_btn1) {
+					@chk1.checked = G.full_screen
+					@chk2.checked = G.hints
+					@chk3.checked = G.sounds
+					@chk4.checked = G.music
+					go_to_screen 0
+				}
+			]),
+			MenuScreen.new([
+				MenuPanel.new(210, -280, 210, 165, :ui_menuComponent4)
+			], [
+				Button.new(245, 360, G.font, "Sair", :ui_btn1) { G.back_to_menu },
+				Button.new(405, 360, G.font, "Cancelar", :ui_btn1) { go_to_screen 0 },
+				MenuText.new("Tem certeza que deseja sair? Seu jogo será salvo automaticamente.", 240, 185, :justified, G.med_font, true, 320)
+			])
+		]
+		@cur_screen = 0
 	end
 end
