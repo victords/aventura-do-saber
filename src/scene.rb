@@ -5,14 +5,24 @@ require_relative 'object'
 Entry = Struct.new :x, :y, :dir
 
 class Exit
-	def initialize x, y, dir, destiny, dest_entry
-		@bounds = Rectangle.new dir == :l ? x - 30 : x + 30, y - 150, 1, 150
+	def initialize x, y, dir, destiny, dest_entry, switch
+		@bounds = Rectangle.new dir == :l ? x - 30 : dir == :r ? x + 30 : x, y - 150, 1, 150
 		@destiny = destiny
 		@dest_entry = dest_entry
+		if switch
+			@active = G.switches.index switch.to_i
+			@switch = switch.to_i unless @active
+		else
+			@active = true
+		end
 	end
 	
 	def update
-		G.set_scene @destiny, @dest_entry if @bounds.intersects G.player.bounds
+		if @active
+			G.set_scene @destiny, @dest_entry if @bounds.intersects G.player.bounds
+		else
+			@active = G.switches.index @switch
+		end
 	end
 end
 
@@ -61,7 +71,7 @@ class Scene
 			a = l[2..-1].chomp.split ','
 			case l[0]
 			when '>'     then @entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)
-			when '<'     then @exits << Exit.new(a[0].to_i, a[1].to_i, a[2].to_sym, a[3].to_i, a[4].to_i)
+			when '<'     then @exits << Exit.new(a[0].to_i, a[1].to_i, a[2].to_sym, a[3].to_i, a[4].to_i, a[5])
 			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
 			when '!'     then check_item a
 			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2])
