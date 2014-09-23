@@ -39,10 +39,14 @@ class NPC < GameObject
 	
 	def update
 		if bounds.intersects G.player.bounds
-			@ellipsis.fade_in unless @can_talk
-			@can_talk = true
-		else
-			@ellipsis.fade_out if @can_talk
+			unless @can_talk
+				@ellipsis.fade_in
+				UI.set_hint "Pressione 'A' para conversar"
+				@can_talk = true
+			end
+		elsif @can_talk
+			@ellipsis.fade_out
+			UI.set_hint "Pressione 'Esc' para pausar o jogo"
 			@can_talk = false
 		end
 		if @can_talk and G.player.x > @x
@@ -68,6 +72,7 @@ class NPC < GameObject
 				@pages = @msgs[@state].split '/'
 				@cur_page = 0
 				G.player.interact_with self
+				UI.set_hint "Pressione 'A' para continuar..."
 				@ellipsis.fade_out; @balloon.fade_in; @balloon_arrow.fade_in
 			end
 		end

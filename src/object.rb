@@ -62,10 +62,14 @@ class SceneObject < GameObject
 		
 		return unless @active
 		if bounds.intersects G.player.bounds
-			@exclam.fade_in unless @can_interact
-			@can_interact = true
-		else
-			@exclam.fade_out if @can_interact
+			unless @can_interact
+				@exclam.fade_in
+				UI.set_hint "Pressione 'A' para interagir..."
+				@can_interact = true
+			end
+		elsif @can_interact
+			@exclam.fade_out
+			UI.set_hint "Pressione 'Esc' para pausar o jogo"
 			@can_interact = false
 		end
 		if @interacting and not @can_interact

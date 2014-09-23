@@ -35,6 +35,7 @@ class MyGame < Gosu::Window
 			G.menu.draw
 		else
 			G.scene.draw
+			UI.draw
 			G.draw_transition if G.state == :transition
 		end
 	end

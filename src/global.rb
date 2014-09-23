@@ -21,8 +21,7 @@ class G
 			l = l.chomp.split
 			@@items[l[0].to_i] = l[1]
 		end
-		@@switches = []
-		@@item_switches = []
+		@@switches = nil
 		@@state = :menu
 		
 		@@menu = nil
@@ -60,6 +59,8 @@ class G
 	def self.start_game type, name, char, continue
 		@@game_type = type
 		@@player = Player.new name, char
+		@@switches = []
+		@@item_switches = []
 		UI.initialize
 		if continue
 			f = File.open("data/save/#{name}")

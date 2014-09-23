@@ -69,7 +69,7 @@ end
 class XText
 	include Fading
 	
-	attr_accessor :text
+	attr_accessor :text, :x, :y
 	
 	def initialize text, x, y, color = 0xffffff
 		@text = text
@@ -126,7 +126,8 @@ class UI
 		@panel1 = XSprite.new base, 0, :ui_panel1
 		@panel2 = XSprite.new 0, 0, :ui_panel2
 		@panel3 = XSprite.new 200, 0, :ui_panel3
-		@panel1.alpha = 255
+		@hint = XText.new "Pressione 'Esc' para pausar o jogo", 10, 565, 0x00ffff
+		@panel1.alpha = @hint.alpha = 255
 		@item_buttons = {}
 		@opt_buttons = []
 	end
@@ -143,6 +144,20 @@ class UI
 			b.update_alpha
 			b.update if @choosing_opt
 		}
+		if G.hints
+			@hint.update_alpha
+			if @changing_hint and @hint.alpha == 0
+				@hint.text = @changing_hint
+				if @hint_pos
+					@hint.x = @hint_pos.x; @hint.y = @hint_pos.y
+					@hint_pos = nil
+				else
+					@hint.x = 10; @hint.y = 565
+				end
+				@changing_hint = nil
+				@hint.fade_in
+			end
+		end
 	end
 	
 	def self.add_item item_set, show, bottom = false
@@ -165,6 +180,7 @@ class UI
 		@panel3.fade_in
 		@choosing_opt = false
 		@choosing_item = true
+		set_hint "Clique num item para usá-lo", 200, @panel3.y - 35
 	end
 	
 	def self.choose_opt opts
@@ -181,6 +197,7 @@ class UI
 			@choosing_item = false
 		end
 		@choosing_opt = true
+		set_hint "Clique na opção desejada", 200, @panel3.y - 35
 	end
 	
 	def self.start_player_interaction
@@ -196,6 +213,13 @@ class UI
 		@panel3.fade_out
 		@opt_buttons.each { |b| b.fade_out }
 		@choosing_item = @choosing_opt = false
+		set_hint "Pressione 'Esc' para pausar o jogo"
+	end
+	
+	def self.set_hint text, x = nil, y = nil
+		@changing_hint = text
+		@hint_pos = Vector.new x, y if x
+		@hint.fade_out
 	end
 	
 	def self.draw
@@ -212,6 +236,10 @@ class UI
 			@panel2.draw
 			@item_buttons.each { |k, v| v.draw }
 			G.font.draw "Itens", @items_text_base, 2, 0, 1, 1, p_t_color
+		end
+		
+		if G.hints
+			@hint.draw
 		end
 	end
 	

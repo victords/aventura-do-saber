@@ -126,7 +126,5 @@ class Scene
 		@effects.each do |e|
 			e.draw
 		end
-		
-		UI.draw
 	end
 end
