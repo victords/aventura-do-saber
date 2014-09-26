@@ -74,12 +74,13 @@ class Player < GameObject
 	end
 	
 	def prepare_item item
-		@prepared_item = Item.new 0, 0, item
+		info = G.items[item]
+		eval "@prepared_item = Item.new 0, 0, :#{info}"
 	end
 	
 	def use_item item, from_obj = false
 		if from_obj
-			@items[item].delete_at 0
+			@items[item].delete_at(0).use
 			if @items[item].length == 0
 				@items.delete item
 				UI.remove_item item

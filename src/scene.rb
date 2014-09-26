@@ -56,6 +56,7 @@ class Scene
 		@exits.each { |e| e.update }
 		
 		UI.update
+		reset if KB.key_pressed? Gosu::KbBackspace
 	end
 	
 	def reset
@@ -91,16 +92,14 @@ class Scene
 		if info[0][0] == '$'
 			sw = info[0][1..-1].to_i
 			unless G.switches.index sw
-				info = G.items[sw].split ','
-				@items << Item.new(info[0].to_i, info[1].to_i, info[2].to_sym, sw)
+				info1 = G.s_items[sw].split ','
+				info2 = G.items[info1[2].to_sym]
+				eval "@items << Item.new(info1[0].to_i, info1[1].to_i, :#{info2}, sw)"
 			end
 		else
-			@items << Item.new(info[0].to_i, info[1].to_i, info[2].to_sym)
+			info2 = G.items[info[2].to_sym]
+			eval "@items << Item.new(info[0].to_i, info[1].to_i, :#{info2})"
 		end
-	end
-	
-	def remove_obst obst
-		@obsts.delete obst
 	end
 	
 	def add_effect id, x, y

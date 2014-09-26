@@ -122,7 +122,7 @@ class NPC < GameObject
 				if s[2][0] == '$'
 					sw = s[2][1..-1].to_i
 					G.add_item_switch sw
-					G.player.prepare_item G.items[sw].split(',')[2].to_sym
+					G.player.prepare_item G.s_items[sw].split(',')[2].to_sym
 				else
 					item = s[2][1..-1].to_sym
 					G.player.prepare_item item
@@ -132,7 +132,7 @@ class NPC < GameObject
 		
 		@state += 1
 		G.scene.show_message "Correto! :)"
-		G.scene.remove_obst @block if @state == @msgs.length - 1
+		G.scene.obsts.delete @block if @state == @msgs.length - 1
 		
 		@pages = @msgs[@state].split '/'
 		@cur_page = 0

@@ -18,8 +18,13 @@ class G
 		f.close
 		@@items = {}
 		File.open("data/text/items.txt").each do |l|
+			key = l.chomp!.split(',')[0].to_sym
+			@@items[key] = l
+		end
+		@@s_items = {}
+		File.open("data/text/s_items.txt").each do |l|
 			l = l.chomp.split
-			@@items[l[0].to_i] = l[1]
+			@@s_items[l[0].to_i] = l[1]
 		end
 		@@switches = nil
 		@@state = :menu
@@ -73,8 +78,10 @@ class G
 			s.each { |sw| @@switches << sw }
 			s = f.readline.chomp.split(',').map { |s| s.to_i }
 			s.each do |sw|
-				@@player.add_item Item.new(0, 0, @@items[sw].split(',')[2].to_sym)
-				add_item_switch sw
+				item_type = @@s_items[sw].split(',')[2].to_sym
+				info = @@items[item_type]
+				eval "@@player.add_item Item.new(0, 0, :#{info}, sw)"
+				@@item_switches << sw
 			end
 			f.close
 		end
@@ -88,6 +95,10 @@ class G
 	def self.add_item_switch sw
 		@@switches << sw
 		@@item_switches << sw
+	end
+	
+	def self.use_s_item sw
+		@@item_switches.delete sw
 	end
 	
 	def self.set_scene scene, entry
