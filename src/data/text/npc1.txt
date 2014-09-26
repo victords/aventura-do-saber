@@ -3,12 +3,12 @@ Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem l
 -OK, entendi.
 -Cala a boca!
 -Ãããhnn...
-+1 $1
++1 10 $1
 
 $1 Traga-me duas maçãs, por favor.
-!apple $2 !item3
+!apple 20 $2 !item3
 
 $2 Obrigado! Traga-me mais uma maçã, por favor.
-!apple $3 $15
+!apple 30 $3 $15
 
 $3 Valeu, mulek!/Você é um cara bacana.

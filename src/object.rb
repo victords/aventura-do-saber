@@ -121,16 +121,16 @@ class SceneObject < GameObject
 	
 	def next_state
 		s = @switches[@state].split
-		if s.length > 1
-			sw = s[1][1..-1].to_i
+		if s.length > 2
+			sw = s[2][1..-1].to_i
 			G.switches << sw
-			if s.length > 2
-				if s[2][0] == '$'
-					sw = s[2][1..-1].to_i
+			if s.length > 3
+				if s[3][0] == '$'
+					sw = s[3][1..-1].to_i
 					G.add_item_switch sw
 					G.player.prepare_item G.s_items[sw].split(',')[2].to_sym
 				else
-					item = s[2][1..-1].to_sym
+					item = s[3][1..-1].to_sym
 					G.player.prepare_item item
 				end
 			end
@@ -140,7 +140,8 @@ class SceneObject < GameObject
 			@animating = true
 			@anim_step = 0
 		end
-		G.scene.show_message @msgs[@state]
+		G.player.score += s[1].to_i
+		G.scene.show_message "#{@msgs[@state]}   + #{s[1]} pontos"
 		@state += 1
 		if @state == @opts.length
 			@active = false

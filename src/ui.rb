@@ -121,9 +121,7 @@ end
 
 class UI
 	def self.initialize
-		base = -270 + G.med_font.text_width(G.player.name.capitalize)
-		base = -210 if base < -210
-		@panel1 = XSprite.new base, 0, :ui_panel1
+		@panel1 = XSprite.new 0, 0, :ui_panel1
 		@panel2 = XSprite.new 0, 0, :ui_panel2
 		@panel3 = XSprite.new 200, 0, :ui_panel3
 		@hint = XText.new "Pressione 'Esc' para pausar o jogo", 10, 565, 0x00ffff
@@ -228,6 +226,7 @@ class UI
 		p_t_color = @panel1.alpha << 24
 		G.font.draw "Jogador", 5, 2, 0, 1, 1, p_t_color
 		G.med_font.draw G.player.name.capitalize, 5, 25, 0, 1, 1, p_t_color
+		G.font.draw_rel "#{G.player.score} pontos", 285, 2, 0, 1, 0, 1, 1, p_t_color
 		
 		@panel3.draw
 		@opt_buttons.each { |b| b.draw } if @choosing_opt

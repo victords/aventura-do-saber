@@ -83,6 +83,7 @@ class G
 				eval "@@player.add_item Item.new(0, 0, :#{info}, sw)"
 				@@item_switches << sw
 			end
+			@@player.score = f.readline.chomp.to_i
 			f.close
 		end
 		@@menu = nil
@@ -153,7 +154,8 @@ class G
 		f = File.open("data/save/#{@@player.name}", "w")
 		f.write @@scenes.values.join(',') + "\n"
 		f.write @@switches.join(',') + "\n"
-		f.write @@item_switches.join(',')
+		f.write @@item_switches.join(',') + "\n"
+		f.write @@player.score
 		f.close
 	end
 	

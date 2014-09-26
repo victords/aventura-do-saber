@@ -18,7 +18,9 @@ class Item < GameObject
 		
 		if bounds.intersects G.player.bounds
 			G.player.add_item self
+			G.player.score += @score
 			G.add_item_switch @switch if @switch
+			G.scene.show_message "+ #{@score} pontos"
 			@dead = true
 		end
 	end
