@@ -107,7 +107,10 @@ class SceneObject < GameObject
 		if s[0] == '+'
 			option = s[1..-1].to_i
 			if option == what; next_state
-			else; G.scene.show_message "Nenhum efeito... =/", :warn; end
+			else
+				G.scene.show_message "Nenhum efeito... =/", :warn
+				G.wrong_answer
+			end
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
@@ -115,6 +118,7 @@ class SceneObject < GameObject
 				next_state
 			else
 				G.scene.show_message "Nenhum efeito... =/", :warn
+				G.wrong_answer
 			end
 		end
 	end
@@ -140,6 +144,7 @@ class SceneObject < GameObject
 			@animating = true
 			@anim_step = 0
 		end
+		G.correct_answer
 		G.player.score += s[1].to_i
 		G.scene.show_message "#{@msgs[@state]}   + #{s[1]} pontos"
 		@state += 1

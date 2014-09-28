@@ -209,14 +209,45 @@ class MainMenu < Menu
 		@char_description = MenuText.new "Um simpático garoto de 10 anos.", 10, 572, :left, G.font
 		@char_selection = MenuSprite.new 112, 87, :ui_selection, true, 2, 1, [0, 1], 10
 		
-		@game_type = :math
+		@game_type = 0
 		@game_selection = MenuSprite.new 38, 98, :ui_selection2, true, 1, 2, [0, 1], 10
 		
+		@back_button = Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 }
 		name_screen_components = [
-			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 0 },
 			MenuText.new("Qual é o seu nome?", 10, 5),
-			@name_input, @name_button
+			@name_input, @name_button, @back_button
 		]
+		
+		@score_label = MenuText.new "", 40, 110, :left, G.med_font
+		@scenes_labels = []
+		@c_answers_labels = []
+		@w_answers_labels = []
+		score_choose_screen_components = [
+			MenuText.new("Pontuações", 10, 5),
+			@back_button
+		]
+		score_screen_components = [
+			MenuText.new("Pontuações", 10, 5), @score_label,
+			MenuText.new("Matemática", 400, 150, :right, G.med_font),
+			MenuText.new("L. Port.", 510, 150, :right, G.med_font),
+			MenuText.new("Lógica", 620, 150, :right, G.med_font),
+			MenuText.new("Tudo", 730, 150, :right, G.med_font),
+			MenuText.new("Cenas visitadas", 40, 190, :left, G.med_font),
+			MenuText.new("Respostas corretas", 40, 230, :left, G.med_font),
+			MenuText.new("Respostas erradas", 40, 270, :left, G.med_font),
+			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 5 }
+		]
+		for i in 0..3
+			b = MenuText.new "", 400 + i * 110, 190, :right, G.med_font
+			score_screen_components << b
+			@scenes_labels << b
+			b = MenuText.new "", 400 + i * 110, 230, :right, G.med_font
+			score_screen_components << b
+			@c_answers_labels << b
+			b = MenuText.new "", 400 + i * 110, 270, :right, G.med_font
+			score_screen_components << b
+			@w_answers_labels << b
+		end
 		
 		Dir["data/save/*"].sort[1..10].each_with_index do |g, i|
 			name = g.split('/')[-1]
@@ -224,6 +255,20 @@ class MainMenu < Menu
 			name_screen_components <<
 				Button.new(100 + (i % 2) * 300, 250 + (i / 2) * 40, G.med_font, name.capitalize, :ui_btn2){
 					@name = name; @continue = true; go_to_screen 3
+				}
+			score_choose_screen_components <<
+				Button.new(100 + (i % 2) * 300, 200 + (i / 2) * 40, G.med_font, name.capitalize, :ui_btn2){
+					f = File.open("data/save/#{name}")
+					score = f.readline.to_i
+					scenes = f.readline.split(',').map { |s| s.to_i }
+					c_answers = f.readline.split(',').map { |s| s.to_i }
+					w_answers = f.readline.split(',').map { |s| s.to_i }
+					f.close
+					@score_label.text = "#{score} pontos"
+					scenes.each_with_index { |s, i| @scenes_labels[i].text = s }
+					c_answers.each_with_index { |s, i| @c_answers_labels[i].text = s }
+					w_answers.each_with_index { |s, i| @w_answers_labels[i].text = s }
+					go_to_screen 6
 				}
 		end
 		
@@ -246,8 +291,8 @@ class MainMenu < Menu
 				MenuPanel.new(-200, 163, 0, 163, :ui_menuComponent3)
 			], [
 				Button.new(19, 193, G.font, "Jogar", :ui_btn1) { go_to_screen 1 },
-				Button.new(19, 253, G.font, "Pontuações", :ui_btn1) { puts "P" },
-				Button.new(19, 313, G.font, "Opções", :ui_btn1) { go_to_screen 5 },
+				Button.new(19, 253, G.font, "Pontuações", :ui_btn1) { go_to_screen 5 },
+				Button.new(19, 313, G.font, "Opções", :ui_btn1) { go_to_screen 7 },
 				Button.new(19, 373, G.font, "Sair", :ui_btn1) { G.quit_game },
 				MenuText.new("Aventura do Saber", 400, 10, :center)
 			]),
@@ -292,10 +337,10 @@ class MainMenu < Menu
 			], [
 				Button.new(440, 555, G.font, "OK", :ui_btn1) { G.start_game @game_type, @name, @char, @continue },
 				Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 3 },
-				Button.new(50, 110, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :math; @game_selection.set_pos 38, 98 },
-				Button.new(430, 110, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :port; @game_selection.set_pos 418, 98 },
-				Button.new(50, 330, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :logic; @game_selection.set_pos 38, 318 },
-				Button.new(430, 330, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = :all; @game_selection.set_pos 418, 318 },
+				Button.new(50, 110, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = 0; @game_selection.set_pos 38, 98 },
+				Button.new(430, 110, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = 1; @game_selection.set_pos 418, 98 },
+				Button.new(50, 330, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = 2; @game_selection.set_pos 38, 318 },
+				Button.new(430, 330, nil, nil, nil, 0, 0, 0, 0, 0, 320, 180) { @game_type = 3; @game_selection.set_pos 418, 318 },
 				MenuSprite.new(50, 110, :sprite_math),
 				MenuSprite.new(430, 110, :sprite_port),
 				MenuSprite.new(50, 330, :sprite_logic),
@@ -309,7 +354,15 @@ class MainMenu < Menu
 			]),
 			MenuScreen.new([
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
-				MenuPanel.new(10, 600, 10, 120, :ui_menuComponent5)
+				MenuPanel.new(800, 531, 570, 531, :ui_menuComponent2)
+			], score_choose_screen_components),
+			MenuScreen.new([
+				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
+				MenuPanel.new(10, 600, 10, 90, :ui_menuComponent5)
+			], score_screen_components),
+			MenuScreen.new([
+				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
+				MenuPanel.new(10, 600, 10, 90, :ui_menuComponent5)
 			], [
 				MenuText.new("Opções", 10, 5), @info_icon, @info_text, @chk1, @chk2, @chk3, @chk4,
 				Button.new(440, 555, G.font, "Salvar", :ui_btn1) { G.save_options; go_to_screen 0 },
@@ -328,6 +381,13 @@ end
 
 class SceneMenu < Menu
 	def initialize game_type
+		game_type =
+			case game_type
+			when 0 then :math
+			when 1 then :port
+			when 2 then :logic
+			else        :all
+			end
 		@bg = Res.img "bg_#{game_type}Menu"
 		
 		@info_icon = MenuSprite.new(40, 400, :icon_info, G.full_screen != G.win.fullscreen?)

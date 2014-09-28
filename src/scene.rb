@@ -30,7 +30,13 @@ class Scene
 	attr_reader :obsts, :ramps
 	
 	def initialize game_type, number, entry
-		@game_type = game_type
+		@game_type =
+			case game_type
+			when 0 then :math
+			when 1 then :port
+			when 2 then :logic
+			else        :all
+			end
 		@number = (number ? number : 1)
 		@entry = entry
 		@bg = Res.img "bg_#{@game_type}#{@number}".to_sym

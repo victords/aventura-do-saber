@@ -32,7 +32,9 @@ class G
 		@@menu = nil
 		@@player = nil
 		@@scene = nil
-		@@scenes = {math: 1, port: 1, logic: 1, all: 1}
+		@@scenes = nil
+		@@c_answers = nil
+		@@w_answers = nil
 		
 		class_variables.each do |v|
 			define_singleton_method(v.to_s[2..-1]) { class_variable_get v }
@@ -64,18 +66,15 @@ class G
 	def self.start_game type, name, char, continue
 		@@game_type = type
 		@@player = Player.new name, char
-		@@switches = []
 		@@item_switches = []
 		UI.initialize
 		if continue
 			f = File.open("data/save/#{name}")
-			s = f.readline.split(',').map { |s| s.to_i }
-			@@scenes[:math] = s[0]
-			@@scenes[:port] = s[1]
-			@@scenes[:logic] = s[2]
-			@@scenes[:all] = s[3]
-			s = f.readline.split(',').map { |s| s.to_i }
-			s.each { |sw| @@switches << sw }
+			@@player.score = f.readline.to_i
+			@@scenes = f.readline.split(',').map { |s| s.to_i }
+			@@c_answers = f.readline.split(',').map { |s| s.to_i }
+			@@w_answers = f.readline.split(',').map { |s| s.to_i }
+			@@switches = f.readline.split(',').map { |s| s.to_i }
 			s = f.readline.chomp.split(',').map { |s| s.to_i }
 			s.each do |sw|
 				item_type = @@s_items[sw].split(',')[2].to_sym
@@ -83,8 +82,13 @@ class G
 				eval "@@player.add_item Item.new(0, 0, :#{info}, sw)"
 				@@item_switches << sw
 			end
-			@@player.score = f.readline.chomp.to_i
 			f.close
+		else
+			@@scenes = [0, 0, 0, 0]
+			@@scenes[type] = 1
+			@@c_answers = [0, 0, 0, 0]
+			@@w_answers = [0, 0, 0, 0]
+			@@switches = []
 		end
 		@@menu = nil
 		Res.clear
@@ -100,6 +104,14 @@ class G
 	
 	def self.use_s_item sw
 		@@item_switches.delete sw
+	end
+	
+	def self.correct_answer
+		@@c_answers[@@game_type] += 1
+	end
+	
+	def self.wrong_answer
+		@@w_answers[@@game_type] += 1
 	end
 	
 	def self.set_scene scene, entry
@@ -149,13 +161,15 @@ class G
 		@@menu = MainMenu.new
 		@@state = :menu
 	end
-		
+	
 	def self.save_game
 		f = File.open("data/save/#{@@player.name}", "w")
-		f.write @@scenes.values.join(',') + "\n"
+		f.write @@player.score.to_s + "\n"
+		f.write @@scenes.join(',') + "\n"
+		f.write @@c_answers.join(',') + "\n"
+		f.write @@w_answers.join(',') + "\n"
 		f.write @@switches.join(',') + "\n"
-		f.write @@item_switches.join(',') + "\n"
-		f.write @@player.score
+		f.write @@item_switches.join(',')
 		f.close
 	end
 	

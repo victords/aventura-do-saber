@@ -101,7 +101,10 @@ class NPC < GameObject
 		if s[0] == '+'
 			option = s[1..-1].to_i
 			if option == what; next_state
-			else; G.scene.show_message "Resposta errada... :(", :error; end
+			else
+				G.scene.show_message "Resposta errada... :(", :error
+				G.wrong_answer
+			end
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
@@ -109,6 +112,7 @@ class NPC < GameObject
 				next_state
 			else
 				G.scene.show_message "Não é esse item... :(", :error
+				G.wrong_answer
 			end
 		end
 	end
@@ -131,6 +135,7 @@ class NPC < GameObject
 		end
 		
 		@state += 1
+		G.correct_answer
 		G.player.score += s[1].to_i
 		G.scene.show_message "Correto! :)   + #{s[1]} pontos"
 		G.scene.obsts.delete @block if @state == @msgs.length - 1
