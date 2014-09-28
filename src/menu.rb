@@ -1,4 +1,5 @@
 require_relative 'global'
+require_relative 'chart'
 include AGL
 
 class MenuPanel
@@ -222,6 +223,7 @@ class MainMenu < Menu
 		@scenes_labels = []
 		@c_answers_labels = []
 		@w_answers_labels = []
+		@chart = Chart.new 40, 320, 500, 200, 6, ["Matemática", "L. Port.", "Lógica", "Tudo"]
 		score_choose_screen_components = [
 			MenuText.new("Pontuações", 10, 5),
 			@back_button
@@ -235,7 +237,8 @@ class MainMenu < Menu
 			MenuText.new("Cenas visitadas", 40, 190, :left, G.med_font),
 			MenuText.new("Respostas corretas", 40, 230, :left, G.med_font),
 			MenuText.new("Respostas erradas", 40, 270, :left, G.med_font),
-			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 5 }
+			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 5 },
+			@chart
 		]
 		for i in 0..3
 			b = MenuText.new "", 400 + i * 110, 190, :right, G.med_font
@@ -268,6 +271,11 @@ class MainMenu < Menu
 					scenes.each_with_index { |s, i| @scenes_labels[i].text = s }
 					c_answers.each_with_index { |s, i| @c_answers_labels[i].text = s }
 					w_answers.each_with_index { |s, i| @w_answers_labels[i].text = s }
+					@chart.set_series([
+						Series.new("Cenas visitadas", 0xff0000ff, scenes),
+						Series.new("Respostas corretas", 0xff00ff00, c_answers),
+						Series.new("Respostas erradas", 0xffff0000, w_answers)
+					])
 					go_to_screen 6
 				}
 		end
