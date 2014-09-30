@@ -27,6 +27,7 @@ class NPC < GameObject
 			@opts << lines[1..-2]
 			@switches << lines[-1]
 		end
+		@score_ratio = 1
 		
 		@block = Block.new @x + 5, @y + 5, @w - 10, @h - 5, false if @state < states.length - 1
 		@writer = TextHelper.new G.font, 8
@@ -101,20 +102,20 @@ class NPC < GameObject
 		if s[0] == '+'
 			option = s[1..-1].to_i
 			if option == what; next_state
-			else
-				G.scene.show_message "Resposta errada... :(", :error
-				G.wrong_answer
-			end
+			else; wrong_answer "Resposta errada... :("; end
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
 				G.player.use_item what, true
 				next_state
-			else
-				G.scene.show_message "Não é esse item... :(", :error
-				G.wrong_answer
-			end
+			else; wrong_answer "Não é esse item... :("; end
 		end
+	end
+	
+	def wrong_answer msg
+		G.scene.show_message msg, :error
+		G.wrong_answer
+		@score_ratio *= 0.9
 	end
 	
 	def next_state
@@ -136,12 +137,13 @@ class NPC < GameObject
 		
 		@state += 1
 		G.correct_answer
-		G.player.score += s[1].to_i
+		G.player.score += (@score_ratio * s[1].to_i).round
 		G.scene.show_message "Correto! :)   + #{s[1]} pontos"
 		G.scene.obsts.delete @block if @state == @msgs.length - 1
 		
 		@pages = @msgs[@state].split '/'
 		@cur_page = 0
+		@score_ratio = 1
 		interact
 	end
 	

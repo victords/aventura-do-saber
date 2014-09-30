@@ -45,6 +45,7 @@ class SceneObject < GameObject
 			@msgs << l[1]
 			eval "@anims << #{l[2]}"
 		end
+		@score_ratio = 1
 	end
 	
 	def update
@@ -107,20 +108,20 @@ class SceneObject < GameObject
 		if s[0] == '+'
 			option = s[1..-1].to_i
 			if option == what; next_state
-			else
-				G.scene.show_message "Nenhum efeito... =/", :warn
-				G.wrong_answer
-			end
+			else; wrong_answer; end
 		elsif s[0] == '!'
 			item = s[1..-1].to_sym
 			if item == what
 				G.player.use_item what, true
 				next_state
-			else
-				G.scene.show_message "Nenhum efeito... =/", :warn
-				G.wrong_answer
-			end
+			else; wrong_answer; end
 		end
+	end
+	
+	def wrong_answer msg
+		G.scene.show_message "Nenhum efeito... =/", :warn
+		G.wrong_answer
+		@score_ratio *= 0.9
 	end
 	
 	def next_state
@@ -145,7 +146,7 @@ class SceneObject < GameObject
 			@anim_step = 0
 		end
 		G.correct_answer
-		G.player.score += s[1].to_i
+		G.player.score += (@score_ratio * s[1].to_i).round
 		G.scene.show_message "#{@msgs[@state]}   + #{s[1]} pontos"
 		@state += 1
 		if @state == @opts.length
@@ -153,6 +154,7 @@ class SceneObject < GameObject
 			@exclam.fade_out
 			G.player.stop_interacting
 		else
+			@score_ratio = 1
 			interact
 		end
 	end
