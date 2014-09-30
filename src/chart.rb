@@ -23,7 +23,7 @@ class Chart
 		@x_max = 0
 		series.each { |s| @x_max = s.data.length if s.data.length > @x_max }
 		@y_max = 0
-		series.each { |s| @y_max = s.data.max if s.data.max > @y_max }
+		series.each { |s| @y_max = s.data.max if s.data.max and s.data.max > @y_max }
 	end
 	
 	def update; end

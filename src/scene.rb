@@ -37,7 +37,7 @@ class Scene
 			when 2 then :logic
 			else        :all
 			end
-		@number = (number ? number : 1)
+		@number = number
 		@entry = entry
 		@bg = Res.img "bg_#{@game_type}#{@number}".to_sym
 		@map = Map.new 1, 1, @bg.width, @bg.height

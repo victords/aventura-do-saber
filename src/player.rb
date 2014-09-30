@@ -3,8 +3,7 @@ require_relative 'ui'
 include AGL
 
 class Player < GameObject
-	attr_reader :name
-	attr_accessor :score
+	attr_reader :name, :score
 	
 	def initialize name, char
 		super 0, 0, (char == :marcus ? 44 : 37), 115, "sprite_#{char}", Vector.new(-8, -5), 3, 2
@@ -102,6 +101,11 @@ class Player < GameObject
 		@obj.stop_interacting
 		@obj = nil
 		UI.stop_player_interaction
+	end
+	
+	def score= value
+		@score = value
+		@score = 0 if @score < 0
 	end
 	
 	private

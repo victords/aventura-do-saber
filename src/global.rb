@@ -72,10 +72,11 @@ class G
 			f = File.open("data/save/#{name}")
 			@@player.score = f.readline.to_i
 			@@scenes = f.readline.split(',').map { |s| s.to_i }
+			@@scenes[type] = 1 if @@scenes[type] == 0
 			@@c_answers = []
 			all_c_answers = f.readline.chomp.split('|', -1)
 			all_c_answers.each { |a| @@c_answers << a.split(',').map { |s| s.to_i } }
-			@@c_answers[type] << @@c_answers[type][-1]
+			@@c_answers[type] << (@@c_answers[type].empty? ? 0 : @@c_answers[type][-1])
 			@@w_answers = f.readline.split(',').map { |s| s.to_i }
 			@@switches = f.readline.split(',').map { |s| s.to_i }
 			s = f.readline.chomp.split(',').map { |s| s.to_i }

@@ -271,16 +271,16 @@ class MainMenu < Menu
 					all_c_answers.each { |a| c_answers << a.split(',').map { |s| s.to_i } }
 					w_answers = f.readline.split(',').map { |s| s.to_i }
 					f.close
-					@score_label.text = "#{score} pontos"
+					@score_label.text = "#{score} ponto#{score > 1 ? 's' : ''}"
 					scenes.each_with_index { |s, i| @scenes_labels[i].text = s }
-					c_answers.each_with_index { |s, i| @c_answers_labels[i].text = s[-1] }
+					c_answers.each_with_index { |s, i| @c_answers_labels[i].text = s.empty? ? 0 : s[-1] }
 					w_answers.each_with_index { |s, i| @w_answers_labels[i].text = s }
-					@chart.set_series([
-						Series.new("Matemática", 0xffff0000, c_answers[0]),
-						Series.new("Língua Portuguesa", 0xff008000, c_answers[1]),
-						Series.new("Lógica", 0xff0000ff, c_answers[2]),
-						Series.new("Tudo", 0xffffff00, c_answers[3])
-					])
+					series = []
+					series << Series.new("Matemática", 0xffff0000, c_answers[0]) unless c_answers[0].empty?
+					series << Series.new("Língua Portuguesa", 0xff008000, c_answers[1]) unless c_answers[1].empty?
+					series << Series.new("Lógica", 0xff0000ff, c_answers[2]) unless c_answers[2].empty?
+					series << Series.new("Tudo", 0xffffff00, c_answers[3]) unless c_answers[3].empty?
+					@chart.set_series(series)
 					go_to_screen 6
 				}
 		end
