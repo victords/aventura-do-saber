@@ -51,11 +51,11 @@ class Chart
 				prev_y = y
 			end
 			top = @y + (@h - (25 * @series.length - 10)) / 2
-			G.win.draw_quad @x + @w + 5, top + j * 25, color,
-			                @x + @w + 20, top + j * 25, color,
-			                @x + @w + 20, top + 15 + j * 25, color,
-			                @x + @w + 5, top + 15 + j * 25, color, 1
-			G.font.draw s.name, @x + @w + 25, top - 3 + j * 25, 1, 1, 1, a_black
+			G.win.draw_quad @x + @w + 15, top + j * 25, color,
+			                @x + @w + 30, top + j * 25, color,
+			                @x + @w + 30, top + 15 + j * 25, color,
+			                @x + @w + 15, top + 15 + j * 25, color, 1
+			G.font.draw s.name, @x + @w + 35, top - 3 + j * 25, 1, 1, 1, a_black
 		end
 		if @categories
 			@categories.each_with_index do |c, i|

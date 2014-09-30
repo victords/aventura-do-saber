@@ -223,9 +223,10 @@ class MainMenu < Menu
 		@scenes_labels = []
 		@c_answers_labels = []
 		@w_answers_labels = []
-		@chart = Chart.new 40, 320, 500, 200, 6, ["Matemática", "L. Port.", "Lógica", "Tudo"]
+		@chart = Chart.new 65, 320, 500, 200, 6
 		score_choose_screen_components = [
 			MenuText.new("Pontuações", 10, 5),
+			MenuText.new("De quem você quer ver as pontuações?", 400, 120, :center, G.med_font),
 			@back_button
 		]
 		score_screen_components = [
@@ -237,6 +238,7 @@ class MainMenu < Menu
 			MenuText.new("Cenas visitadas", 40, 190, :left, G.med_font),
 			MenuText.new("Respostas corretas", 40, 230, :left, G.med_font),
 			MenuText.new("Respostas erradas", 40, 270, :left, G.med_font),
+			MenuText.new("Evolução do número de respostas corretas", 315, 530, :center, G.font),
 			Button.new(600, 555, G.font, "Voltar", :ui_btn1) { go_to_screen 5 },
 			@chart
 		]
@@ -264,25 +266,28 @@ class MainMenu < Menu
 					f = File.open("data/save/#{name}")
 					score = f.readline.to_i
 					scenes = f.readline.split(',').map { |s| s.to_i }
-					c_answers = f.readline.split(',').map { |s| s.to_i }
+					c_answers = []
+					all_c_answers = f.readline.chomp.split('|', -1)
+					all_c_answers.each { |a| c_answers << a.split(',').map { |s| s.to_i } }
 					w_answers = f.readline.split(',').map { |s| s.to_i }
 					f.close
 					@score_label.text = "#{score} pontos"
 					scenes.each_with_index { |s, i| @scenes_labels[i].text = s }
-					c_answers.each_with_index { |s, i| @c_answers_labels[i].text = s }
+					c_answers.each_with_index { |s, i| @c_answers_labels[i].text = s[-1] }
 					w_answers.each_with_index { |s, i| @w_answers_labels[i].text = s }
 					@chart.set_series([
-						Series.new("Cenas visitadas", 0xff0000ff, scenes),
-						Series.new("Respostas corretas", 0xff00ff00, c_answers),
-						Series.new("Respostas erradas", 0xffff0000, w_answers)
+						Series.new("Matemática", 0xffff0000, c_answers[0]),
+						Series.new("Língua Portuguesa", 0xff008000, c_answers[1]),
+						Series.new("Lógica", 0xff0000ff, c_answers[2]),
+						Series.new("Tudo", 0xffffff00, c_answers[3])
 					])
 					go_to_screen 6
 				}
 		end
 		
-		@info_icon = MenuSprite.new(40, 400, :icon_info, G.full_screen != G.win.fullscreen?)
-		@info_text = MenuText.new("Reinicie o jogo para mudar o modo tela cheia.", 82, 400, :left, G.med_font, G.full_screen != G.win.fullscreen?)
-		@chk1 = ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, G.full_screen, 0, 0, false, 60, 10) { |c|
+		@info_icon = MenuSprite.new(40, 370, :icon_info, G.full_screen != G.win.fullscreen?)
+		@info_text = MenuText.new("Reinicie o jogo para mudar o modo tela cheia.", 82, 370, :left, G.med_font, G.full_screen != G.win.fullscreen?)
+		@chk1 = ToggleButton.new(40, 110, G.med_font, "Tela cheia", :ui_check, G.full_screen, 0, 0, false, 60, 10) { |c|
 			G.set_option 0, c
 			if c == G.win.fullscreen?
 				@info_icon.visible = @info_text.visible = false
@@ -290,9 +295,9 @@ class MainMenu < Menu
 				@info_icon.visible = @info_text.visible = true
 			end
 		}
-		@chk2 = ToggleButton.new(40, 200, G.med_font, "Mostrar dicas", :ui_check, G.hints, 0, 0, false, 60, 10) { |c| G.set_option 1, c }
-		@chk3 = ToggleButton.new(40, 260, G.med_font, "Tocar sons", :ui_check, G.sounds, 0, 0, false, 60, 10) { |c| G.set_option 2, c }
-		@chk4 = ToggleButton.new(40, 320, G.med_font, "Tocar músicas", :ui_check, G.music, 0, 0, false, 60, 10) { |c| G.set_option 3, c }
+		@chk2 = ToggleButton.new(40, 170, G.med_font, "Mostrar dicas", :ui_check, G.hints, 0, 0, false, 60, 10) { |c| G.set_option 1, c }
+		@chk3 = ToggleButton.new(40, 230, G.med_font, "Tocar sons", :ui_check, G.sounds, 0, 0, false, 60, 10) { |c| G.set_option 2, c }
+		@chk4 = ToggleButton.new(40, 290, G.med_font, "Tocar músicas", :ui_check, G.music, 0, 0, false, 60, 10) { |c| G.set_option 3, c }
 		
 		@screens = [
 			MenuScreen.new([
@@ -398,9 +403,9 @@ class SceneMenu < Menu
 			end
 		@bg = Res.img "bg_#{game_type}Menu"
 		
-		@info_icon = MenuSprite.new(40, 400, :icon_info, G.full_screen != G.win.fullscreen?)
-		@info_text = MenuText.new("Reinicie o jogo para mudar o modo tela cheia.", 82, 400, :left, G.med_font, G.full_screen != G.win.fullscreen?)
-		@chk1 = ToggleButton.new(40, 140, G.med_font, "Tela cheia", :ui_check, G.full_screen, 0, 0, false, 60, 10) { |c|
+		@info_icon = MenuSprite.new(40, 370, :icon_info, G.full_screen != G.win.fullscreen?)
+		@info_text = MenuText.new("Reinicie o jogo para mudar o modo tela cheia.", 82, 370, :left, G.med_font, G.full_screen != G.win.fullscreen?)
+		@chk1 = ToggleButton.new(40, 110, G.med_font, "Tela cheia", :ui_check, G.full_screen, 0, 0, false, 60, 10) { |c|
 			G.set_option 0, c
 			if c == G.win.fullscreen?
 				@info_icon.visible = @info_text.visible = false
@@ -408,9 +413,9 @@ class SceneMenu < Menu
 				@info_icon.visible = @info_text.visible = true
 			end
 		}
-		@chk2 = ToggleButton.new(40, 200, G.med_font, "Mostrar dicas", :ui_check, G.hints, 0, 0, false, 60, 10) { |c| G.set_option 1, c }
-		@chk3 = ToggleButton.new(40, 260, G.med_font, "Tocar sons", :ui_check, G.sounds, 0, 0, false, 60, 10) { |c| G.set_option 2, c }
-		@chk4 = ToggleButton.new(40, 320, G.med_font, "Tocar músicas", :ui_check, G.music, 0, 0, false, 60, 10) { |c| G.set_option 3, c }
+		@chk2 = ToggleButton.new(40, 170, G.med_font, "Mostrar dicas", :ui_check, G.hints, 0, 0, false, 60, 10) { |c| G.set_option 1, c }
+		@chk3 = ToggleButton.new(40, 230, G.med_font, "Tocar sons", :ui_check, G.sounds, 0, 0, false, 60, 10) { |c| G.set_option 2, c }
+		@chk4 = ToggleButton.new(40, 290, G.med_font, "Tocar músicas", :ui_check, G.music, 0, 0, false, 60, 10) { |c| G.set_option 3, c }
 		
 		@screens = [
 			MenuScreen.new([
@@ -422,7 +427,7 @@ class SceneMenu < Menu
 			]),
 			MenuScreen.new([
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
-				MenuPanel.new(10, 600, 10, 120, :ui_menuComponent5)
+				MenuPanel.new(10, 600, 10, 90, :ui_menuComponent5)
 			], [
 				MenuText.new("Opções", 10, 5), @info_icon, @info_text, @chk1, @chk2, @chk3, @chk4,
 				Button.new(440, 555, G.font, "Salvar", :ui_btn1) { G.save_options; go_to_screen 0 },

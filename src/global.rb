@@ -72,7 +72,10 @@ class G
 			f = File.open("data/save/#{name}")
 			@@player.score = f.readline.to_i
 			@@scenes = f.readline.split(',').map { |s| s.to_i }
-			@@c_answers = f.readline.split(',').map { |s| s.to_i }
+			@@c_answers = []
+			all_c_answers = f.readline.chomp.split('|', -1)
+			all_c_answers.each { |a| @@c_answers << a.split(',').map { |s| s.to_i } }
+			@@c_answers[type] << @@c_answers[type][-1]
 			@@w_answers = f.readline.split(',').map { |s| s.to_i }
 			@@switches = f.readline.split(',').map { |s| s.to_i }
 			s = f.readline.chomp.split(',').map { |s| s.to_i }
@@ -86,7 +89,8 @@ class G
 		else
 			@@scenes = [0, 0, 0, 0]
 			@@scenes[type] = 1
-			@@c_answers = [0, 0, 0, 0]
+			@@c_answers = [[], [], [], []]
+			@@c_answers[type] << 0
 			@@w_answers = [0, 0, 0, 0]
 			@@switches = []
 		end
@@ -107,7 +111,7 @@ class G
 	end
 	
 	def self.correct_answer
-		@@c_answers[@@game_type] += 1
+		@@c_answers[@@game_type][-1] += 1
 	end
 	
 	def self.wrong_answer
@@ -166,7 +170,9 @@ class G
 		f = File.open("data/save/#{@@player.name}", "w")
 		f.write @@player.score.to_s + "\n"
 		f.write @@scenes.join(',') + "\n"
-		f.write @@c_answers.join(',') + "\n"
+		all_c_answers = []
+		@@c_answers.each { |a| all_c_answers << a.join(',') }
+		f.write all_c_answers.join('|') + "\n"
 		f.write @@w_answers.join(',') + "\n"
 		f.write @@switches.join(',') + "\n"
 		f.write @@item_switches.join(',')
