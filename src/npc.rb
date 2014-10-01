@@ -22,7 +22,7 @@ class NPC < GameObject
 				sw = lines[0].split[0][1..-1].to_i
 				@state = i if G.switches.index sw
 			end
-			@msgs << (lines[0][0] == '$' ? lines[0][2..-1] : lines[0])
+			@msgs << (lines[0][0] == '$' ? lines[0][(lines[0].index(' ') + 1)..-1] : lines[0])
 			break if i == states.length - 1
 			@opts << lines[1..-2]
 			@switches << lines[-1]
@@ -32,9 +32,10 @@ class NPC < GameObject
 		@writer = TextHelper.new G.font, 8
 		@ellipsis = XSprite.new 0, 0, :ui_ellipsis
 		@balloon = XSprite.new 0, 0, :ui_balloon
-		@balloon_arrow = XSprite.new 0, 0, :ui_balloonArrow
+		@balloon_arrow = XSprite.new 0, 0, "ui_balloonArrow#{@facing_right ? 'R' : ''}"
 		@talking_seq = [1, 2, 1, 0, 2, 1, 2, 0]
 		@talking_seq_right = [4, 5, 4, 3, 5, 4, 5, 3]
+		set_animation 3 if @facing_right
 	end
 	
 	def update
@@ -113,7 +114,7 @@ class NPC < GameObject
 	
 	def wrong_answer msg
 		s = (0.1 * @switches[@state].split[1].to_i).round
-		G.scene.show_message "#{msg}   -#{s} pontos", :error
+		G.scene.show_message "#{msg}   -#{s} ponto#{s > 1 ? 's' : ''}", :error
 		G.player.score -= s
 		G.wrong_answer
 	end
@@ -157,13 +158,16 @@ class NPC < GameObject
 		@ellipsis.x = @x - map.cam.x + @w / 2 - 25; @ellipsis.y = @y - map.cam.y - 45
 		@ellipsis.draw
 		
-		@balloon.x = @x - map.cam.x - 404; @balloon.y = @y - map.cam.y - 133
+		x_off = (@facing_right ? -10 : -404)
+		@balloon.x = @x - map.cam.x + x_off; @balloon.y = @y - map.cam.y - 133
 		@balloon.draw
 		
-		@balloon_arrow.x = @x - map.cam.x - 34; @balloon_arrow.y = @y - map.cam.y - 35
+		x_off = (@facing_right ? @w / 2 : -@w / 34)
+		@balloon_arrow.x = @x - map.cam.x + x_off; @balloon_arrow.y = @y - map.cam.y - 35
 		@balloon_arrow.draw
 		
+		x_off = (@facing_right ? 20 : -374)
 		@writer.write_breaking @pages[@cur_page],
-			@x - map.cam.x - 374, @y - map.cam.y - 123, 380, :justified, 0, @balloon.alpha if @pages
+			@x - map.cam.x + x_off, @y - map.cam.y - 123, 380, :justified, 0, @balloon.alpha if @pages
 	end
 end

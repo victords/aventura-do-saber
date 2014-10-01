@@ -176,7 +176,7 @@ class G
 		f.write all_c_answers.join('|') + "\n"
 		f.write @@w_answers.join(',') + "\n"
 		f.write @@switches.join(',') + "\n"
-		f.write @@item_switches.join(',')
+		f.write @@item_switches.join(',') + "\n"
 		f.close
 	end
 	

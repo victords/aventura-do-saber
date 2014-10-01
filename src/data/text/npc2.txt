@@ -1,0 +1,8 @@
+70,140,2,0,r
+Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem longa, para ocupar quase todo o espaço disponível./A fala pode ter mais de uma página.
+-OK, entendi.
+-Cala a boca!
+-Ãããhnn...
++1 10 $11
+
+$11 Valeu, mulek!/Você é um cara bacana.
