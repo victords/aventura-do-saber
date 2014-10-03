@@ -1,5 +1,6 @@
 require 'minigl'
 require_relative 'player'
+require_relative 'intro'
 include AGL
 
 class G
@@ -67,7 +68,7 @@ class G
 		@@game_type = type
 		@@player = Player.new name, char
 		@@item_switches = []
-		UI.initialize
+		@@menu = nil
 		if continue
 			f = File.open("data/save/#{name}")
 			@@player.score = f.readline.to_i
@@ -87,6 +88,10 @@ class G
 				@@item_switches << sw
 			end
 			f.close
+			Res.clear
+			UI.initialize
+			@@state = :game
+			@@scene = Scene.new type, @@scenes[type], 0
 		else
 			@@scenes = [0, 0, 0, 0]
 			@@scenes[type] = 1
@@ -94,12 +99,9 @@ class G
 			@@c_answers[type] << 0
 			@@w_answers = [0, 0, 0, 0]
 			@@switches = []
+			@@state = :intro
+			@@intro = Intro.new type
 		end
-		@@menu = nil
-		Res.clear
-		@@scene = Scene.new type, @@scenes[type], 1
-		
-		@@state = :game
 	end
 	
 	def self.add_item_switch sw
@@ -126,11 +128,27 @@ class G
 		@@transition_alpha = 0
 	end
 	
+	def self.update_intro
+		if @@intro.update
+			Res.clear
+			UI.initialize
+			@@scene = Scene.new @@game_type, 1, 0
+			@@state = :transition
+			@@transition_alpha = 255
+			@@next_scene = nil
+		end
+	end
+	
+	def self.draw_intro
+		@@intro.draw
+	end
+	
 	def self.update_transition
 		if @@next_scene
 			@@transition_alpha += 17
 			if @@transition_alpha == 255
 				Res.clear
+				UI.initialize
 				@@scene = Scene.new @@game_type, @@next_scene, @@next_entry
 				@@scenes[@@game_type] = @@next_scene
 				@@next_scene = @@next_entry = nil

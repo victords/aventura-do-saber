@@ -71,25 +71,30 @@ class XText
 	
 	attr_accessor :text, :x, :y
 	
-	def initialize text, x, y, color = 0xffffff
+	def initialize text, x, y, color = 0xffffff, line_break = false
 		@text = text
 		@x = x
 		@y = y
 		@color = color
 		@alpha = 0
+		@writer = line_break ? TextHelper.new(G.med_font) : nil
 	end
 	
 	def draw
-		aa = @alpha << 24
-		G.med_font.draw @text, @x - 1, @y - 1, 0, 1, 1, aa
-		G.med_font.draw @text, @x, @y - 1, 0, 1, 1, aa
-		G.med_font.draw @text, @x + 1, @y - 1, 0, 1, 1, aa
-		G.med_font.draw @text, @x + 1, @y, 0, 1, 1, aa
-		G.med_font.draw @text, @x + 1, @y + 1, 0, 1, 1, aa
-		G.med_font.draw @text, @x, @y + 1, 0, 1, 1, aa
-		G.med_font.draw @text, @x - 1, @y + 1, 0, 1, 1, aa
-		G.med_font.draw @text, @x - 1, @y, 0, 1, 1, aa
-		G.med_font.draw @text, @x, @y, 0, 1, 1, aa | @color
+		if @writer
+			@writer.write_breaking @text, @x, @y, 800, :left, 0, @alpha
+		else
+			aa = @alpha << 24
+			G.med_font.draw @text, @x - 1, @y - 1, 0, 1, 1, aa
+			G.med_font.draw @text, @x, @y - 1, 0, 1, 1, aa
+			G.med_font.draw @text, @x + 1, @y - 1, 0, 1, 1, aa
+			G.med_font.draw @text, @x + 1, @y, 0, 1, 1, aa
+			G.med_font.draw @text, @x + 1, @y + 1, 0, 1, 1, aa
+			G.med_font.draw @text, @x, @y + 1, 0, 1, 1, aa
+			G.med_font.draw @text, @x - 1, @y + 1, 0, 1, 1, aa
+			G.med_font.draw @text, @x - 1, @y, 0, 1, 1, aa
+			G.med_font.draw @text, @x, @y, 0, 1, 1, aa | @color
+		end
 	end
 end
 

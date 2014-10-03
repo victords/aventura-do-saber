@@ -1,0 +1,3 @@
+Este é o texto da primeira cena\nda introdução da missão de Matemática.
+Como visto no primeiro texto,\nquebras de linha são permitidas.
+Mas é claro que textos com uma só linha também.

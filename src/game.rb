@@ -24,6 +24,8 @@ class MyGame < Gosu::Window
 		elsif G.state == :game
 			if KB.key_pressed? Gosu::KbEscape; G.open_menu
 			else; G.scene.update; end
+		elsif G.state == :intro
+			G.update_intro
 		else
 			G.update_transition
 		end
@@ -33,6 +35,8 @@ class MyGame < Gosu::Window
 		if G.state == :menu or G.state == :paused
 			G.scene.draw if G.state == :paused
 			G.menu.draw
+		elsif G.state == :intro
+			G.draw_intro
 		else
 			G.scene.draw
 			UI.draw
