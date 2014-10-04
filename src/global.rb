@@ -47,6 +47,7 @@ class G
 			(sounds ? 1 : 0),
 			(music ? 1 : 0)
 		]
+		@@cur_music = nil
 		@@menu = MainMenu.new
 	end
 	
@@ -59,6 +60,10 @@ class G
 		@@hints = (@@temp_options[1] == 1)
 		@@sounds = (@@temp_options[2] == 1)
 		@@music = (@@temp_options[3] == 1)
+		unless @@music
+			@@cur_music.stop unless @@cur_music.nil?
+			@@cur_music = nil
+		end
 		f = File.open("data/save/_config", "w")
 		f.write @@temp_options.join(',')
 		f.close
@@ -119,6 +124,15 @@ class G
 	
 	def self.wrong_answer
 		@@w_answers[@@game_type] += 1
+	end
+	
+	def self.play_music music
+		return unless @@music
+		if @@cur_music.nil? or @@cur_music != music
+			@@cur_music.stop unless @@cur_music.nil?
+			@@cur_music = music
+			@@cur_music.play
+		end
 	end
 	
 	def self.set_scene scene, entry
