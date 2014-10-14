@@ -62,12 +62,8 @@ class Player < GameObject
 	end
 	
 	def add_item item, show = true, bottom = false
-		if @items[item.type].nil?
-			@items[item.type] = []
-			@items[item.type] << item
-		else
-			@items[item.type] << item
-		end
+		@items[item.type] = [] if @items[item.type].nil?
+		@items[item.type] << item
 		UI.add_item @items[item.type], show, bottom
 	end
 	

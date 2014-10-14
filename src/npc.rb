@@ -156,18 +156,18 @@ class NPC < GameObject
 		super map
 		
 		@ellipsis.x = @x - map.cam.x + @w / 2 - 25; @ellipsis.y = @y - map.cam.y - 45
-		@ellipsis.draw
+		@ellipsis.draw 1
 		
 		x_off = (@facing_right ? -10 : -404)
 		@balloon.x = @x - map.cam.x + x_off; @balloon.y = @y - map.cam.y - 133
-		@balloon.draw
+		@balloon.draw 1
 		
 		x_off = (@facing_right ? @w / 2 : -@w / 34)
 		@balloon_arrow.x = @x - map.cam.x + x_off; @balloon_arrow.y = @y - map.cam.y - 35
-		@balloon_arrow.draw
+		@balloon_arrow.draw 1
 		
 		x_off = (@facing_right ? 20 : -374)
 		@writer.write_breaking @pages[@cur_page],
-			@x - map.cam.x + x_off, @y - map.cam.y - 123, 380, :justified, 0, @balloon.alpha if @pages
+			@x - map.cam.x + x_off, @y - map.cam.y - 123, 380, :justified, 0, @balloon.alpha, 1 if @pages
 	end
 end

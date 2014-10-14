@@ -61,8 +61,8 @@ class XSprite < Sprite
 		@alpha = 0
 	end
 	
-	def draw
-		super nil, 1, 1, @alpha
+	def draw z_index = 0
+		super nil, 1, 1, @alpha, 0xffffff, nil, z_index
 	end
 end
 

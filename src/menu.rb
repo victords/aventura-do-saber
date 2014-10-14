@@ -320,7 +320,8 @@ class MainMenu < Menu
 				MenuButton.new(19, 253, G.font, "Pontuações", :ui_btn1) { go_to_screen 5 },
 				MenuButton.new(19, 313, G.font, "Opções", :ui_btn1) { go_to_screen 7 },
 				MenuButton.new(19, 373, G.font, "Sair", :ui_btn1) { G.quit_game },
-				MenuText.new("Aventura do Saber", 400, 10, :center)
+				MenuText.new("Aventura do Saber", 400, 10, :center),
+				MenuSprite.new(200, 100, :sprite_startScreen)
 			]),
 			MenuScreen.new([
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),

@@ -75,6 +75,8 @@ class G
 		@@item_switches = []
 		@@menu = nil
 		if continue
+			Res.clear
+			UI.initialize
 			f = File.open("data/save/#{name}")
 			@@player.score = f.readline.to_i
 			@@scenes = f.readline.split(',').map { |s| s.to_i }
@@ -93,8 +95,6 @@ class G
 				@@item_switches << sw
 			end
 			f.close
-			Res.clear
-			UI.initialize
 			@@state = :game
 			@@scene = Scene.new type, @@scenes[type], 0
 		else
