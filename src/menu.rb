@@ -240,6 +240,7 @@ class MainMenu < Menu
 		score_choose_screen_components = [
 			MenuText.new("Pontuações", 10, 5),
 			MenuText.new("De quem você quer ver as pontuações?", 400, 120, :center, G.med_font),
+			MenuSprite.new(0, 350, :sprite_scoreScreen),
 			@back_button
 		]
 		score_screen_components = [
@@ -399,7 +400,8 @@ class MainMenu < Menu
 					@chk3.checked = G.sounds
 					@chk4.checked = G.music
 					go_to_screen 0
-				}
+				},
+				MenuSprite.new(520, 130, :sprite_optionsScreen)
 			])
 		]
 		@cur_screen = 0
