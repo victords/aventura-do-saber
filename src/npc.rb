@@ -3,7 +3,7 @@ include AGL
 
 class NPC < GameObject
 	attr_reader :block
-	
+
 	def initialize x, y, id
 		f = File.open("data/text/npc#{id}.txt")
 		info = f.readline.chomp.split ','
@@ -13,7 +13,7 @@ class NPC < GameObject
 		@msgs = []
 		@opts = []
 		@switches = []
-		
+
 		states = f.read.split "\n\n"
 		f.close
 		states.each_with_index do |s, i|
@@ -27,7 +27,7 @@ class NPC < GameObject
 			@opts << lines[1..-2]
 			@switches << lines[-1]
 		end
-		
+
 		@block = Block.new @x + 5, @y + 5, @w - 10, @h - 5, false if @state < states.length - 1
 		@writer = TextHelper.new G.font, 8
 		@ellipsis = XSprite.new 0, 0, :ui_ellipsis
@@ -37,7 +37,7 @@ class NPC < GameObject
 		@talking_seq_right = [4, 5, 4, 3, 5, 4, 5, 3]
 		set_animation 3 if @facing_right
 	end
-	
+
 	def update
 		if bounds.intersects G.player.bounds
 			unless @can_talk
@@ -80,7 +80,7 @@ class NPC < GameObject
 		animate (@facing_right ? @talking_seq_right : @talking_seq), 8 if @talking
 		@ellipsis.update_alpha; @balloon.update_alpha; @balloon_arrow.update_alpha
 	end
-	
+
 	def interact
 		if require_item?
 			UI.choose_item
@@ -91,12 +91,12 @@ class NPC < GameObject
 			UI.choose_opt @opts[@state]
 		end
 	end
-	
+
 	def require_item?
 		return false unless @switches[@state]
 		@switches[@state][0] == '!'
 	end
-	
+
 	def send what
 		s = @switches[@state].split[0]
 		if s[0] == '+'
@@ -111,14 +111,14 @@ class NPC < GameObject
 			else; wrong_answer "Não é esse item... :("; end
 		end
 	end
-	
+
 	def wrong_answer msg
 		s = (0.1 * @switches[@state].split[1].to_i).round
 		G.scene.show_message "#{msg}   -#{s} ponto#{s > 1 ? 's' : ''}", :error
 		G.player.score -= s
 		G.wrong_answer
 	end
-	
+
 	def next_state
 		s = @switches[@state].split
 		if s.length > 2
@@ -135,37 +135,37 @@ class NPC < GameObject
 				end
 			end
 		end
-		
+
 		@state += 1
 		G.correct_answer
 		G.player.score += s[1].to_i
 		G.scene.show_message "Correto! :)   + #{s[1]} pontos"
 		G.scene.obsts.delete @block if @state == @msgs.length - 1
-		
+
 		@pages = @msgs[@state].split '/'
 		@cur_page = 0
 		interact
 	end
-	
+
 	def stop_interacting
 		@can_talk = @talking = false
 		@balloon.fade_out; @balloon_arrow.fade_out
 	end
-	
+
 	def draw map
 		super map
-		
+
 		@ellipsis.x = @x - map.cam.x + @w / 2 - 25; @ellipsis.y = @y - map.cam.y - 45
 		@ellipsis.draw 1
-		
+
 		x_off = (@facing_right ? -10 : -404)
 		@balloon.x = @x - map.cam.x + x_off; @balloon.y = @y - map.cam.y - 133
 		@balloon.draw 1
-		
+
 		x_off = (@facing_right ? @w / 2 : -@w / 34)
 		@balloon_arrow.x = @x - map.cam.x + x_off; @balloon_arrow.y = @y - map.cam.y - 35
 		@balloon_arrow.draw 1
-		
+
 		x_off = (@facing_right ? 20 : -374)
 		@writer.write_breaking @pages[@cur_page],
 			@x - map.cam.x + x_off, @y - map.cam.y - 123, 380, :justified, 0, @balloon.alpha, 1 if @pages

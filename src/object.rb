@@ -14,7 +14,7 @@ class SceneObject < GameObject
 		@switches = []
 		@msgs = []
 		@anims = []
-		
+
 		states = f.read.split "\n\n"
 		f.close
 		sw = states[-1][1..-1].to_i
@@ -46,11 +46,11 @@ class SceneObject < GameObject
 			eval "@anims << #{l[2]}"
 		end
 	end
-	
+
 	def update
 		@exclam.update_alpha
 		@text.update_alpha
-		
+
 		if @animating
 			if @anim_step < 7 * (@anims[@state-1].length - 1)
 				animate @anims[@state-1], 7
@@ -59,7 +59,7 @@ class SceneObject < GameObject
 				@animating = false
 			end
 		end
-		
+
 		return unless @active
 		if bounds.intersects G.player.bounds
 			unless @can_interact
@@ -87,7 +87,7 @@ class SceneObject < GameObject
 			end
 		end
 	end
-	
+
 	def interact
 		if require_item?
 			@text.text = "Usar qual item?"
@@ -97,11 +97,11 @@ class SceneObject < GameObject
 			UI.choose_opt @opts[@state]
 		end
 	end
-	
+
 	def require_item?
 		@switches[@state][0] == '!'
 	end
-	
+
 	def send what
 		s = @switches[@state].split[0]
 		if s[0] == '+'
@@ -116,12 +116,12 @@ class SceneObject < GameObject
 			else; wrong_answer; end
 		end
 	end
-	
+
 	def wrong_answer
 		G.scene.show_message "Nenhum efeito... =/", :warn
 		G.wrong_answer
 	end
-	
+
 	def next_state
 		s = @switches[@state].split
 		if s.length > 2
@@ -155,12 +155,12 @@ class SceneObject < GameObject
 			interact
 		end
 	end
-	
+
 	def stop_interacting
 		@text.fade_out
 		@can_interact = @interacting = false
 	end
-	
+
 	def draw map
 		super map
 		if @active

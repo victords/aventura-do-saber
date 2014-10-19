@@ -6,23 +6,25 @@ class MyGame < Gosu::Window
 	def initialize full_screen, hints, sounds, music
 		super 800, 600, full_screen
 		self.caption = "Aventura do Saber"
-		
+
 		Game.initialize self
 		G.initialize hints, sounds, music
 	end
-	
+
 	def needs_cursor?
 		true
 	end
-	
+
 	def update
 		KB.update
 		Mouse.update
-		
+
 		if G.state == :menu or G.state == :paused
 			G.menu.update
 		elsif G.state == :game
-			if KB.key_pressed? Gosu::KbEscape; G.open_menu
+			if KB.key_pressed? Gosu::KbEscape
+        G.open_menu
+        G.play_sound :pause
 			else; G.scene.update; end
 		elsif G.state == :intro
 			G.update_intro
@@ -30,7 +32,7 @@ class MyGame < Gosu::Window
 			G.update_transition
 		end
 	end
-	
+
 	def draw
 		if G.state == :menu or G.state == :paused
 			G.scene.draw if G.state == :paused

@@ -10,7 +10,7 @@ class G
 		@@hints = hints
 		@@sounds = sounds
 		@@music = music
-		
+
 		@@font = Res.font :UbuntuLight, 20
 		@@med_font = Res.font :UbuntuLight, 32
 		@@big_font = Res.font :UbuntuLight, 54
@@ -29,18 +29,18 @@ class G
 		end
 		@@switches = nil
 		@@state = :menu
-		
+
 		@@menu = nil
 		@@player = nil
 		@@scene = nil
 		@@scenes = nil
 		@@c_answers = nil
 		@@w_answers = nil
-		
+
 		class_variables.each do |v|
 			define_singleton_method(v.to_s[2..-1]) { class_variable_get v }
 		end
-		
+
 		@@temp_options = [
 			(@@full_screen ? 1 : 0),
 			(hints ? 1 : 0),
@@ -50,11 +50,11 @@ class G
 		@@cur_music = nil
 		@@menu = MainMenu.new
 	end
-	
+
 	def self.set_option o, v
 		@@temp_options[o] = (v ? 1 : 0)
 	end
-	
+
 	def self.save_options
 		@@full_screen = (@@temp_options[0] == 1)
 		@@hints = (@@temp_options[1] == 1)
@@ -68,7 +68,7 @@ class G
 		f.write @@temp_options.join(',')
 		f.close
 	end
-	
+
 	def self.start_game type, name, char, continue
 		@@game_type = type
 		@@player = Player.new name, char
@@ -108,24 +108,26 @@ class G
 			@@intro = Intro.new type
 		end
 	end
-	
+
 	def self.add_item_switch sw
 		@@switches << sw
 		@@item_switches << sw
 	end
-	
+
 	def self.use_s_item sw
 		@@item_switches.delete sw
 	end
-	
+
 	def self.correct_answer
 		@@c_answers[@@game_type][-1] += 1
+    play_sound :correct
 	end
-	
+
 	def self.wrong_answer
 		@@w_answers[@@game_type] += 1
+    play_sound :wrong
 	end
-	
+
 	def self.play_music music
 		return unless @@music
 		if @@cur_music.nil? or @@cur_music != music
@@ -134,14 +136,20 @@ class G
 			@@cur_music.play
 		end
 	end
-	
+
+  def self.play_sound id
+    return unless @@sounds
+    sound = Res.sound id, true
+    sound.play
+  end
+
 	def self.set_scene scene, entry
 		@@state = :transition
 		@@next_scene = scene
 		@@next_entry = entry
 		@@transition_alpha = 0
 	end
-	
+
 	def self.update_intro
 		if @@intro.update
 			Res.clear
@@ -152,11 +160,11 @@ class G
 			@@next_scene = nil
 		end
 	end
-	
+
 	def self.draw_intro
 		@@intro.draw
 	end
-	
+
 	def self.update_transition
 		if @@next_scene
 			@@transition_alpha += 17
@@ -172,7 +180,7 @@ class G
 			@@state = :game if @@transition_alpha == 0
 		end
 	end
-	
+
 	def self.draw_transition
 		color = (@@transition_alpha << 24)
 		@@win.draw_quad 0, 0, color,
@@ -180,17 +188,17 @@ class G
 		                800, 600, color,
 		                0, 600, color, 0
 	end
-	
+
 	def self.open_menu
 		@@menu = SceneMenu.new @@game_type
 		@@state = :paused
 	end
-	
+
 	def self.resume_game
 		@@menu = nil
 		@@state = :game
 	end
-	
+
 	def self.back_to_menu
 		@@scene = nil
 		Res.clear
@@ -198,7 +206,7 @@ class G
 		@@menu = MainMenu.new
 		@@state = :menu
 	end
-	
+
 	def self.save_game
 		f = File.open("data/save/#{@@player.name}", "w")
 		f.write @@player.score.to_s + "\n"
@@ -211,7 +219,7 @@ class G
 		f.write @@item_switches.join(',') + "\n"
 		f.close
 	end
-	
+
 	def self.quit_game
 		@@win.close
 	end

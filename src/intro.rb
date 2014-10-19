@@ -19,14 +19,14 @@ class Intro
 			s = l.chomp.gsub("\\n", "\n")
 			@texts << XText.new(s, 10, 600 - s.split("\n").size * 36, 0, true)
 		end
-		@hint = XText.new "Pressione 'A' para continuar...", 10, 5, 0x00ffff
-		
+		@hint = XText.new "Pressione 'A' ou clique para continuar...", 10, 5, 0x00ffff
+
 		@scale = 1
 		@cur_scene = 0
 		@rect_alpha = 255
 		@transition = 0
 	end
-	
+
 	def update
 		@texts.each { |t| t.update_alpha }
 		@hint.update_alpha
@@ -57,11 +57,11 @@ class Intro
 				@scenes[@cur_scene].y = (600 - (@scale * 750)) / 2
 				@hint.fade_in if @scale <= 0.8
 			end
-			@transition = 1 if KB.key_pressed? Gosu::KbA
+			@transition = 1 if KB.key_pressed? Gosu::KbA or Mouse.button_pressed? :left
 		end
 		false
 	end
-	
+
 	def draw
 		@scenes[@cur_scene].draw nil, @scale, @scale
 		@texts[@cur_scene].draw
