@@ -129,7 +129,15 @@ class UI
 		@panel1 = XSprite.new 0, 0, :ui_panel1
 		@panel2 = XSprite.new 0, 0, :ui_panel2
 		@panel3 = XSprite.new 200, 0, :ui_panel3
-		@hint = XText.new "Pressione 'Esc' para pausar o jogo", 10, 565, 0x00ffff
+    @main_hints = [
+        "Use as setas esquerda e direita para se mover",
+        "Use a barra de espaço para pular",
+        "Pressione 'Esc' para pausar o jogo"
+    ]
+		@hint = XText.new @main_hints[0], 10, 565, 0x00ffff
+    @hint_index = 0
+    @hint_timer = 0
+    @showing_main_hint = false
 		@panel1.alpha = @hint.alpha = 255
 		@item_buttons = {}
 		@opt_buttons = []
@@ -159,7 +167,11 @@ class UI
 				end
 				@changing_hint = nil
 				@hint.fade_in
-			end
+      end
+      if @showing_main_hint
+        @hint_timer += 1
+        set_main_hint if @hint_timer == 180
+      end
 		end
 	end
 	
@@ -223,7 +235,16 @@ class UI
 		@changing_hint = text
 		@hint_pos = Vector.new x, y if x
 		@hint.fade_out
-	end
+    @showing_main_hint = false
+  end
+
+  def self.set_main_hint
+    set_hint @main_hints[@hint_index]
+    @hint_index += 1
+    @hint_index = 0 if @hint_index == @main_hints.length
+    @hint_timer = 0
+    @showing_main_hint = true
+  end
 	
 	def self.draw
 		@panel1.draw
