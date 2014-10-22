@@ -28,6 +28,8 @@ class MyGame < Gosu::Window
 			else; G.scene.update; end
 		elsif G.state == :intro
 			G.update_intro
+    elsif G.state == :mission_complete
+      G.update_mission_complete
 		else
 			G.update_transition
 		end
@@ -55,6 +57,4 @@ sounds = (config[2] == '1')
 music = (config[3] == '1')
 f.close
 
-game = MyGame.new full_screen, hints, sounds, music
-game.show
-
+MyGame.new(full_screen, hints, sounds, music).show

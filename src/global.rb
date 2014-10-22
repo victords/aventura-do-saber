@@ -109,6 +109,21 @@ class G
 		end
 	end
 
+  def self.update_intro
+    if @@intro.update
+      Res.clear
+      UI.initialize
+      @@scene = Scene.new @@game_type, 1, 0
+      @@state = :transition
+      @@transition_alpha = 255
+      @@next_scene = nil
+    end
+  end
+
+  def self.draw_intro
+    @@intro.draw
+  end
+
 	def self.add_item_switch sw
 		@@switches << sw
 		@@item_switches << sw
@@ -150,21 +165,6 @@ class G
 		@@transition_alpha = 0
 	end
 
-	def self.update_intro
-		if @@intro.update
-			Res.clear
-			UI.initialize
-			@@scene = Scene.new @@game_type, 1, 0
-			@@state = :transition
-			@@transition_alpha = 255
-			@@next_scene = nil
-		end
-	end
-
-	def self.draw_intro
-		@@intro.draw
-	end
-
 	def self.update_transition
 		if @@next_scene
 			@@transition_alpha += 17
@@ -199,11 +199,11 @@ class G
 		@@state = :game
 	end
 
-	def self.back_to_menu
+	def self.back_to_menu screen = 0
 		@@scene = nil
 		Res.clear
 		save_game
-		@@menu = MainMenu.new
+		@@menu = MainMenu.new screen
 		@@state = :menu
 	end
 
@@ -219,6 +219,16 @@ class G
 		f.write @@item_switches.join(',') + "\n"
 		f.close
 	end
+
+  def self.mission_complete
+    play_sound :missionComplete
+    @@state = :mission_complete
+  end
+
+  def self.update_mission_complete
+    @@scene.update
+    back_to_menu 4 if KB.key_pressed? Gosu::KbA or Mouse.button_pressed? :left
+  end
 
 	def self.quit_game
 		@@win.close

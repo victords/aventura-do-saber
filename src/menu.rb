@@ -206,7 +206,7 @@ class Menu
 end
 
 class MainMenu < Menu
-	def initialize
+	def initialize screen = 0
 		@bg = Res.img :bg_menu
 		@bgm = Res.song :track1
 
@@ -267,17 +267,17 @@ class MainMenu < Menu
 			MenuButton.new(600, 555, G.font, "Voltar", :ui_btn1, true) { go_to_screen 5 },
 			@chart
 		]
-		for i in 0..3
-			b = MenuText.new "", 400 + i * 110, 190, :right, G.med_font
-			score_screen_components << b
-			@scenes_labels << b
-			b = MenuText.new "", 400 + i * 110, 230, :right, G.med_font
-			score_screen_components << b
-			@c_answers_labels << b
-			b = MenuText.new "", 400 + i * 110, 270, :right, G.med_font
-			score_screen_components << b
-			@w_answers_labels << b
-		end
+    (0..3).each do |i|
+      b = MenuText.new "", 400 + i * 110, 190, :right, G.med_font
+      score_screen_components << b
+      @scenes_labels << b
+      b = MenuText.new "", 400 + i * 110, 230, :right, G.med_font
+      score_screen_components << b
+      @c_answers_labels << b
+      b = MenuText.new "", 400 + i * 110, 270, :right, G.med_font
+      score_screen_components << b
+      @w_answers_labels << b
+    end
 
 		Dir["data/save/*"].sort[1..10].each_with_index do |g, i|
 			name = g.split('/')[-1]
@@ -415,7 +415,7 @@ class MainMenu < Menu
 				MenuSprite.new(520, 130, :sprite_optionsScreen)
 			])
 		]
-		@cur_screen = 0
+		@cur_screen = screen
 		G.play_music @bgm
 	end
 end

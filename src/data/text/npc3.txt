@@ -1,0 +1,8 @@
+70,140,2,0,l
+Responda corretamente para finalizar issaqui: 2 + 2 = ...?
+-3
+-4
+-5
++2 10
+
+Parabéns!!

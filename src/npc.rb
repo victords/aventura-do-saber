@@ -4,11 +4,12 @@ include AGL
 class NPC < GameObject
 	attr_reader :block
 
-	def initialize x, y, id
+	def initialize x, y, id, final
 		f = File.open("data/text/npc#{id}.txt")
 		info = f.readline.chomp.split ','
 		super x, y, info[0].to_i, info[1].to_i, "sprite_npc#{id}", Vector.new(info[2].to_i, info[3].to_i), 3, 2
-		@facing_right = (info[4] == 'r')
+		@final = final
+    @facing_right = (info[4] == 'r')
 		@state = 0
 		@msgs = []
 		@opts = []
@@ -87,7 +88,14 @@ class NPC < GameObject
 			UI.choose_item
 		elsif @opts[@state].nil? or @opts[@state].empty?
 			set_animation (@facing_right ? 3 : 0)
-			G.player.stop_interacting
+      if @final
+        G.player.victory
+        G.mission_complete
+        UI.mission_complete
+        stop_interacting
+      else
+        G.player.stop_interacting
+      end
 		else
 			UI.choose_opt @opts[@state]
 		end
@@ -141,7 +149,9 @@ class NPC < GameObject
 		G.correct_answer
 		G.player.score += s[1].to_i
 		G.scene.show_message "Correto! :)   + #{s[1]} pontos"
-		G.scene.obsts.delete @block if @state == @msgs.length - 1
+    if @state == @msgs.length - 1
+      G.scene.obsts.delete @block
+    end
 
 		@pages = @msgs[@state].split '/'
 		@cur_page = 0

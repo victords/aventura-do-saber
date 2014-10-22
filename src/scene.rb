@@ -21,7 +21,7 @@ class Exit
     @arrow = XSprite.new 0, 0, :ui_arrow unless @immediate
     @contact = false
 	end
-	
+
 	def update
 		if @active
       @arrow.update_alpha if @arrow
@@ -56,7 +56,7 @@ end
 
 class Scene
 	attr_reader :obsts, :ramps
-	
+
 	def initialize game_type, number, entry
 		@game_type =
 			case game_type
@@ -69,14 +69,14 @@ class Scene
 		@entry = entry
 		@bg = Res.img "bg_#{@game_type}#{@number}".to_sym
 		@map = Map.new 1, 1, @bg.width, @bg.height
-		
+
 		reset
 	end
-	
+
 	def update
 		G.player.update
 		@map.set_camera G.player.x - 380, G.player.y - 240
-		
+
 		@items.each do |i|
 			i.update
 			@items.delete i if i.dead
@@ -88,11 +88,11 @@ class Scene
 		@npcs.each { |c| c.update }
 		@objects.each { |o| o.update }
 		@exits.each { |e| e.update }
-		
+
 		UI.update
 		reset if KB.key_pressed? Gosu::KbBackspace
 	end
-	
+
 	def reset
 		@entries = []
 		@exits = []
@@ -109,7 +109,7 @@ class Scene
 			when '<'     then @exits << Exit.new(a[0].to_i, a[1].to_i, a[2].to_sym, a[3].to_i, a[4].to_i, a[5] == 'i', a[6])
 			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
 			when '!'     then check_item a
-			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2])
+			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2], a[3])
 			when '*'     then @objects << SceneObject.new(a[0].to_i, a[1].to_i, a[2])
 			else              @obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
 			end
@@ -122,7 +122,7 @@ class Scene
 		G.player.set_position @entries[@entry]
 		@map.set_camera G.player.x - 380, G.player.y - 240
 	end
-	
+
 	def check_item info
 		if info[0][0] == '$'
 			sw = info[0][1..-1].to_i
@@ -136,15 +136,15 @@ class Scene
 			eval "@items << Item.new(info[0].to_i, info[1].to_i, :#{info2})"
 		end
 	end
-	
+
 	def add_effect id, x, y
 		eval "@effects << Effect.new(#{x}, #{y}, :fx_#{id}, #{G.effects[id].chomp})"
 	end
-	
+
 	def show_message msg, level = :info
 		@effects << TextEffect.new(msg, level)
 	end
-	
+
 	def draw
 		@bg.draw -@map.cam.x, -@map.cam.y, 0
 		@items.each do |i|

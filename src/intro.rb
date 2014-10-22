@@ -17,7 +17,7 @@ class Intro
 		@texts = []
 		File.open("data/text/#{type}.txt").each do |l|
 			s = l.chomp.gsub("\\n", "\n")
-			@texts << XText.new(s, 10, 600 - s.split("\n").size * 36, 0, true)
+			@texts << XText.new(s, 10, 600 - s.split("\n").size * 36, 0, G.med_font, true)
 		end
 		@hint = XText.new "Pressione 'A' ou clique para continuar...", 10, 5, 0x00ffff
 
