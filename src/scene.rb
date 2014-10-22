@@ -5,25 +5,53 @@ require_relative 'object'
 Entry = Struct.new :x, :y, :dir
 
 class Exit
-	def initialize x, y, dir, destiny, dest_entry, switch
-		@bounds = Rectangle.new dir == :l ? x - 30 : dir == :r ? x + 30 : x, y - 150, 1, 150
+	def initialize x, y, dir, destiny, dest_entry, immediate, switch
+		@x = dir == :l ? x - 30 : dir == :r ? x + 30 : x
+    @y = y - 150
+    @bounds = Rectangle.new @x, @y, 1, 150
 		@destiny = destiny
 		@dest_entry = dest_entry
-		if switch
-			@active = G.switches.index switch.to_i
-			@switch = switch.to_i unless @active
-		else
-			@active = true
-		end
+    @immediate = immediate
+    if switch
+      @active = G.switches.index switch.to_i
+      @switch = switch.to_i unless @active
+    else
+      @active = true
+    end
+    @arrow = XSprite.new 0, 0, :ui_arrow unless @immediate
+    @contact = false
 	end
 	
 	def update
 		if @active
-			G.set_scene @destiny, @dest_entry if @bounds.intersects G.player.bounds
+      @arrow.update_alpha if @arrow
+      if @bounds.intersects G.player.bounds
+        if @immediate
+			    G.set_scene @destiny, @dest_entry
+        else
+          unless @contact
+            @arrow.fade_in
+            @contact = true
+            UI.set_hint "Pressione seta para cima para entrar..."
+          end
+          G.set_scene @destiny, @dest_entry if KB.key_pressed? Gosu::KbUp
+        end
+      elsif @contact and not @immediate
+        @arrow.fade_out
+        @contact = false
+        UI.set_main_hint
+      end
 		else
 			@active = G.switches.index @switch
 		end
-	end
+  end
+
+  def draw map
+    if @arrow and @arrow.alpha > 0
+      @arrow.x = @x - map.cam.x - 22; @arrow.y = @y - map.cam.y - 10
+      @arrow.draw
+    end
+  end
 end
 
 class Scene
@@ -78,7 +106,7 @@ class Scene
 			a = l[2..-1].chomp.split ','
 			case l[0]
 			when '>'     then @entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)
-			when '<'     then @exits << Exit.new(a[0].to_i, a[1].to_i, a[2].to_sym, a[3].to_i, a[4].to_i, a[5])
+			when '<'     then @exits << Exit.new(a[0].to_i, a[1].to_i, a[2].to_sym, a[3].to_i, a[4].to_i, a[5] == 'i', a[6])
 			when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
 			when '!'     then check_item a
 			when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2])
@@ -89,7 +117,8 @@ class Scene
 		@npcs.each do |c|
 			@obsts << c.block if c.block
 		end
-		
+
+    UI.set_main_hint
 		G.player.set_position @entries[@entry]
 		@map.set_camera G.player.x - 380, G.player.y - 240
 	end
@@ -124,9 +153,12 @@ class Scene
 		@npcs.each do |c|
 			c.draw @map
 		end
-		@objects.each do |o|
-			o.draw @map
-		end
+    @objects.each do |o|
+      o.draw @map
+    end
+    @exits.each do |e|
+      e.draw @map
+    end
 		G.player.draw @map
 		@effects.each do |e|
 			e.draw

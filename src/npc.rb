@@ -47,7 +47,7 @@ class NPC < GameObject
 			end
 		elsif @can_talk
 			@ellipsis.fade_out
-			UI.set_hint "Pressione 'Esc' para pausar o jogo"
+			UI.set_main_hint
 			@can_talk = false
 		end
 		if @can_talk and G.player.x > @x
@@ -60,6 +60,7 @@ class NPC < GameObject
 		if @talking and not @can_talk
 			set_animation (@facing_right ? 3 : 0)
 			G.player.stop_interacting
+      UI.set_main_hint
 		end
 		if @can_talk and KB.key_pressed? Gosu::KbA
 			if @talking

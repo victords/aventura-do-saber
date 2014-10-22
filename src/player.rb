@@ -42,10 +42,8 @@ class Player < GameObject
 			else
 				set_animation 0
 			end
-			if KB.key_pressed? Gosu::KbUp
+			if KB.key_pressed? Gosu::KbSpace
 				forces.y -= 13.7 + 0.4 * @speed.x.abs
-#					if @facing_right; set_animation 3
-#					else; set_animation 8; end
 			end
 		end
 		move forces, G.scene.obsts, G.scene.ramps

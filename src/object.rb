@@ -69,11 +69,12 @@ class SceneObject < GameObject
 			end
 		elsif @can_interact
 			@exclam.fade_out
-			UI.set_hint "Pressione 'Esc' para pausar o jogo"
+			UI.set_main_hint
 			@can_interact = false
 		end
 		if @interacting and not @can_interact
 			G.player.stop_interacting
+      UI.set_main_hint
 		end
 		if @can_interact and KB.key_pressed? Gosu::KbA
 			if @interacting
