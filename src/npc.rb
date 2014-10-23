@@ -25,7 +25,7 @@ class NPC < GameObject
 			end
 			@msgs << (lines[0][0] == '$' ? lines[0][(lines[0].index(' ') + 1)..-1] : lines[0])
 			break if i == states.length - 1
-			@opts << lines[1..-2]
+			@opts << lines[1..-2].map { |o| o[1..-1] }
 			@switches << lines[-1]
 		end
 
@@ -40,7 +40,9 @@ class NPC < GameObject
 	end
 
 	def update
-		if bounds.intersects G.player.bounds
+    @ellipsis.update_alpha; @balloon.update_alpha; @balloon_arrow.update_alpha
+		return if @opts[@state].nil? and @final
+    if bounds.intersects G.player.bounds
 			unless @can_talk
 				@ellipsis.fade_in
 				UI.set_hint "Pressione 'A' para conversar"
@@ -80,7 +82,6 @@ class NPC < GameObject
 			end
 		end
 		animate (@facing_right ? @talking_seq_right : @talking_seq), 8 if @talking
-		@ellipsis.update_alpha; @balloon.update_alpha; @balloon_arrow.update_alpha
 	end
 
 	def interact

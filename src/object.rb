@@ -36,7 +36,7 @@ class SceneObject < GameObject
 					end
 					ind += 1
 				end
-				@opts << lines[ind..-2]
+				@opts << lines[ind..-2].map { |o| o[1..-1] }
 			else
 				@opts << []
 			end
