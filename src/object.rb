@@ -3,7 +3,7 @@ include AGL
 
 class SceneObject < GameObject
 	def initialize x, y, id
-		f = File.open("data/text/obj#{id}.txt")
+		f = File.open("#{Res.prefix}text/obj#{id}.txt")
 		info = f.readline.chomp.split ','
 		super x, y, info[0].to_i, info[1].to_i, "sprite_obj#{id}", nil, info[2].to_i, info[3].to_i
 		@exclam = XSprite.new 0, 0, :ui_exclam

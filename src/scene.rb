@@ -102,7 +102,7 @@ class Scene
 		@npcs = []
 		@objects = []
 		@effects = []
-		File.open("data/text/#{@game_type}#{@number}.txt").each do |l|
+		File.open("#{Res.prefix}text/#{@game_type}#{@number}.txt").each do |l|
 			a = l[2..-1].chomp.split ','
 			case l[0]
 			when '>'     then @entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)

@@ -49,7 +49,7 @@ class MyGame < Gosu::Window
 	end
 end
 
-f = File.open("data/save/_config")
+f = File.open("#{File.expand_path(File.dirname($0))}/data/save/_config")
 config = f.read.chomp.split(',')
 full_screen = (config[0] == '1')
 hints = (config[1] == '1')

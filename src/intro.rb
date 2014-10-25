@@ -10,12 +10,12 @@ class Intro
 			else        "all"
 			end
 		@scenes = []
-		Dir["data/img/bg/#{type}Intro*"].sort.each do |f|
-			id = f.split('/')[2..3].join('_').chomp(".png")
-			@scenes << Sprite.new(-100, -75, id)
+		Dir["#{Res.prefix}img/bg/#{type}Intro*"].sort.each do |f|
+			id = f.split('/')[-1].chomp(".png")
+			@scenes << Sprite.new(-100, -75, "bg_#{id}")
 		end
 		@texts = []
-		File.open("data/text/#{type}.txt").each do |l|
+		File.open("#{Res.prefix}text/#{type}.txt").each do |l|
 			s = l.chomp.gsub("\\n", "\n")
 			@texts << XText.new(s, 10, 600 - s.split("\n").size * 36, 0, G.med_font, true)
 		end

@@ -250,7 +250,7 @@ class MainMenu < Menu
 		@chart = Chart.new 65, 320, 500, 200, 6
 		score_choose_screen_components = [
 			MenuText.new("Pontuações", 10, 5),
-			MenuText.new("De quem você quer ver as pontuações?", 400, 120, :center, G.med_font),
+			MenuText.new("De quem você quer ver as pontuações?", 400, 90, :center, G.med_font),
 			MenuSprite.new(0, 350, :sprite_scoreScreen),
 			@back_button
 		]
@@ -279,7 +279,7 @@ class MainMenu < Menu
       @w_answers_labels << b
     end
 
-		Dir["data/save/*"].sort[1..10].each_with_index do |g, i|
+		Dir["#{Res.prefix}save/*"].sort[1..10].each_with_index do |g, i|
 			name = g.split('/')[-1]
 			@names << name
 			name_screen_components <<
@@ -287,8 +287,8 @@ class MainMenu < Menu
 					@name = name; @continue = true; go_to_screen 3
 				}
 			score_choose_screen_components <<
-				MenuButton.new(100 + (i % 2) * 300, 200 + (i / 2) * 40, G.med_font, name.capitalize, :ui_btn2){
-					f = File.open("data/save/#{name}")
+				MenuButton.new(100 + (i % 2) * 300, 140 + (i / 2) * 40, G.med_font, name.capitalize, :ui_btn2){
+					f = File.open("#{Res.prefix}save/#{name}")
 					score = f.readline.to_i
 					scenes = f.readline.split(',').map { |s| s.to_i }
 					c_answers = []
@@ -403,6 +403,7 @@ class MainMenu < Menu
 				MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
 				MenuPanel.new(10, 600, 10, 90, :ui_menuComponent5)
 			], [
+        MenuSprite.new(520, 130, :sprite_optionsScreen),
 				MenuText.new("Opções", 10, 5), @info_icon, @info_text, @chk1, @chk2, @chk3, @chk4,
 				MenuButton.new(440, 555, G.font, "Salvar", :ui_btn1) { G.save_options; G.play_music @bgm; go_to_screen 0 },
 				MenuButton.new(600, 555, G.font, "Cancelar", :ui_btn1, true) {
@@ -411,8 +412,7 @@ class MainMenu < Menu
 					@chk3.checked = G.sounds
 					@chk4.checked = G.music
 					go_to_screen 0
-				},
-				MenuSprite.new(520, 130, :sprite_optionsScreen)
+				}
 			])
 		]
 		@cur_screen = screen

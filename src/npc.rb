@@ -5,7 +5,7 @@ class NPC < GameObject
 	attr_reader :block
 
 	def initialize x, y, id, final
-		f = File.open("data/text/npc#{id}.txt")
+		f = File.open("#{Res.prefix}text/npc#{id}.txt")
 		info = f.readline.chomp.split ','
 		super x, y, info[0].to_i, info[1].to_i, "sprite_npc#{id}", Vector.new(info[2].to_i, info[3].to_i), 3, 2
 		@final = final

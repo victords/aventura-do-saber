@@ -14,16 +14,16 @@ class G
 		@@font = Res.font :UbuntuLight, 20
 		@@med_font = Res.font :UbuntuLight, 32
 		@@big_font = Res.font :UbuntuLight, 54
-		f = File.open("data/text/fx.txt")
+		f = File.open("#{Res.prefix}text/fx.txt")
 		@@effects = f.readlines
 		f.close
 		@@items = {}
-		File.open("data/text/items.txt").each do |l|
+		File.open("#{Res.prefix}text/items.txt").each do |l|
 			key = l.chomp!.split(',')[0].to_sym
 			@@items[key] = l
 		end
 		@@s_items = {}
-		File.open("data/text/s_items.txt").each do |l|
+		File.open("#{Res.prefix}text/s_items.txt").each do |l|
 			l = l.chomp.split
 			@@s_items[l[0].to_i] = l[1]
 		end
@@ -64,7 +64,7 @@ class G
 			@@cur_music.stop unless @@cur_music.nil?
 			@@cur_music = nil
 		end
-		f = File.open("data/save/_config", "w")
+		f = File.open("#{Res.prefix}save/_config", "w")
 		f.write @@temp_options.join(',')
 		f.close
 	end
@@ -77,10 +77,9 @@ class G
 		if continue
 			Res.clear
 			UI.initialize
-			f = File.open("data/save/#{name}")
+			f = File.open("#{Res.prefix}save/#{name}")
 			@@player.score = f.readline.to_i
 			@@scenes = f.readline.split(',').map { |s| s.to_i }
-			@@scenes[type] = 1 if @@scenes[type] == 0
 			@@c_answers = []
 			all_c_answers = f.readline.chomp.split('|', -1)
 			all_c_answers.each { |a| @@c_answers << a.split(',').map { |s| s.to_i } }
@@ -95,18 +94,22 @@ class G
 				@@item_switches << sw
 			end
 			f.close
-			@@state = :game
-			@@scene = Scene.new type, @@scenes[type], 0
 		else
 			@@scenes = [0, 0, 0, 0]
-			@@scenes[type] = 1
 			@@c_answers = [[], [], [], []]
 			@@c_answers[type] << 0
 			@@w_answers = [0, 0, 0, 0]
 			@@switches = []
-			@@state = :intro
-			@@intro = Intro.new type
-		end
+    end
+
+    if @@scenes[type] == 0
+      @@state = :intro
+      @@intro = Intro.new type
+      @@scenes[type] = 1
+    else
+      @@state = :game
+      @@scene = Scene.new type, @@scenes[type], 0
+    end
 	end
 
   def self.update_intro
@@ -208,7 +211,7 @@ class G
 	end
 
 	def self.save_game
-		f = File.open("data/save/#{@@player.name}", "w")
+		f = File.open("#{Res.prefix}save/#{@@player.name}", "w")
 		f.write @@player.score.to_s + "\n"
 		f.write @@scenes.join(',') + "\n"
 		all_c_answers = []
