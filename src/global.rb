@@ -71,15 +71,21 @@ class G
 
   def self.start_game type, name, char, continue
     @@game_type = type
-    if name; @@player = Player.new name, char
-    elsif char; @@player = Player.new @@player.name, char
-    else; @@player.reset; end
+    if name
+      @@player = Player.new name, char
+    elsif char
+      @@player = Player.new @@player.name, char
+      continue = true
+    else
+      @@player.reset
+      continue = true
+    end
     @@item_switches = []
     @@menu = nil
     if continue
       Res.clear
       UI.initialize
-      f = File.open("#{Res.prefix}save/#{name}")
+      f = File.open("#{Res.prefix}save/#{@@player.name}")
       @@player.score = f.readline.to_i
       @@scenes = f.readline.split(',').map { |s| s.to_i }
       @@c_answers = []
@@ -227,6 +233,7 @@ class G
   end
 
   def self.mission_complete
+    save_game
     play_sound :missionComplete
     @@state = :mission_complete
   end

@@ -183,7 +183,6 @@ class UI
       @item_buttons[item_set[0].type] = ItemButton.new(item_set)
       arrange_item_buttons bottom if show
     end
-    @panel2.fade_in if @item_buttons.length == 1
   end
 
   def self.remove_item item
@@ -306,5 +305,6 @@ class UI
     end
     @items_text_base = 805 - @item_buttons.length * 57
     @panel2.x = @items_text_base - 20
+    @panel2.fade_in if @item_buttons.length == 1 and not bottom
   end
 end

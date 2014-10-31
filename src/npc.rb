@@ -174,6 +174,7 @@ class NPC < GameObject
 
   def draw map
     super map
+    return if G.state == :paused
 
     @ellipsis.x = @x - map.cam.x + @w / 2 - 25; @ellipsis.y = @y - map.cam.y - 45
     @ellipsis.draw 1

@@ -164,7 +164,7 @@ class SceneObject < GameObject
 
   def draw map
     super map
-    if @active
+    if @active and G.state == :game
       @exclam.x = @x + @w / 2 - map.cam.x - 6; @exclam.y = @y - map.cam.y - 60
       @exclam.draw
       @text.draw
