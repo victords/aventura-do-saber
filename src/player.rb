@@ -16,6 +16,10 @@ class Player < GameObject
     @items = {}
     @score = 0
   end
+  
+  def reset
+    @victory = nil
+  end
 
   def update
     return if @victory == 2

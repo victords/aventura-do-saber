@@ -71,7 +71,9 @@ class G
 
   def self.start_game type, name, char, continue
     @@game_type = type
-    @@player = Player.new name, char
+    if name; @@player = Player.new name, char
+    elsif char; @@player = Player.new @@player.name, char
+    else; @@player.reset; end
     @@item_switches = []
     @@menu = nil
     if continue

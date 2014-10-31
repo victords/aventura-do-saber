@@ -9,9 +9,11 @@ $1 Ah, que ótimo! Nesse caso... Bom, estamos com uma praga de um inseto que est
 -OK.
 +1 0 $2
 
-$2 Ficarei aguardando você retornar com o produto./Você já o conseguiu?
-!apple 30 $3 $4 .
+$2 Ficarei aguardando você retornar com o produto.
 
-$3 Ótimo! Agora, precisamos aplicar o produto... Siga em frente para chegar às plantações.
+$3 Você já o conseguiu?
+!apple 30 $4 $5 .
 
-$5 Muito obrigado por toda a ajuda!
+$4 Ótimo! Agora, precisamos aplicar o produto... Siga em frente para chegar às plantações.
+
+$6 Muito obrigado por toda a ajuda!

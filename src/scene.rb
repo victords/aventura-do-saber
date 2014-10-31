@@ -66,37 +66,15 @@ class Scene
       else        :all
       end
     @number = number
-    @entry = entry
     @bg = Res.img "bg_#{@game_type}#{@number}".to_sym
     @map = Map.new 1, 1, @bg.width, @bg.height
 
-    reset
-  end
-
-  def update
-    G.player.update
-    @map.set_camera G.player.x - 380, G.player.y - 240
-
-    @items.each do |i|
-      i.update
-      @items.delete i if i.dead
-    end
-    @effects.each do |e|
-      e.update
-      @effects.delete e if e.dead
-    end
-    @npcs.each { |c| c.update }
-    @objects.each { |o| o.update }
-    @exits.each { |e| e.update }
-
-    UI.update
-    reset if KB.key_pressed? Gosu::KbBackspace
-  end
-
-  def reset
     @entries = []
     @exits = []
-    @obsts = []
+    @obsts = [
+      Block.new(-31, 0, 1, @bg.height, false),
+      Block.new(@bg.width + 30, 0, 1, @bg.height, false),
+    ]
     @ramps = []
     @items = []
     @npcs = []
@@ -119,8 +97,27 @@ class Scene
     end
 
     UI.set_main_hint
-    G.player.set_position @entries[@entry]
+    G.player.set_position @entries[entry]
     @map.set_camera G.player.x - 380, G.player.y - 240
+  end
+
+  def update
+    G.player.update
+    @map.set_camera G.player.x - 380, G.player.y - 240
+
+    @items.each do |i|
+      i.update
+      @items.delete i if i.dead
+    end
+    @effects.each do |e|
+      e.update
+      @effects.delete e if e.dead
+    end
+    @npcs.each { |c| c.update }
+    @objects.each { |o| o.update }
+    @exits.each { |e| e.update }
+
+    UI.update
   end
 
   def check_item info
