@@ -1,14 +1,17 @@
 70,140,2,0,l
-Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem longa, para ocupar quase todo o espaço disponível./A fala pode ter mais de uma página.
--OK, entendi.
--Cala a boca!
--Ãããhnn...
+Olá, você veio visitar a fazenda? Infelizmente, estamos com um problema sério... Aliás, será que você não poderia nos ajudar?
+-Sim, claro!
+-Não.
+-Por que deveria?
 +1 10 $1
 
-$1 Traga-me duas maçãs, por favor.
-!apple 20 $2 !item3
+$1 Ah, que ótimo! Nesse caso... Bom, estamos com uma praga de um inseto que está atacando as abelhas, .../e com isso a polinização está prejudicada, e não conseguimos produzir nada./Porém, parece que há uma planta da qual podemos extrair um produto para espantar esses insetos./Vá à casa do sr. José, ele te explicará melhor...
+-OK.
++1 0 $2
 
-$2 Obrigado! Traga-me mais uma maçã, por favor.
-!apple 30 $3 $15
+$2 Ficarei aguardando você retornar com o produto./Você já o conseguiu?
+!apple 30 $3 $4 .
 
-$3 Valeu, mulek!/Você é um cara bacana.
+$3 Ótimo! Agora, precisamos aplicar o produto... Siga em frente para chegar às plantações.
+
+$5 Muito obrigado por toda a ajuda!

@@ -90,8 +90,11 @@ class NPC < GameObject
       check_finish
     elsif require_item?
       UI.choose_item
-    else
+    elsif @opts[@state].size > 0
       UI.choose_opt @opts[@state]
+    else
+      set_animation (@facing_right ? 3 : 0)
+      G.player.stop_interacting
     end
   end
 
@@ -155,7 +158,7 @@ class NPC < GameObject
     G.correct_answer
     G.player.score += s[1].to_i
     G.scene.show_message "Correto! :)   + #{s[1]} pontos"
-    if @state == @msgs.length - 1
+    if s.length > 4
       G.scene.obsts.delete @block
     end
 

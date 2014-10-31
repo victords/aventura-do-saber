@@ -174,6 +174,7 @@ class G
       if @@transition_alpha == 255
         Res.clear
         UI.initialize
+        @@player.ui_add_items
         @@scene = Scene.new @@game_type, @@next_scene, @@next_entry
         @@scenes[@@game_type] = @@next_scene
         @@next_scene = @@next_entry = nil

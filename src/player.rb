@@ -122,6 +122,10 @@ class Player < GameObject
     set_animation @anim_indices[0]
   end
 
+  def ui_add_items
+    @items.each { |k, v| UI.add_item(v, true) }
+  end
+
   private
 
   def set_direction dir
