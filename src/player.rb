@@ -65,7 +65,7 @@ class Player < GameObject
 
   def set_position entry
     @x = entry.x
-    @y = entry.y
+    @y = entry.y - @h
     @speed.x = @speed.y = 0
 
     @facing_right = (entry.dir != :l)

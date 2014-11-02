@@ -1,12 +1,4 @@
-class Series
-  attr_reader :name, :color, :data
-
-  def initialize name, color, data
-    @name = name
-    @color = color
-    @data = data
-  end
-end
+Series = Struct.new :name, :color, :data
 
 class Chart
   def initialize x, y, w, h, marker_size = 4, categories = nil
