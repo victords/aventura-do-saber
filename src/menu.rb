@@ -219,7 +219,7 @@ class MainMenu < Menu
       @continue = false
       @name = @name_input.text.downcase
       if @names.index @name
-        @same_name.text = "Um jogo com nome '#{@name.capitalize}' já existe. Deseja continuar ou substituir?"
+        @same_name.text = "Um jogo com nome '#{@name.split.map{|s|s.capitalize}.join(' ')}' já existe. Deseja continuar ou substituir?"
         go_to_screen 2
       else
         go_to_screen 3
@@ -283,11 +283,11 @@ class MainMenu < Menu
       name = g.split('/')[-1]
       @names << name
       name_screen_components <<
-        MenuButton.new(100 + (i % 2) * 300, 250 + (i / 2) * 40, G.med_font, name.capitalize, :ui_btn2){
+        MenuButton.new(100 + (i % 2) * 300, 250 + (i / 2) * 40, G.med_font, name.split.map{|s|s.capitalize}.join(' '), :ui_btn2){
           @name = name; @continue = true; go_to_screen 3
         }
       score_choose_screen_components <<
-        MenuButton.new(100 + (i % 2) * 300, 140 + (i / 2) * 40, G.med_font, name.capitalize, :ui_btn2){
+        MenuButton.new(100 + (i % 2) * 300, 140 + (i / 2) * 40, G.med_font, name.split.map{|s|s.capitalize}.join(' '), :ui_btn2){
           f = File.open("#{Res.prefix}save/#{name}")
           score = f.readline.to_i
           scenes = f.readline.split(',').map { |s| s.to_i }
@@ -328,10 +328,11 @@ class MainMenu < Menu
       MenuScreen.new([
         MenuPanel.new(-200, 163, 0, 163, :ui_menuComponent3)
       ], [
-        MenuButton.new(19, 193, G.font, "Jogar", :ui_btn1) { go_to_screen 1 },
-        MenuButton.new(19, 253, G.font, "Pontuações", :ui_btn1) { go_to_screen 5 },
-        MenuButton.new(19, 313, G.font, "Opções", :ui_btn1) { go_to_screen 7 },
-        Button.new(19, 373, G.font, "Sair", :ui_btn1) { G.quit_game },
+        MenuButton.new(19, 191, G.font, "Jogar", :ui_btn1) { go_to_screen 1 },
+        MenuButton.new(19, 251, G.font, "Pontuações", :ui_btn1) { go_to_screen 5 },
+        MenuButton.new(19, 311, G.font, "Opções", :ui_btn1) { go_to_screen 7 },
+        Button.new(19, 371, G.font, "Sair", :ui_btn1) { G.quit_game },
+        MenuButton.new(0, 570, G.font, "Créditos", :ui_btn5) { go_to_screen 8 },
         MenuText.new("Aventura do Saber", 400, 10, :center),
         MenuSprite.new(200, 100, :sprite_startScreen)
       ]),
@@ -413,6 +414,19 @@ class MainMenu < Menu
           @chk4.checked = G.music
           go_to_screen 0
         }
+      ]),
+      MenuScreen.new([
+        MenuPanel.new(-660, 0, 0, 0, :ui_menuComponent1),
+        MenuPanel.new(10, 600, 10, 90, :ui_menuComponent5)
+      ], [
+        MenuText.new("Créditos", 10, 5),
+        MenuText.new("Design, Programação, Gráficos e Músicas", 40, 110, :left, G.med_font),
+        MenuText.new("Victor David Santos", 70, 150, :justified, G.med_font, true, 660),
+        MenuText.new("Sons", 40, 220, :left, G.med_font),
+        MenuText.new("www.freesound.org", 70, 260, :justified, G.med_font, true, 660),
+        MenuText.new("Agradecimentos especiais", 40, 330, :left, G.med_font),
+        MenuText.new("À minha mãe Zuleica, ao meu irmão Yuri, e ao meu orientador de TCC, Prof. Gubi", 70, 370, :justified, G.med_font, true, 660),
+        MenuButton.new(600, 555, G.font, "OK", :ui_btn1) { go_to_screen 0 }
       ])
     ]
     @cur_screen = screen

@@ -274,7 +274,7 @@ class UI
     p_color = (@panel1.alpha << 24) | 0xffffff
     p_t_color = @panel1.alpha << 24
     G.font.draw "Jogador", 5, 2, 0, 1, 1, p_t_color
-    G.med_font.draw G.player.name.capitalize, 5, 25, 0, 1, 1, p_t_color
+    G.med_font.draw G.player.name.split.map{|s|s.capitalize}.join(' '), 5, 25, 0, 1, 1, p_t_color
     s = G.player.score
     G.font.draw_rel "#{s} ponto#{s > 1 ? 's' : ''}", 285, 2, 0, 1, 0, 1, 1, p_t_color
 
