@@ -5,13 +5,13 @@ require_relative 'object'
 Entry = Struct.new :x, :y, :dir
 
 class Exit
-  def initialize x, y, dir, destiny, dest_entry, immediate, switch
+  def initialize x, y, dir, destiny, dest_entry, switch
     @x = dir == :l ? x - 30 : dir == :r ? x + 30 : x
     @y = y - 150
     @bounds = Rectangle.new @x, @y, 1, 150
     @destiny = destiny
     @dest_entry = dest_entry
-    @immediate = immediate
+    @immediate = (dir != :x)
     if switch
       @active = G.switches.index switch.to_i
       @switch = switch.to_i unless @active
@@ -73,7 +73,7 @@ class Scene
     @exits = []
     @obsts = [
       Block.new(-31, 0, 1, @bg.height, false),
-      Block.new(@bg.width + 30, 0, 1, @bg.height, false),
+      Block.new(@bg.width + 31, 0, 1, @bg.height, false),
     ]
     @ramps = []
     @items = []
@@ -84,12 +84,12 @@ class Scene
       a = l[2..-1].chomp.split ','
       case l[0]
       when '>'     then @entries << Entry.new(a[0].to_i, a[1].to_i, a[2].to_sym)
-      when '<'     then @exits << Exit.new(a[0].to_i, a[1].to_i, a[2].to_sym, a[3].to_i, a[4].to_i, a[5] == 'i', a[6])
+      when '<'     then @exits << Exit.new(a[0].to_i, a[1].to_i, a[2].to_sym, a[3].to_i, a[4].to_i, a[5])
       when /\\|\// then @ramps << Ramp.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, l[0] == '/')
       when '!'     then check_item a
       when '?'     then @npcs << NPC.new(a[0].to_i, a[1].to_i, a[2], a[3])
       when '*'     then @objects << SceneObject.new(a[0].to_i, a[1].to_i, a[2])
-      else              @obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, a[3].to_i, true)
+      else              @obsts << Block.new(a[0].to_i, a[1].to_i, a[2].to_i, 1, true)
       end
     end
     @npcs.each do |c|
