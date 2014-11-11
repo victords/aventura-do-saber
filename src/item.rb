@@ -2,11 +2,12 @@ require 'minigl'
 include AGL
 
 class Item < GameObject
-  attr_reader :type, :dead, :icon
+  attr_reader :type, :name, :dead, :icon
 
-  def initialize x, y, type, w, h, img_gap_x, img_gap_y, score, switch = nil
+  def initialize x, y, type, name, w, h, img_gap_x, img_gap_y, score, switch = nil
     super x, y, w, h, "sprite_#{type}", Vector.new(img_gap_x, img_gap_y)
     @type = type
+    @name = name
     @score = score
     @switch = switch
     @icon = Res.img "icon_#{type}"
@@ -20,7 +21,7 @@ class Item < GameObject
       G.player.add_item self
       G.player.score += @score
       G.add_item_switch @switch if @switch
-      G.scene.show_message "+ #{@score} pontos"
+      G.scene.show_message "#{@name} (+ #{@score} pontos)"
       G.play_sound :getItem
       @dead = true
     end

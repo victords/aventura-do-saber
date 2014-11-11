@@ -30,6 +30,23 @@ class ItemButton < Button
     super(0, 20, nil, nil, :ui_btn4, 0, 0, 0, 0, 0, 0, 0, item_set[0].type){ |i| G.player.use_item i }
     @item_set = item_set
     @alpha = 0
+    @tooltip = XText.new item_set[0].name, 0, 0, 0xffffff, G.font
+  end
+
+  def update
+    super
+    @tooltip.update_alpha
+    if Mouse.over? @x, @y, @w, @h
+      @tooltip.fade_in
+    else
+      @tooltip.fade_out
+    end
+  end
+
+  def set_position x, y
+    super
+    @tooltip.x = x + 19 - G.font.text_width(@tooltip.text) / 2
+    @tooltip.y = y - 18
   end
 
   def draw
@@ -37,6 +54,7 @@ class ItemButton < Button
     c1 = (@alpha << 24) | 0xffffff; c2 = @alpha << 24
     @item_set[0].icon.draw @x + 3, @y + 3, 0, 1, 1, c1
     G.med_font.draw @item_set.length, @x + 33, @y + 7, 0, 1, 1, c2 if @item_set.length > 1
+    @tooltip.draw
   end
 end
 
