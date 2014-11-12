@@ -14,8 +14,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="two.svg"
-   inkscape:export-filename="/home/victor/Projects/TCC/aventura-do-saber/src/data/img/icon/two.png"
+   sodipodi:docname="seven.svg"
+   inkscape:export-filename="/home/victor/Projects/TCC/aventura-do-saber/src/data/img/icon/seven.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="13.272727"
-     inkscape:cx="19.924658"
-     inkscape:cy="15.972603"
+     inkscape:zoom="1"
+     inkscape:cx="17.5"
+     inkscape:cy="22"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -56,10 +56,10 @@
      id="layer1"
      transform="translate(0,-1020.3622)">
     <path
-       sodipodi:nodetypes="cscsccccscscc"
        inkscape:connector-curvature="0"
-       id="path16238"
-       d="m 3.168032,1031.0915 c 0,0 0.6895014,-9.6502 12.866097,-9.7287 13.235226,-0.086 13.074919,9.5398 13.074919,9.5398 0,0 0.691613,9.0235 -10.925436,9.6899 -9.5270646,0.5465 -10.2828456,6.5202 -10.2828456,6.5202 l 20.8180746,-0.4185 -0.78913,4.668 -24.8857893,0 c 0,0 -2.6006915,-13.1148 13.1159893,-14.8845 8.981049,-1.0111 8.18568,-5.4811 8.18568,-5.4811 0,0 0.07348,-5.1521 -7.86894,-5.1586 -9.0061071,-0.01 -8.8880579,5.6615 -8.8880579,5.6615 z"
-       style="fill:#bc9c31;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+       id="path7009"
+       d="M 4.1973686,1021.3622 3.6,1026.2391 l 19.363066,0.2395 c 0,0 -14.8597589,5.011 -16.6499873,24.3105 l 5.2079093,0.5731 c 0,0 -0.758215,-16.7154 16.818465,-22.448 l -0.706505,-7.552 z"
+       style="fill:#bc9c31;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:nodetypes="cccccccc" />
   </g>
 </svg>

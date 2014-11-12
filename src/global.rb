@@ -198,7 +198,7 @@ class G
     @@win.draw_quad 0, 0, color,
                     800, 0, color,
                     800, 600, color,
-                    0, 600, color, 0
+                    0, 600, color, 2
   end
 
   def self.open_menu

@@ -7,7 +7,8 @@ class NPC < GameObject
   def initialize x, y, id, final
     f = File.open("#{Res.prefix}text/npc#{id}.txt")
     info = f.readline.chomp.split ','
-    super x, y, info[0].to_i, info[1].to_i, "sprite_npc#{id}", Vector.new(info[2].to_i, info[3].to_i), 3, 2
+    h = info[1].to_i
+    super x, y - h, info[0].to_i, h, "sprite_npc#{id}", Vector.new(info[2].to_i, info[3].to_i), 3, 2
     @final = final
     @right = @facing_right = (info[4] == 'r')
     @state = 0
