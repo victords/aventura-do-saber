@@ -1,17 +1,10 @@
-40,200,8,1
--opção 1
--opção 2
--opção 3
-+1 15 $3/certa resposta!/[0]
+250,175,2,3
+-Tentar usar um item
+-Quebrar
++1 10/Ótimo! O que encaixar neste primeiro buraco?/[0]
 
-$3
-!item2 30/certa resposta!/[1,2,3,2,1]
+!item1 10/Certo! E no segundo?/[1]
 
-!item1 50 $4 $8/certa resposta!/[1]
+!item2 10/Perfeito! Você encontrou a planta!/[2,3,4,5]
 
-$4
--opção 1
--opção 2
-+2 80 $5 !apple/certa resposta!/[1,2,3,4,5,6,7]
-
-$5
+$10
