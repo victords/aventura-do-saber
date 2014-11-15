@@ -1,8 +1,36 @@
-70,140,2,0,r
-Testando primeira fala. Esta é a primeira fala do NPC. Esta fala deve ser bem longa, para ocupar quase todo o espaço disponível./A fala pode ter mais de uma página.
--OK, entendi.
--Cala a boca!
--Ãããhnn...
-+1 10 $11
+60,150,3,0,r
+Olá, jovem. Você veio nos ajudar com o problema dos insetos, certo?
+-Sim
+-Não
++1 5 $7
 
-$11 Valeu, mulek!/Você é um cara bacana.
+$7 Como o Jonas já deve ter te explicado, podemos usar uma certa planta para fazer um produto que vai espantar estes insetos./Mas essa planta é difícil de achar, fica nas profundezas da floresta, que se encontra a oeste daqui./Devido ao perigo, eu peço ao meu amigo Alberto para impedir que as pessoas entrem lá./Mas se você responder a pergunta secreta, ele vai saber que deve deixar você passar./Você é bom em matemática?
+-Sou!
+-Não...
++1 0
+
+Então aqui vai: qual o nome do polígono que tem 5 lados?
+-Triângulo
+-Pentágono
+-Hexágono
++2 0
+
+Bom! Agora, diga-me: a operação inversa à multiplicação é a...
+-Soma
+-Subtração
+-Divisão
++3 50 $8
+
+$8 Muito bom. Vejo que você está preparado para resolver os enigmas da floresta./A resposta para a pergunta secreta é o MMC entre 6 e 8.
+
+$3 Você encontrou a planta?
+!plant 0 $5
+
+$5 Ok. Vou preparar o produto, mas precisaremos de uma lata para armazená-lo. Veja se você encontra uma lata por aí...
+
+$6 Você encontrou uma lata?
+!can 0 $16 $17
+
+$16 Ótimo, isso deve servir. Agora, pegue esse produto e aplique na plantação...
+
+$4 Você salvou nossa fazenda! Muito obrigado por tudo!

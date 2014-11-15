@@ -1,5 +1,5 @@
-apple,'Maçã',30,30,0,0,100
-item1,'Item 1',20,20,-6,-6,50
-item2,'Item com nome longo',22,32,-4,-4,60
-item3,'Terceiro item',2,1,-15,-31,70
-two,'Número dois',20,80,-30,0,123
+two,'Número dois',36,1,-2,-4,10
+eight,'Número oito',31,40,-2,-4,30
+plant,'Planta venenosa',0,0,0,0,50
+potion,'Produto para espantar insetos',0,0,0,0,50
+can,'Lata',24,14,-1,-2,20

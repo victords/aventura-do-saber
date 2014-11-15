@@ -133,7 +133,7 @@ class NPC < GameObject
 
   def wrong_answer msg
     s = (0.1 * @switches[@state].split[1].to_i).round
-    G.scene.show_message "#{msg}   -#{s} ponto#{s > 1 ? 's' : ''}", :error
+    G.scene.show_message "#{msg}" + (if s > 0 then "   -#{s} ponto#{s > 1 ? 's' : ''}" else '' end), :error
     G.player.score -= s
     G.wrong_answer
   end
@@ -148,7 +148,7 @@ class NPC < GameObject
           sw = s[3][1..-1].to_i
           G.add_item_switch sw
           G.player.prepare_item G.s_items[sw].split(',')[2].to_sym
-        else
+        elsif s[3][0] == '!'
           item = s[3][1..-1].to_sym
           G.player.prepare_item item
         end
@@ -158,7 +158,7 @@ class NPC < GameObject
     @state += 1
     G.correct_answer
     G.player.score += s[1].to_i
-    G.scene.show_message "Correto! :)   + #{s[1]} pontos"
+    G.scene.show_message "Correto! :)" + (s[1].to_i > 0 ? "   +#{s[1]} pontos" : '')
     if s.length > 4
       G.scene.obsts.delete @block
     end

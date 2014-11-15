@@ -15,8 +15,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="math5.svg"
-   inkscape:export-filename="/home/victor/Projects/TCC/aventura-do-saber/src/data/img/bg/math5.png"
+   sodipodi:docname="math6.svg"
+   inkscape:export-filename="/home/victor/Projects/TCC/aventura-do-saber/src/data/img/bg/math6.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -281,9 +281,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="445.02944"
-     inkscape:cy="393.43997"
+     inkscape:zoom="1"
+     inkscape:cx="507.51466"
+     inkscape:cy="373.50803"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -310,7 +310,7 @@
      id="layer1"
      transform="translate(0,-352.36218)">
     <rect
-       style="fill:url(#linearGradient7024);fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       style="fill:url(#linearGradient7024);fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect7016"
        width="913.58197"
        height="629.32501"
@@ -809,63 +809,6 @@
        height="19"
        x="-5"
        y="532.36218" />
-    <path
-       style="fill:url(#linearGradient7082);fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="M 5,963.3622 4,944.0126 184,823.36219 183,849.54106 z"
-       id="path6888"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:url(#linearGradient7084);fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 6,821.36221 -1,22.51968 177,120.48032 3,-23.64567 z"
-       id="path6890"
-       inkscape:connector-curvature="0" />
-    <rect
-       style="fill:#882600;fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       id="rect6892"
-       width="11"
-       height="138"
-       x="207"
-       y="480"
-       transform="translate(0,352.36218)" />
-    <path
-       style="fill:#882600;fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 191,476 21,120 -1,15 -21,-108 z"
-       id="path6896"
-       inkscape:connector-curvature="0"
-       transform="translate(0,352.36218)" />
-    <path
-       style="fill:#882600;fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 212,493 -23,95 0,22 24,-103 z"
-       id="path6898"
-       inkscape:connector-curvature="0"
-       transform="translate(0,352.36218)" />
-    <path
-       style="fill:#882600;fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 188,470 24,16 1,14 -25,-12 z"
-       id="path6894"
-       inkscape:connector-curvature="0"
-       transform="translate(0,352.36218)" />
-    <rect
-       style="fill:url(#linearGradient7090);fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       id="rect6994"
-       width="172"
-       height="19"
-       x="8"
-       y="822.36218" />
-    <rect
-       style="fill:url(#linearGradient7086);fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       id="rect6886"
-       width="17"
-       height="154"
-       x="176"
-       y="815.36218" />
-    <rect
-       style="fill:url(#linearGradient7088);fill-opacity:1;stroke:#4d1200;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       id="rect6884"
-       width="17"
-       height="156"
-       x="-5"
-       y="814.36218" />
     <path
        inkscape:connector-curvature="0"
        id="path7010"

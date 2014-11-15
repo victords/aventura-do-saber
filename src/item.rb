@@ -14,8 +14,8 @@ class Item < GameObject
   end
 
   def update
-    forces = Vector.new(0, 0)
-    move forces, G.scene.obsts, G.scene.ramps
+    # forces = Vector.new(0, 0)
+    # move forces, G.scene.obsts, G.scene.ramps
 
     if bounds.intersects G.player.bounds
       G.player.add_item self

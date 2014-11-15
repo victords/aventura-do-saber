@@ -22,6 +22,17 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient4768">
+      <stop
+         style="stop-color:#5f2000;stop-opacity:1;"
+         offset="0"
+         id="stop4770" />
+      <stop
+         style="stop-color:#180700;stop-opacity:1;"
+         offset="1"
+         id="stop4772" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient17579">
       <stop
          id="stop17581"
@@ -608,6 +619,17 @@
        y1="666.02917"
        x2="314.24088"
        y2="707.52917" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4768"
+       id="radialGradient4778"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(7.7666434,0.02527679,-0.0391537,12.030399,-1042.6747,-7899.3937)"
+       cx="158.30435"
+       cy="723.27234"
+       fx="158.30435"
+       fy="723.27234"
+       r="16" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -617,8 +639,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="563.60197"
-     inkscape:cy="319.3506"
+     inkscape:cx="146.99501"
+     inkscape:cy="411.51059"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -635,7 +657,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -658,6 +680,13 @@
        height="278"
        x="-29"
        y="534.36218" />
+    <rect
+       style="fill:#7e2700;stroke:#3d1500;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+       id="rect3998"
+       width="30"
+       height="213"
+       x="142"
+       y="602.36218" />
     <path
        sodipodi:type="arc"
        style="fill:url(#linearGradient7242);fill-opacity:1;stroke:#d2e4ff;stroke-width:2.7186954;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -3389,6 +3418,13 @@
          id="tspan17605"
          x="346.9281"
          y="768.02838">JOSÉ</tspan></text>
+    <rect
+       y="606.36218"
+       x="146"
+       height="209"
+       width="23"
+       id="rect4776"
+       style="fill:url(#radialGradient4778);fill-opacity:1;stroke:#3d1500;stroke-width:1.99999975999999990;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
     <rect
        y="811.36218"
        x="-39"

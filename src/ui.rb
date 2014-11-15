@@ -136,7 +136,7 @@ class TextEffect < XText
 
   def update
     @y -= 0.3
-    if @steps == 180; fade_out
+    if @steps == 300; fade_out
     else; @steps += 1; end
     update_alpha
     @dead = true if @alpha == 0

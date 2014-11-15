@@ -146,7 +146,7 @@ class SceneObject < GameObject
     end
     G.correct_answer
     G.player.score += s[1].to_i
-    G.scene.show_message "#{@msgs[@state]}   + #{s[1]} pontos"
+    G.scene.show_message "#{@msgs[@state]}" + (s[1].to_i > 0 ? "   +#{s[1]} pontos" : '')
     @state += 1
     if @state == @opts.length
       @active = false
@@ -166,7 +166,7 @@ class SceneObject < GameObject
     super map
     if @active and G.state == :game
       @exclam.x = @x + @w / 2 - map.cam.x - 6; @exclam.y = @y - map.cam.y - 60
-      @exclam.draw
+      @exclam.draw 1
       @text.draw
     end
   end

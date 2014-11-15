@@ -1,0 +1,8 @@
+243,213,1,1
+-Tentar dar a comida
+-Acariciar o cavalo
++2 15/O cavalo ficou mais calmo. E agora?/[0]
+
+!food/Ótimo! Ele está mais contente agora./[0]
+
+$123

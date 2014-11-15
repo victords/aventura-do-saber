@@ -11,9 +11,13 @@ $1 Ah, que ótimo! Nesse caso... Bom, estamos com uma praga de um inseto que est
 
 $2 Ficarei aguardando você retornar com o produto.
 
-$3 Você já o conseguiu?
-!apple 30 $4 $5 .
+$3 Ótimo! Você encontrou a planta! Agora, precisamos aplicar o produto... Fale com o sr. José, ele vai te ajudar.
 
-$4 Ótimo! Agora, precisamos aplicar o produto... Siga em frente para chegar às plantações.
+$17 Você está com o produto em mãos?
+-Sim
+-Não
++1 0 $18 . .
 
-$6 Muito obrigado por toda a ajuda!
+$18 Siga em frente para chegar às plantações.
+
+$4 Muito obrigado por toda a ajuda!

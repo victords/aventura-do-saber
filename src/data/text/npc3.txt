@@ -1,8 +1,16 @@
-70,140,2,0,l
-Responda corretamente para finalizar issaqui: 2 + 2 = ...?
--3
--4
--5
-+2 10
+58,114,5,-21,r
+Ei, garoto, espere aí! Para passar aqui você deve provar que tem a confiança do sr. José. Qual a resposta para a pergunta secreta?
+-Não faço ideia...
++2
 
-Parabéns!!
+$8 Ei, garoto, espere aí! Para passar aqui você deve provar que tem a confiança do sr. José. Qual a resposta para a pergunta secreta?
+-12
+-24
+-48
++2 30 $9
+
+$9 Correto, deixarei você passar. Porém, muito cuidado adiante...
+-Obrigado, tomarei cuidado.
++1 0 $10 . .
+
+$10 Você pode passar.
