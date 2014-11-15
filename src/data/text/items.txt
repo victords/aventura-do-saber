@@ -3,3 +3,6 @@ eight,'Número oito',31,40,-2,-4,30
 plant,'Planta venenosa',0,0,0,0,50
 potion,'Produto para espantar insetos',0,0,0,0,50
 can,'Lata',24,14,-1,-2,20
+five,'Número cinco',31,40,-2,-4,20
+seven,'Número sete',33,40,-2,-4,20
+food,'Comida para cavalo',0,0,0,0,50

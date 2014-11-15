@@ -3,8 +3,8 @@
 -Quebrar
 +1 10/Ótimo! O que encaixar neste primeiro buraco?/[0]
 
-!item2 10/Certo! E no segundo?/[1]
+!five 25 $18/Certo! E no segundo?/[1]
 
-!item2 10/Perfeito! Você encontrou a comida de cavalo!/[2,3,4,5]
+!seven 25 $19 $20/Perfeito! Você encontrou a comida de cavalo!/[2,3,4,5]
 
-$10
+$19

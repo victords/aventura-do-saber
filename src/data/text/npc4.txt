@@ -1,0 +1,12 @@
+57,117,5,0,l
+Olá. Você veio nos ajudar com o problema dos insetos, não é?/Mas antes, eu queria te pedir outro favor... O nosso cavalo, Halley, está com fome, mas eu não consigo encontrar a comida para ele.../Você pode ajudar? Ele está nesse armazém aí...
+
+$23 Obrigada por alimentar o Halley! Agora... Nossa área de plantação tem 6m por 7m... Quantos metros quadrados isso dá?
+-14
+-36
+-42
++3 35 $24 . .
+
+$24 Hummm... Então essa lata que você tem aí deve ser suficiente. Siga em frente para chegar às plantações.
+
+$4 Os insetos foram exterminados! Estamos salvos!

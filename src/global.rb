@@ -19,8 +19,8 @@ class G
     f.close
     @@items = {}
     File.open("#{Res.prefix}text/items.txt").each do |l|
-      key = l.chomp!.split(',')[0].to_sym
-      @@items[key] = l
+      key = l.chomp.split(',')[0].to_sym
+      @@items[key] = l.chomp
     end
     @@s_items = {}
     File.open("#{Res.prefix}text/s_items.txt").each do |l|

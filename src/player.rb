@@ -16,7 +16,7 @@ class Player < GameObject
     @items = {}
     @score = 0
   end
-  
+
   def reset
     @victory = nil
   end
@@ -79,9 +79,9 @@ class Player < GameObject
     UI.add_item @items[item.type], show, bottom
   end
 
-  def prepare_item item
+  def prepare_item item, switch = nil
     info = G.items[item]
-    eval "@prepared_item = Item.new 0, 0, :#{info}"
+    eval "@prepared_item = Item.new 0, 0, :#{info}" + (switch ? ", #{switch}" : '')
   end
 
   def use_item item, from_obj = false

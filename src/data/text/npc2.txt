@@ -21,15 +21,13 @@ Bom! Agora, diga-me: a operação inversa à multiplicação é a...
 -Divisão
 +3 50 $8
 
-$8 Muito bom. Vejo que você está preparado para resolver os enigmas da floresta./A resposta para a pergunta secreta é o MMC entre 6 e 8.
-
-$3 Você encontrou a planta?
-!plant 0 $5
-
-$5 Ok. Vou preparar o produto, mas precisaremos de uma lata para armazená-lo. Veja se você encontra uma lata por aí...
+$8 Muito bom. Vejo que você está preparado para resolver os enigmas da floresta./A resposta para a pergunta secreta é o MMC entre 6 e 8./Vamos precisar da planta e de uma lata para armazenar o produto.
 
 $6 Você encontrou uma lata?
-!can 0 $16 $17
+!can 0 $5
+
+$5 Ótimo. Você encontrou a planta?
+!plant 50 $16 $17
 
 $16 Ótimo, isso deve servir. Agora, pegue esse produto e aplique na plantação...
 

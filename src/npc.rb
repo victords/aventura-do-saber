@@ -147,7 +147,7 @@ class NPC < GameObject
         if s[3][0] == '$'
           sw = s[3][1..-1].to_i
           G.add_item_switch sw
-          G.player.prepare_item G.s_items[sw].split(',')[2].to_sym
+          G.player.prepare_item G.s_items[sw].split(',')[2].to_sym, sw
         elsif s[3][0] == '!'
           item = s[3][1..-1].to_sym
           G.player.prepare_item item
