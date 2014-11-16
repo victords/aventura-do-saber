@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'minigl'
 require_relative 'player'
 require_relative 'intro'

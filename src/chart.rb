@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 Series = Struct.new :name, :color, :data
 
 class Chart

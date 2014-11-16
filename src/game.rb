@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require_relative 'menu'
 require_relative 'scene'
 include AGL

@@ -1,4 +1,4 @@
-60,150,3,0,r
+104,150,25,0,r
 Olá, jovem. Você veio nos ajudar com o problema dos insetos, certo?
 -Sim
 -Não

@@ -1,4 +1,4 @@
-70,140,2,0,l
+114,140,25,0,l
 Olá, você veio visitar a fazenda? Infelizmente, estamos com um problema sério... Aliás, será que você não poderia nos ajudar?
 -Sim, claro!
 -Não.

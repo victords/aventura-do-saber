@@ -1,16 +1,16 @@
-58,114,5,-21,r
-Ei, garoto, espere aí! Para passar aqui você deve provar que tem a confiança do sr. José. Qual a resposta para a pergunta secreta?
+98,114,25,-21,r
+Ei, você, espere aí! Para passar aqui você deve provar que tem a confiança do sr. José. Qual a resposta para a pergunta secreta?
 -Não faço ideia...
 +2
 
-$8 Ei, garoto, espere aí! Para passar aqui você deve provar que tem a confiança do sr. José. Qual a resposta para a pergunta secreta?
+$8 Ei, você, espere aí! Para passar aqui você deve provar que tem a confiança do sr. José. Qual a resposta para a pergunta secreta?
 -12
 -24
 -48
 +2 30 $9
 
 $9 Correto, deixarei você passar. Porém, muito cuidado adiante...
--Obrigado, tomarei cuidado.
+-Ok, tomarei cuidado.
 +1 0 $10 . .
 
 $10 Você pode passar.

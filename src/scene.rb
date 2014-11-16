@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require_relative 'item'
 require_relative 'npc'
 require_relative 'object'

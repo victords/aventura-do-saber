@@ -1,0 +1,66 @@
+<seqview xscroll="0,000000" yscroll="0" zoom="318">
+<sequence maintempo="120" measureAmount="2" currentTrack="1" beatResolution="960" internalName="Victory" fileFormatVersion="4" channelManagement="auto" metronome="false">
+
+<measure  firstMeasure="0" denom="4" num="4"/>
+
+<tempo>
+</tempo>
+<text>
+</text>
+<copyright>
+</copyright>
+<defaultkeysig keytype="2" keysymbolamount="0" />
+
+
+<track name="Untitled" id="0" channel="0" volume="100" default_volume="80">
+  <key type="C" />
+  <editors height="211">
+    <score enabled="false" musical_notation="true" linear_notation="true" g_clef="true" f_clef="true" scroll="0,547945"/>
+    <keyboard enabled="true" scroll="0,486667" proportion="1,000000"/>
+    <guitar enabled="false"/>
+    <drum enabled="false" scroll="0,000000"/>
+    <controller enabled="false" controller="7"/>
+  </editors>
+  <magneticgrid divider="8" triplet="false" dotted="false"/>
+  <instrument id="56"/>
+  <drumkit id="0" collapseView="false"/>
+  <guitartuning  string0="67" string1="72" string2="76" string3="81" string4="86" string5="91"/>
+
+  <note pitch="64" start="0" end="960" volume="80"/>
+  <note pitch="60" start="960" end="1920" volume="80"/>
+  <note pitch="59" start="1920" end="2880" volume="80"/>
+</track>
+
+
+<track name="Untitled" id="1" channel="0" volume="100" default_volume="80">
+  <key type="C" />
+  <editors height="224">
+    <score enabled="false" musical_notation="true" linear_notation="true" g_clef="true" f_clef="true" scroll="0,547945"/>
+    <keyboard enabled="false" scroll="0,500000"/>
+    <guitar enabled="false"/>
+    <drum enabled="true" scroll="0,000000" proportion="1,000000"/>
+    <controller enabled="false" controller="7"/>
+  </editors>
+  <magneticgrid divider="32" triplet="false" dotted="false"/>
+  <instrument id="0"/>
+  <drumkit id="0" collapseView="false"/>
+  <guitartuning  string0="67" string1="72" string2="76" string3="81" string4="86" string5="91"/>
+
+  <note pitch="36" start="0" end="31" volume="80"/>
+  <note pitch="36" start="480" end="511" volume="80"/>
+  <note pitch="36" start="960" end="991" volume="80"/>
+  <note pitch="38" start="960" end="991" volume="80"/>
+  <note pitch="38" start="1080" end="1111" volume="80"/>
+  <note pitch="38" start="1200" end="1231" volume="80"/>
+  <note pitch="38" start="1320" end="1351" volume="80"/>
+  <note pitch="36" start="1440" end="1471" volume="80"/>
+  <note pitch="38" start="1440" end="1471" volume="80"/>
+  <note pitch="36" start="1920" end="1951" volume="80"/>
+  <note pitch="38" start="1920" end="1951" volume="80"/>
+  <note pitch="38" start="2160" end="2191" volume="80"/>
+  <note pitch="49" start="2400" end="2431" volume="80" selected="true"/>
+  <note pitch="38" start="2400" end="2431" volume="80"/>
+  <note pitch="36" start="2400" end="2431" volume="80"/>
+</track>
+
+</sequence></seqview>
